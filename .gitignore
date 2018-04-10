@@ -4,3 +4,7 @@ bin/
 .settings/
 .classpath
 .project
+*.class
+target/classes/poprawione
+target/
+poprawione

@@ -1,4 +1,4 @@
-package classes;
+package learning.budget;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.xml.ws.FaultAction;
 
-import org.junit.experimental.categories.Categories.ExcludeCategory;
+//import org.junit.experimental.categories.Categories.ExcludeCategory;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -77,7 +77,7 @@ public class ButtonAction extends GenerateComponents {
 								&& monthFromClickedButton == monthFromDateChooser)
 							refreshSumLabel(labelOtherIncomeSum, amount);
 					} catch (ParseException e1) {
-						JOptionPane.showMessageDialog(null, "Wybierz datê");
+						JOptionPane.showMessageDialog(null, "Wybierz datï¿½");
 					}
 				}
 			}
@@ -131,7 +131,7 @@ public class ButtonAction extends GenerateComponents {
 								refreshSumLabel(labelSavingsSum, amount);
 						}
 					} catch (ParseException e1) {
-						JOptionPane.showMessageDialog(null, "Wybierz datê");
+						JOptionPane.showMessageDialog(null, "Wybierz datï¿½");
 					}
 				}
 			}
