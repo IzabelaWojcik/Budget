@@ -6,7 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DatabaseWriter {
+public class DatabaseWriter implements IDatabaseWriter{
 	private Statement start = null;
 	DatabaseConnection databaseConnection = new DatabaseConnection();
 	Connection connection = databaseConnection.connectionWithDB();
