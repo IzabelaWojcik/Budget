@@ -43,7 +43,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 	private HashMap<Integer, Double> incomeMap = new HashMap<Integer, Double>();
 	private DatabaseWriter databaseWriter = new DatabaseWriter();
 	private DatabaseReader databaseReader = new DatabaseReader();
-	private GenerateComponents generateComponents = new GenerateComponents();
+	private GenerateComponents generateComponents = new GenerateComponents(databaseReader);
 	
 	private DataFormatter dataFormatter = new DataFormatter();
 	///////////////////

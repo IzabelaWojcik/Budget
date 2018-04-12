@@ -21,8 +21,8 @@ import javax.xml.ws.FaultAction;
 import com.toedter.calendar.JDateChooser;
 
 public class ButtonAction extends GenerateComponents {
+	//FIXME: check if parent has that members, if it has, remove them from here
 	private DatabaseWriter databaseWriter = new DatabaseWriter();
-	private IDatabaseReader databaseReader;
 	private HashMap<Integer, String> incomeCategoryMap;
 	private ArrayList<UsersIncomeObject> userIncomeObjectList;
 	private HashMap<Integer, String> usersNameIdMap;
@@ -36,7 +36,8 @@ public class ButtonAction extends GenerateComponents {
 	private Sort sort = new Sort();
 
 	public ButtonAction(IDatabaseReader _databaseReader) {
-		databaseReader = _databaseReader;
+		super(_databaseReader);
+		
 		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
 		userIncomeObjectList = databaseReader.readIncomefromDatabase();
 		usersNameIdMap = databaseReader.readUsersFromDatabasetoHashMap();
@@ -315,8 +316,7 @@ public class ButtonAction extends GenerateComponents {
 	}
 
 	public int getYearFromButtonClicked() {
-		GenerateComponents generateComponents = new GenerateComponents();
-		String yearAndMonthFromClickingButton = generateComponents.getYearAndMonth();
+		String yearAndMonthFromClickingButton = getYearAndMonth();
 		int yearFromClickedButton = 0;
 		if (yearAndMonthFromClickingButton.length() == 6) {
 			yearFromClickedButton = Integer.parseInt(yearAndMonthFromClickingButton.substring(2, 6));
@@ -327,8 +327,7 @@ public class ButtonAction extends GenerateComponents {
 	}
 
 	public int getMonthFromButtonClicked() {
-		GenerateComponents generateComponents = new GenerateComponents();
-		String yearAndMonthFromClickingButton = generateComponents.getYearAndMonth();
+		String yearAndMonthFromClickingButton = getYearAndMonth();
 		int monthFromClickedButton = 0;
 		if (yearAndMonthFromClickingButton.length() == 6) {
 			monthFromClickedButton = Integer.parseInt(yearAndMonthFromClickingButton.substring(0, 1));

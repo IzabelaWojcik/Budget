@@ -29,29 +29,43 @@ import learning.budget.views.CreateBudgetOptions;
 
 public class GenerateComponents {
 
-	private DatabaseReader databaseReader = new DatabaseReader();
-	private HashMap<Integer, String> budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
+	protected IDatabaseReader databaseReader;
+	private HashMap<Integer, String> budgetIdNameMap;
 	private DateOptions dateOptions = new DateOptions();
-	private ArrayList<UsersIncomeObject> usersIncomeObjectList = databaseReader.readIncomefromDatabase();
-	private ArrayList<UsersObject> usersObjectList = databaseReader.readUsersFromDatabase();
-	private HashMap<Integer, String> usersNameHashMap = databaseReader.readUsersFromDatabasetoHashMap();
-	private HashMap<Integer, String> incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
-	private HashMap<Integer, String> expenditureCategoryMap = databaseReader
-			.readCategoryFromDatabase("Expenditure_category");
-	private HashMap<Integer, String> savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+	private ArrayList<UsersIncomeObject> usersIncomeObjectList;
+	private ArrayList<UsersObject> usersObjectList;
+	private HashMap<Integer, String> usersNameHashMap;
+	private HashMap<Integer, String> incomeCategoryMap;
+	private HashMap<Integer, String> expenditureCategoryMap;
+	private HashMap<Integer, String> savingsCategoryMap;
 	private LayoutOptions layoutOptions = new LayoutOptions();
-	private ArrayList<ExpendiutureObject> expenditureObjectList = databaseReader.readExpenditureFromDataBase();
-	private ArrayList<SavingsObject> savingObjectList = databaseReader.readSavingsFromDataBase();
+	private ArrayList<ExpendiutureObject> expenditureObjectList;
+	private ArrayList<SavingsObject> savingObjectList; 
 	private CreateBudgetOptions cbo = new CreateBudgetOptions();
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
 	private int num = cbo.getMaxNumberOfUsers();
 	private int userNumber = 0;
 	private int idOfBudget;
 	private static String YEARANDMONTH;
-	private ComboBoxAction comboBoxAction = new ComboBoxAction(databaseReader);
+	private ComboBoxAction comboBoxAction;
 	private Sort sort = new Sort();
 	private SumOfElements sumOfElements = new SumOfElements();
 
+	public GenerateComponents(IDatabaseReader _databaseReader) {
+		databaseReader = _databaseReader;
+		
+		budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
+		usersIncomeObjectList = databaseReader.readIncomefromDatabase();
+		usersObjectList = databaseReader.readUsersFromDatabase();
+		usersNameHashMap = databaseReader.readUsersFromDatabasetoHashMap();
+		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
+		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
+		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
+		savingObjectList = databaseReader.readSavingsFromDataBase();
+		comboBoxAction = new ComboBoxAction(databaseReader);
+	}
+	
 	public String getYearAndMonth() {
 		return YEARANDMONTH;
 	}

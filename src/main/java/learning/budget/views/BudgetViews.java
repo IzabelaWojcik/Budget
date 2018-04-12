@@ -24,6 +24,7 @@ import learning.budget.DatabaseReader;
 import learning.budget.DatabaseWriter;
 import learning.budget.ExpendiutureObject;
 import learning.budget.GenerateComponents;
+import learning.budget.IDatabaseReader;
 import learning.budget.Sort;
 import learning.budget.TextFieldAction;
 import learning.budget.TextFieldValidator;
@@ -76,7 +77,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 //	private CreateBudgetForNewMonth createBudgetForNewMonth = new CreateBudgetForNewMonth();
 	TextFieldValidator textFieldValidator = new TextFieldValidator();
 	private DatabaseWriter databaseWriter = new DatabaseWriter();
-	private DatabaseReader databaseReader = new DatabaseReader();
+	private IDatabaseReader databaseReader;
 	private JPanel panelMainBudgetsFromAllYears;
 	//private GenerateComponents generateComponents = new GenerateComponents();
 	private JPanel panelMainWithMonthsInYear;
@@ -112,8 +113,8 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private JLabel lblSavingsSum;
 	private JLabel lblErrorAddExpenditure;
 	private JLabel lblErrorAddSavings;
-	private HashMap<Integer, String> expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
-	private HashMap<Integer, String> savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+	private HashMap<Integer, String> expenditureCategoryMap;
+	private HashMap<Integer, String> savingsCategoryMap;
 	private JPanel panelSavingsView;
 	private JLabel lblInform;
 	private JLabel lblSumaPozostaychPrzychodw;
@@ -124,7 +125,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					BudgetViews window = new BudgetViews();
+					BudgetViews window = new BudgetViews(new DatabaseReader());
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -136,7 +137,12 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	/**
 	 * Create the application.
 	 */
-	public BudgetViews() {
+	public BudgetViews(IDatabaseReader _databaseReader) {
+		super(_databaseReader);
+		databaseReader = _databaseReader;
+		
+		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
+		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
 		initialize();
 	}
 
