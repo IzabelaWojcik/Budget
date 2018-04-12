@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DatabaseReader {
+public class DatabaseReader implements IDatabaseReader{
 	private Statement start = null;
 	private ResultSet rs = null;
 	private HashMap<Integer, String> usersFromDatabaseMap = new HashMap<Integer, String>();
