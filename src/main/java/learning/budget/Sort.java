@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Sort {
-	private DatabaseReader databaseReader = new DatabaseReader();
-	private ArrayList<UsersIncomeObject> usersIncomeObjectList = databaseReader.readIncomefromDatabase();
+	private IDatabaseReader databaseReader;
+	private ArrayList<UsersIncomeObject> usersIncomeObjectList; 
 	private DataFormatter dataFormatter = new DataFormatter();
 	private DateOptions dateOptions = new DateOptions();
 
+	public Sort(IDatabaseReader _databaseReader) {
+		databaseReader = _databaseReader;
+		usersIncomeObjectList = databaseReader.readIncomefromDatabase();
+	}
 	public ArrayList<Integer> sortAscending(ArrayList<Integer> listToSort) {
 		listToSort.sort(null);
 		return listToSort;

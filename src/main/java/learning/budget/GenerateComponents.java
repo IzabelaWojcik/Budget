@@ -48,7 +48,7 @@ public class GenerateComponents {
 	private int idOfBudget;
 	private static String YEARANDMONTH;
 	private ComboBoxAction comboBoxAction;
-	private Sort sort = new Sort();
+	private Sort sort;
 	private SumOfElements sumOfElements = new SumOfElements();
 
 	public GenerateComponents(IDatabaseReader _databaseReader) {
@@ -64,6 +64,7 @@ public class GenerateComponents {
 		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
 		savingObjectList = databaseReader.readSavingsFromDataBase();
 		comboBoxAction = new ComboBoxAction(databaseReader);
+		sort = new Sort(databaseReader);
 	}
 	
 	public String getYearAndMonth() {

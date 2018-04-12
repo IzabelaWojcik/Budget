@@ -33,7 +33,7 @@ public class ButtonAction extends GenerateComponents {
 	private HashMap<Integer, String> expenditureCategoryMap;
 	private HashMap<Integer, String> savingsCategoryMap;
 	private DateOptions dateOptions = new DateOptions();
-	private Sort sort = new Sort();
+	private Sort sort = new Sort(databaseReader);
 
 	public ButtonAction(IDatabaseReader _databaseReader) {
 		super(_databaseReader);
