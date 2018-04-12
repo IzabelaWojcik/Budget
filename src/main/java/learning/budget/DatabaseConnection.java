@@ -3,7 +3,7 @@ package learning.budget;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class DatabaseConnection {
+public class DatabaseConnection  implements IDatabaseConnection{
 	private String conectionUrl = "jdbc:sqlserver://localhost:1433;" + 
 			"databasename=Budget;integratedSecurity=true;";
 	private Connection con = null;
