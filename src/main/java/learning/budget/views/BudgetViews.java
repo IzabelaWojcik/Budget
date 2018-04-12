@@ -73,7 +73,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private JFrame frame;
 	private JPanel panelMain;
 	private JPanel panelPoprzednieBudzety;
-	private CreateBudgetOptions myBudget = new CreateBudgetOptions();
+	private CreateBudgetOptions myBudget;
 //	private CreateBudgetForNewMonth createBudgetForNewMonth = new CreateBudgetForNewMonth();
 	TextFieldValidator textFieldValidator = new TextFieldValidator();
 	private DatabaseWriter databaseWriter = new DatabaseWriter();
@@ -143,6 +143,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		
 		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
 		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+		 myBudget = new CreateBudgetOptions(databaseReader);
 		initialize();
 	}
 

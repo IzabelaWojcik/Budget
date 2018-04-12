@@ -41,9 +41,9 @@ public class GenerateComponents {
 	private LayoutOptions layoutOptions = new LayoutOptions();
 	private ArrayList<ExpendiutureObject> expenditureObjectList;
 	private ArrayList<SavingsObject> savingObjectList; 
-	private CreateBudgetOptions cbo = new CreateBudgetOptions();
+	private CreateBudgetOptions cbo;
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
-	private int num = cbo.getMaxNumberOfUsers();
+	private int num;
 	private int userNumber = 0;
 	private int idOfBudget;
 	private static String YEARANDMONTH;
@@ -54,6 +54,8 @@ public class GenerateComponents {
 	public GenerateComponents(IDatabaseReader _databaseReader) {
 		databaseReader = _databaseReader;
 		
+		cbo = new CreateBudgetOptions(databaseReader);
+		num = cbo.getMaxNumberOfUsers();
 		budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
 		usersIncomeObjectList = databaseReader.readIncomefromDatabase();
 		usersObjectList = databaseReader.readUsersFromDatabase();
