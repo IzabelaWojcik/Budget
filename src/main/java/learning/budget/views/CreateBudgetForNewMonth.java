@@ -15,6 +15,7 @@ import learning.budget.DataFormatter;
 import learning.budget.DatabaseReader;
 import learning.budget.DatabaseWriter;
 import learning.budget.GenerateComponents;
+import learning.budget.IDatabaseReader;
 import learning.budget.TextFieldValidator;
 import java.awt.Dimension;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -42,8 +43,8 @@ public class CreateBudgetForNewMonth extends JDialog {
 	private JButton cancelButton;
 	private HashMap<Integer, Double> incomeMap = new HashMap<Integer, Double>();
 	private DatabaseWriter databaseWriter = new DatabaseWriter();
-	private DatabaseReader databaseReader = new DatabaseReader();
-	private GenerateComponents generateComponents = new GenerateComponents(databaseReader);
+	private IDatabaseReader databaseReader;
+	private GenerateComponents generateComponents;
 	
 	private DataFormatter dataFormatter = new DataFormatter();
 	///////////////////
@@ -55,7 +56,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth();
+			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth(new DatabaseReader());
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -66,7 +67,11 @@ public class CreateBudgetForNewMonth extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public CreateBudgetForNewMonth() {
+	public CreateBudgetForNewMonth(IDatabaseReader _databaseReader) {
+		databaseReader = _databaseReader;
+		
+		generateComponents = new GenerateComponents(databaseReader);
+				
 		setTitle("Nowy Bud\u017Cet");
 		setBounds(100, 100, 496, 434);
 		getContentPane().setLayout(new BorderLayout());
