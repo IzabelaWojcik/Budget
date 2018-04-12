@@ -7,7 +7,12 @@ import java.util.Map.Entry;
 import javax.swing.JComboBox;
 
 public class ComboBoxAction {
-	private DatabaseReader databaseReader = new DatabaseReader();
+	private IDatabaseReader databaseReader;
+	
+	public ComboBoxAction(IDatabaseReader _databaseReader) {
+		databaseReader = _databaseReader;
+	}
+	
 
 	public void writeOtherIncomeCategoryToComboBox(JComboBox<String> cbBox, int budgetId) {
 		ArrayList<UsersIncomeObject> userIncomeList = databaseReader.readIncomefromDatabase();

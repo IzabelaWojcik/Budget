@@ -48,7 +48,7 @@ public class GenerateComponents {
 	private int userNumber = 0;
 	private int idOfBudget;
 	private static String YEARANDMONTH;
-	private ComboBoxAction comboBoxAction = new ComboBoxAction();
+	private ComboBoxAction comboBoxAction = new ComboBoxAction(databaseReader);
 	private Sort sort = new Sort();
 	private SumOfElements sumOfElements = new SumOfElements();
 
