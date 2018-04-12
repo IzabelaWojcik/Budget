@@ -22,20 +22,30 @@ import com.toedter.calendar.JDateChooser;
 
 public class ButtonAction extends GenerateComponents {
 	private DatabaseWriter databaseWriter = new DatabaseWriter();
-	private DatabaseReader databaseReader = new DatabaseReader();
-	private HashMap<Integer, String> incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
-	private ArrayList<UsersIncomeObject> userIncomeObjectList = databaseReader.readIncomefromDatabase();
-	private HashMap<Integer, String> usersNameIdMap = databaseReader.readUsersFromDatabasetoHashMap();
+	private IDatabaseReader databaseReader;
+	private HashMap<Integer, String> incomeCategoryMap;
+	private ArrayList<UsersIncomeObject> userIncomeObjectList;
+	private HashMap<Integer, String> usersNameIdMap;
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
 	private DataFormatter dataFormatter = new DataFormatter();
-	ArrayList<ExpendiutureObject> expenditureObjectList = databaseReader.readExpenditureFromDataBase();
-	ArrayList<SavingsObject> savingsObjectList = databaseReader.readSavingsFromDataBase();
-	private HashMap<Integer, String> expenditureCategoryMap = databaseReader
-			.readCategoryFromDatabase("Expenditure_category");
-	private HashMap<Integer, String> savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+	ArrayList<ExpendiutureObject> expenditureObjectList;
+	ArrayList<SavingsObject> savingsObjectList;
+	private HashMap<Integer, String> expenditureCategoryMap;
+	private HashMap<Integer, String> savingsCategoryMap;
 	private DateOptions dateOptions = new DateOptions();
 	private Sort sort = new Sort();
 
+	public ButtonAction(IDatabaseReader _databaseReader) {
+		databaseReader = _databaseReader;
+		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
+		userIncomeObjectList = databaseReader.readIncomefromDatabase();
+		usersNameIdMap = databaseReader.readUsersFromDatabasetoHashMap();
+		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
+		savingsObjectList = databaseReader.readSavingsFromDataBase();
+		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
+		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+	}
+	
 	public void addOtherIncomeToDatabaseAfterClickingButton(JButton button, JComboBox<String> cbUser,
 			JComboBox<String> cbOtherIncome, JTextField txFieldAmount, JLabel lblError, JDateChooser dateChooser,
 			JPanel panelOtherIncomeView, JLabel labelOtherIncomeSum) {

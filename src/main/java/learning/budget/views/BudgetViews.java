@@ -623,7 +623,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		panelMain.setLayout(gl_panelMain);
 		
 		TextFieldAction txFielsAction = new TextFieldAction();
-		ButtonAction buttonAction = new ButtonAction();
+		ButtonAction buttonAction = new ButtonAction(databaseReader);
 		
 		txFielsAction.checkIfTextFieldHaveNumberValue(textFieldOtherIncome, lblIncomeOtherError, btnAddOtherIncome);
 		txFielsAction.checkIfTextFieldHaveNumberValue(textFieldExpenditureAmount, lblErrorAddExpenditure, btnExpenditureAdd);
