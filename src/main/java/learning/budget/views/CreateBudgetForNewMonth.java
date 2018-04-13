@@ -59,7 +59,9 @@ public class CreateBudgetForNewMonth extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth(new DatabaseReader(DatabaseConnection.getInstance()), new DatabaseWriter(DatabaseConnection.getInstance()));
+			IDatabaseWriter databaseWriter = DatabaseWriter.getInstance();
+			DatabaseWriter.setConnection(DatabaseConnection.getInstance());
+			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth(new DatabaseReader(DatabaseConnection.getInstance()), databaseWriter);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {

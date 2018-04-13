@@ -171,7 +171,9 @@ public class CreateBudgetOptions extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			CreateBudgetOptions dialog = new CreateBudgetOptions(new DatabaseReader(DatabaseConnection.getInstance()), new DatabaseWriter(DatabaseConnection.getInstance()));
+			IDatabaseWriter databaseWriter = DatabaseWriter.getInstance();
+			DatabaseWriter.setConnection(DatabaseConnection.getInstance());
+			CreateBudgetOptions dialog = new CreateBudgetOptions(new DatabaseReader(DatabaseConnection.getInstance()), databaseWriter);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {

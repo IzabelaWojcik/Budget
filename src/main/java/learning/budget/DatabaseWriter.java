@@ -8,12 +8,29 @@ import java.util.HashMap;
 
 public class DatabaseWriter implements IDatabaseWriter {
 	private Statement start = null;
-	Connection connection;
+	private static IDatabaseWriter databaseWriter =  null;
+	static Connection connection;
 
-	public DatabaseWriter(Connection con) {
+	private DatabaseWriter() {}
+
+	public static IDatabaseWriter getInstance() {
+		if(databaseWriter == null) databaseWriter = new DatabaseWriter();
+		return databaseWriter;
+	}
+	
+	public static void setConnection(Connection con) {
 		connection = con;
 	}
-
+	
+	private void executeUpdate(String update) {
+		try {
+			start = connection.createStatement();
+			start.executeUpdate(update);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void writeCategoryMapToDatabase(HashMap<String, String> map, int idBudget, String tablename) {
 		for (String s : map.values()) {
 			String update = "insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget
@@ -49,15 +66,6 @@ public class DatabaseWriter implements IDatabaseWriter {
 		String update = "insert into " + "\"" + tablename + "\"" + "values(" + amount + "," + "\'" + date + "\'" + ","
 				+ idUser + "," + idIncomeCategory + "," + idBudget + ")";
 		executeUpdate(update);
-	}
-
-	private void executeUpdate(String update) {
-		try {
-			start = connection.createStatement();
-			start.executeUpdate(update);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void writeExpenditureOrSavingsToDatabase(double amount, java.sql.Date date, int idCategory, int idBudget,

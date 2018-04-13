@@ -126,7 +126,9 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					BudgetViews window = new BudgetViews(new DatabaseReader(DatabaseConnection.getInstance()), new DatabaseWriter(DatabaseConnection.getInstance()));
+					IDatabaseWriter databaseWriter = DatabaseWriter.getInstance();
+					DatabaseWriter.setConnection(DatabaseConnection.getInstance());
+					BudgetViews window = new BudgetViews(new DatabaseReader(DatabaseConnection.getInstance()), databaseWriter);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
