@@ -9,21 +9,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DatabaseReader implements IDatabaseReader{
-	private Statement start = null;
-	private ResultSet rs = null;
-	private HashMap<Integer, String> usersFromDatabaseMap = new HashMap<Integer, String>();
-
 	Connection connection;
 	
 	public DatabaseReader(Connection con) {
 		connection = con;
 	}
 
-	private ResultSet makeConnection(String tablename) throws SQLException {
-		start = connection.createStatement();
+	private ResultSet getDataFromTable(String tablename) throws SQLException {
+		Statement start = connection.createStatement();
 		String SQL = "Select * from " + "\"" + tablename + "\"";
-		rs = start.executeQuery(SQL);
+		ResultSet rs = start.executeQuery(SQL);
 		start = connection.createStatement();
+
 		return rs;
 	}
 	
@@ -31,7 +28,7 @@ public class DatabaseReader implements IDatabaseReader{
 		String tablename = "Budget_options";
 		int date = 0;
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			int idBudget = rs.getInt(3);
 			if(budgetId == idBudget) date = rs.getInt(2);
 		}catch(SQLException e){
@@ -44,7 +41,7 @@ public class DatabaseReader implements IDatabaseReader{
 		String tablename = "Users";
 		ArrayList<UsersObject> userList = new ArrayList<UsersObject>();
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int userId = rs.getInt(1);
 				String userName = rs.getString(2);
@@ -59,9 +56,10 @@ public class DatabaseReader implements IDatabaseReader{
 	}
 
 	public HashMap<Integer, String> readUsersFromDatabasetoHashMap() {
+		HashMap<Integer, String> usersFromDatabaseMap = new HashMap<Integer, String>();
 		String tablename = "Users";
 		try {
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while (rs.next()) {
 				int key = rs.getInt(1);
 				String value = rs.getString(2);
@@ -79,7 +77,7 @@ public class DatabaseReader implements IDatabaseReader{
 		ArrayList<UsersIncomeObject> usersIncomeList= new ArrayList<UsersIncomeObject>();
 		UsersIncomeObject usersIncomeObject = null;
 		try {
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while (rs.next()) {
 				double amount = rs.getDouble(2);
 				Date date = rs.getDate(3);
@@ -98,7 +96,7 @@ public class DatabaseReader implements IDatabaseReader{
 	public HashMap<Integer, String> readCategoryFromDatabase(String tablename){
 		HashMap<Integer, String> categoryMap = new HashMap<Integer, String>();
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int idCategory = rs.getInt(1);
 				String categoryName = rs.getString(2);
@@ -114,7 +112,7 @@ public class DatabaseReader implements IDatabaseReader{
 		String tablename = "Budget_name";
 		HashMap<Integer, String> budgetInNameMap = new HashMap<Integer, String>();
 		try {
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while (rs.next()) {
 				int key = rs.getInt(1);
 				String value = rs.getString(2);
@@ -131,7 +129,7 @@ public class DatabaseReader implements IDatabaseReader{
 		ArrayList<ExpendiutureObject> expenditureObjectList = new ArrayList<ExpendiutureObject>();
 		ExpendiutureObject expenditureObject = null;
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int expenditureCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
@@ -151,7 +149,7 @@ public class DatabaseReader implements IDatabaseReader{
 		ArrayList<ExpendiutureObject> expenditureObjectList = new ArrayList<ExpendiutureObject>();
 		ExpendiutureObject expenditureObject = null;
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int idExpenditure = rs.getInt(1);
 				int expenditureCategoryId = rs.getInt(4);
@@ -172,7 +170,7 @@ public class DatabaseReader implements IDatabaseReader{
 		ArrayList<SavingsObject> savingsObjectList = new ArrayList<SavingsObject>();
 		SavingsObject savingsObject = null;
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int savingsCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
@@ -193,7 +191,7 @@ public class DatabaseReader implements IDatabaseReader{
 		ArrayList<SavingsObject> savingsObjectList = new ArrayList<SavingsObject>();
 		SavingsObject savingsObject = null;
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int idSavings = rs.getInt(1);
 				int savingsCategoryId = rs.getInt(4);
