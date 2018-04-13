@@ -6,73 +6,64 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DatabaseWriter implements IDatabaseWriter{
+public class DatabaseWriter implements IDatabaseWriter {
 	private Statement start = null;
-	Connection connection; 
-	
+	Connection connection;
+
 	public DatabaseWriter(Connection con) {
 		connection = con;
 	}
-	public void writeCategoryMapToDatabase(HashMap<String, String> map, int idBudget, String tablename){
-		for(String s : map.values()){
-			try {
-				start = connection.createStatement();
-				start.executeUpdate("insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget + "')");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+
+	public void writeCategoryMapToDatabase(HashMap<String, String> map, int idBudget, String tablename) {
+		for (String s : map.values()) {
+			String update = "insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget
+					+ "')";
+			executeUpdate(update);
 		}
 	}
-	
-	public void writeCategoryListTodatabase(ArrayList<String> list, int idBudget, String tablename){
-		for(String s: list){
-			try {
-				start = connection.createStatement();
-				start.executeUpdate("insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget + "')");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+
+	public void writeCategoryListTodatabase(ArrayList<String> list, int idBudget, String tablename) {
+		for (String s : list) {
+			String update = "insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget
+					+ "')";
+			executeUpdate(update);
 		}
 	}
-	
-	public void writeDayOfBeginingNewBudgetMonthToDatabase(int day, int idBudget){
+
+	public void writeDayOfBeginingNewBudgetMonthToDatabase(int day, int idBudget) {
 		String tablename = "Budget_options";
-		try {
-			start = connection.createStatement();
-			start.executeUpdate("insert into " + "\"" + tablename + "\"" + "values('" + day + "\'" + "," + "\'" + idBudget + "')");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		String update = "insert into " + "\"" + tablename + "\"" + "values('" + day + "\'" + "," + "\'" + idBudget
+				+ "')";
+		executeUpdate(update);
 	}
-	
-	public void writeBudgetNameToDatabase(String name){
+
+	public void writeBudgetNameToDatabase(String name) {
 		String tablename = "Budget_name";
-		try {
-			start = connection.createStatement();
-			start.executeUpdate("insert into " + "\"" + tablename + "\"" + "values('" + name + "')");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		String update = "insert into " + "\"" + tablename + "\"" + "values('" + name + "')";
+		executeUpdate(update);
 	}
-	
-	public void writeIncomeToDatabase(double amount, java.sql.Date date, int idUser, int idIncomeCategory, int idBudget){
+
+	public void writeIncomeToDatabase(double amount, java.sql.Date date, int idUser, int idIncomeCategory,
+			int idBudget) {
 		String tablename = "Income";
+		String update = "insert into " + "\"" + tablename + "\"" + "values(" + amount + "," + "\'" + date + "\'" + ","
+				+ idUser + "," + idIncomeCategory + "," + idBudget + ")";
+		executeUpdate(update);
+	}
+
+	private void executeUpdate(String update) {
 		try {
 			start = connection.createStatement();
-			start.executeUpdate("insert into " + "\"" + tablename + "\"" + 
-			"values(" + amount  + "," + "\'" + date + "\'" + ","  + idUser + ","  + idIncomeCategory + "," + idBudget + ")");
+			start.executeUpdate(update);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void writeExpenditureOrSavingsToDatabase(double amount, java.sql.Date date, int idCategory, int idBudget, String tablename){
-		try {
-			start = connection.createStatement();
-			start.executeUpdate("insert into " + "\"" + tablename + "\"" + 
-			"values(" + amount  + "," + "\'" + date + "\'" + ","  + idCategory + "," + idBudget + ")");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+
+	public void writeExpenditureOrSavingsToDatabase(double amount, java.sql.Date date, int idCategory, int idBudget,
+			String tablename) {
+		String update = "insert into " + "\"" + tablename + "\"" + "values(" + amount + "," + "\'" + date + "\'" + ","
+				+ idCategory + "," + idBudget + ")";
+		executeUpdate(update);
 	}
 }
