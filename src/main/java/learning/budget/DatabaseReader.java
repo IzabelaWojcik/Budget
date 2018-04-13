@@ -13,8 +13,13 @@ public class DatabaseReader implements IDatabaseReader{
 	private ResultSet rs = null;
 	private HashMap<Integer, String> usersFromDatabaseMap = new HashMap<Integer, String>();
 
-	DatabaseConnection databaseConnection = new DatabaseConnection();
-	Connection connection = databaseConnection.connectionWithDB();
+	IDatabaseConnection databaseConnection;
+	Connection connection;
+	
+	public DatabaseReader(IDatabaseConnection _databaseConnection) {
+		databaseConnection = _databaseConnection;
+		connection = databaseConnection.connectionWithDB();
+	}
 
 	private ResultSet makeConnection(String tablename) throws SQLException {
 		start = connection.createStatement();
