@@ -52,8 +52,9 @@ public class GenerateComponents {
 	private Sort sort;
 	private SumOfElements sumOfElements = new SumOfElements();
 
-	public GenerateComponents(IDatabaseReader _databaseReader) {
+	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
 		databaseReader = _databaseReader;
+		databaseWriter = _databaseWriter;
 		
 		cbo = new CreateBudgetOptions(databaseReader, databaseWriter);
 		num = cbo.getMaxNumberOfUsers();

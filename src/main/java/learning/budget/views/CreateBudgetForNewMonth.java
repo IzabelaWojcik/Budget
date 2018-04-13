@@ -73,7 +73,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWritter;
 		
-		generateComponents = new GenerateComponents(databaseReader);
+		generateComponents = new GenerateComponents(databaseReader, databaseWriter);
 				
 		setTitle("Nowy Bud\u017Cet");
 		setBounds(100, 100, 496, 434);

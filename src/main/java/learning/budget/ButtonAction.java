@@ -37,7 +37,7 @@ public class ButtonAction extends GenerateComponents {
 	private Sort sort = new Sort(databaseReader);
 
 	public ButtonAction(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
-		super(_databaseReader);
+		super(_databaseReader, _databaseWriter);
 		
 		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
 		userIncomeObjectList = databaseReader.readIncomefromDatabase();

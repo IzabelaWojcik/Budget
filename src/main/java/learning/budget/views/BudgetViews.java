@@ -139,7 +139,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	 * Create the application.
 	 */
 	public BudgetViews(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
-		super(_databaseReader);
+		super(_databaseReader, _databaseWriter);
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWriter;
 		
