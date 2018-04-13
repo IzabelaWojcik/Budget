@@ -22,7 +22,8 @@ import com.toedter.calendar.JDateChooser;
 
 public class ButtonAction extends GenerateComponents {
 	//FIXME: check if parent has that members, if it has, remove them from here
-	private DatabaseWriter databaseWriter = new DatabaseWriter();
+	
+	private IDatabaseWriter databaseWriter;
 	private HashMap<Integer, String> incomeCategoryMap;
 	private ArrayList<UsersIncomeObject> userIncomeObjectList;
 	private HashMap<Integer, String> usersNameIdMap;
@@ -35,7 +36,7 @@ public class ButtonAction extends GenerateComponents {
 	private DateOptions dateOptions = new DateOptions();
 	private Sort sort = new Sort(databaseReader);
 
-	public ButtonAction(IDatabaseReader _databaseReader) {
+	public ButtonAction(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
 		super(_databaseReader);
 		
 		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");

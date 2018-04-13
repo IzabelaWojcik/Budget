@@ -25,6 +25,7 @@ import learning.budget.DatabaseWriter;
 import learning.budget.ExpendiutureObject;
 import learning.budget.GenerateComponents;
 import learning.budget.IDatabaseReader;
+import learning.budget.IDatabaseWriter;
 import learning.budget.Sort;
 import learning.budget.TextFieldAction;
 import learning.budget.TextFieldValidator;
@@ -76,7 +77,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private CreateBudgetOptions myBudget;
 //	private CreateBudgetForNewMonth createBudgetForNewMonth = new CreateBudgetForNewMonth();
 	TextFieldValidator textFieldValidator = new TextFieldValidator();
-	private DatabaseWriter databaseWriter = new DatabaseWriter();
+	private IDatabaseWriter databaseWriter;
 	private IDatabaseReader databaseReader;
 	private JPanel panelMainBudgetsFromAllYears;
 	//private GenerateComponents generateComponents = new GenerateComponents();
@@ -125,7 +126,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					BudgetViews window = new BudgetViews(new DatabaseReader());
+					BudgetViews window = new BudgetViews(new DatabaseReader(), new DatabaseWriter(new DatabaseConnection()));
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -137,13 +138,14 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	/**
 	 * Create the application.
 	 */
-	public BudgetViews(IDatabaseReader _databaseReader) {
+	public BudgetViews(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
 		super(_databaseReader);
 		databaseReader = _databaseReader;
+		databaseWriter = _databaseWriter;
 		
 		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
 		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
-		 myBudget = new CreateBudgetOptions(databaseReader);
+		 myBudget = new CreateBudgetOptions(databaseReader, databaseWriter);
 		initialize();
 	}
 
@@ -630,7 +632,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		panelMain.setLayout(gl_panelMain);
 		
 		TextFieldAction txFielsAction = new TextFieldAction();
-		ButtonAction buttonAction = new ButtonAction(databaseReader);
+		ButtonAction buttonAction = new ButtonAction(databaseReader, databaseWriter);
 		
 		txFielsAction.checkIfTextFieldHaveNumberValue(textFieldOtherIncome, lblIncomeOtherError, btnAddOtherIncome);
 		txFielsAction.checkIfTextFieldHaveNumberValue(textFieldExpenditureAmount, lblErrorAddExpenditure, btnExpenditureAdd);

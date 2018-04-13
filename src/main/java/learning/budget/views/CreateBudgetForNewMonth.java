@@ -12,10 +12,12 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
 import learning.budget.DataFormatter;
+import learning.budget.DatabaseConnection;
 import learning.budget.DatabaseReader;
 import learning.budget.DatabaseWriter;
 import learning.budget.GenerateComponents;
 import learning.budget.IDatabaseReader;
+import learning.budget.IDatabaseWriter;
 import learning.budget.TextFieldValidator;
 import java.awt.Dimension;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -42,7 +44,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 	private JButton okButton;
 	private JButton cancelButton;
 	private HashMap<Integer, Double> incomeMap = new HashMap<Integer, Double>();
-	private DatabaseWriter databaseWriter = new DatabaseWriter();
+	private IDatabaseWriter databaseWriter;
 	private IDatabaseReader databaseReader;
 	private GenerateComponents generateComponents;
 	
@@ -56,7 +58,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth(new DatabaseReader());
+			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth(new DatabaseReader(), new DatabaseWriter(new DatabaseConnection()));
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -67,8 +69,9 @@ public class CreateBudgetForNewMonth extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public CreateBudgetForNewMonth(IDatabaseReader _databaseReader) {
+	public CreateBudgetForNewMonth(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWritter) {
 		databaseReader = _databaseReader;
+		databaseWriter = _databaseWritter;
 		
 		generateComponents = new GenerateComponents(databaseReader);
 				

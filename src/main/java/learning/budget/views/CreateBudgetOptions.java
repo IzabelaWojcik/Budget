@@ -29,9 +29,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 import java.awt.Point;
 import java.awt.Rectangle;
+
+import learning.budget.DatabaseConnection;
 import learning.budget.DatabaseReader;
 import learning.budget.DatabaseWriter;
 import learning.budget.IDatabaseReader;
+import learning.budget.IDatabaseWriter;
 import learning.budget.TextFieldValidator;
 
 import java.awt.event.ItemListener;
@@ -161,14 +164,14 @@ public class CreateBudgetOptions extends JDialog {
 	private String budgetName;
 	private int idBudget = 0;
 	private IDatabaseReader databaseReader;
-	private DatabaseWriter databaseWriter = new DatabaseWriter();
+	private IDatabaseWriter databaseWriter;
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			CreateBudgetOptions dialog = new CreateBudgetOptions(new DatabaseReader());
+			CreateBudgetOptions dialog = new CreateBudgetOptions(new DatabaseReader(), new DatabaseWriter(new DatabaseConnection()));
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -179,8 +182,9 @@ public class CreateBudgetOptions extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public CreateBudgetOptions(IDatabaseReader _databaseReader) {
+	public CreateBudgetOptions(IDatabaseReader _databaseReader, IDatabaseWriter _dDatabaseWriter) {
 		databaseReader = _databaseReader;
+		databaseWriter = _dDatabaseWriter;
 		
 		setTitle("Nowy projekt");
 		setBounds(100, 100, 578, 565);

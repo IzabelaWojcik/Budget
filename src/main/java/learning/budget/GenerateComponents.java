@@ -30,6 +30,7 @@ import learning.budget.views.CreateBudgetOptions;
 public class GenerateComponents {
 
 	protected IDatabaseReader databaseReader;
+	protected IDatabaseWriter databaseWriter;
 	private HashMap<Integer, String> budgetIdNameMap;
 	private DateOptions dateOptions = new DateOptions();
 	private ArrayList<UsersIncomeObject> usersIncomeObjectList;
@@ -54,7 +55,7 @@ public class GenerateComponents {
 	public GenerateComponents(IDatabaseReader _databaseReader) {
 		databaseReader = _databaseReader;
 		
-		cbo = new CreateBudgetOptions(databaseReader);
+		cbo = new CreateBudgetOptions(databaseReader, databaseWriter);
 		num = cbo.getMaxNumberOfUsers();
 		budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
 		usersIncomeObjectList = databaseReader.readIncomefromDatabase();

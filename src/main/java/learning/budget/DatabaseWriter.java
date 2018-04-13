@@ -8,9 +8,13 @@ import java.util.HashMap;
 
 public class DatabaseWriter implements IDatabaseWriter{
 	private Statement start = null;
-	DatabaseConnection databaseConnection = new DatabaseConnection();
-	Connection connection = databaseConnection.connectionWithDB();
+	IDatabaseConnection databaseConnection;
+	Connection connection; 
 	
+	public DatabaseWriter(IDatabaseConnection _databaseConnection) {
+		databaseConnection = _databaseConnection;
+		connection = databaseConnection.connectionWithDB();
+	}
 	public void writeCategoryMapToDatabase(HashMap<String, String> map, int idBudget, String tablename){
 		for(String s : map.values()){
 			try {

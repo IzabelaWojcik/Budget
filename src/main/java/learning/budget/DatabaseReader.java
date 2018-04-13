@@ -15,7 +15,6 @@ public class DatabaseReader implements IDatabaseReader{
 
 	DatabaseConnection databaseConnection = new DatabaseConnection();
 	Connection connection = databaseConnection.connectionWithDB();
-	DatabaseWriter databaseWriter = new DatabaseWriter();
 
 	private ResultSet makeConnection(String tablename) throws SQLException {
 		start = connection.createStatement();
