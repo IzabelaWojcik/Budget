@@ -27,6 +27,7 @@ import com.toedter.calendar.JDateChooser;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,7 +59,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth(new DatabaseReader(new DatabaseConnection()), new DatabaseWriter(new DatabaseConnection()));
+			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth(new DatabaseReader(DatabaseConnection.getInstance()), new DatabaseWriter(DatabaseConnection.getInstance()));
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
