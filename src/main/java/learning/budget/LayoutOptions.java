@@ -1,7 +1,6 @@
 package learning.budget;
 
 import java.awt.GridBagConstraints;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -15,7 +14,6 @@ public class LayoutOptions {
 		c.gridx = gridx;
 		c.gridy = gridy;
 		panel.add(label, c);
-		
 	}
 	
 	public void gridBagLayoutOptionsForPanelsWithThreeLabels(JPanel panel, JLabel label1, JLabel label2, JLabel label3){

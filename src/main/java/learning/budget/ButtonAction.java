@@ -9,15 +9,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.xml.ws.FaultAction;
-
-//import org.junit.experimental.categories.Categories.ExcludeCategory;
-
 import com.toedter.calendar.JDateChooser;
 
 public class ButtonAction extends GenerateComponents {
@@ -338,12 +333,4 @@ public class ButtonAction extends GenerateComponents {
 		}
 		return idUser;
 	}
-	
-
-
-	///////////////////////////////////////////////////////////////////
-	public void refreshPanelsWithButtonsView(JPanel panel) {
-
-	}
-
 }

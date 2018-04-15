@@ -1,93 +1,45 @@
 package learning.budget.views;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.CardLayout;
 import java.awt.Color;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
 import learning.budget.ButtonAction;
-//import classes.ButtonAction;
-import learning.budget.ComboBoxAction;
-import learning.budget.DatabaseConnection;
 import learning.budget.DatabaseReader;
-import learning.budget.DatabaseWriter;
-import learning.budget.ExpendiutureObject;
-import learning.budget.GenerateComponents;
-import learning.budget.Sort;
 import learning.budget.TextFieldAction;
-import learning.budget.TextFieldValidator;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import java.awt.event.HierarchyListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
-import java.awt.event.HierarchyEvent;
-import java.awt.Dimension;
-import java.awt.event.ContainerAdapter;
-import java.awt.event.ContainerEvent;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.GridLayout;
 import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import javax.swing.border.TitledBorder;
-import javax.xml.soap.Text;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JCalendar;
 import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.BorderLayout;
-import java.awt.Insets;
-import javax.swing.JScrollBar;
-import javax.swing.JTextArea;
-import javax.swing.DefaultComboBoxModel;
-import com.toedter.calendar.JDayChooser;
 
 public class BudgetViews extends learning.budget.GenerateComponents{
-
 	private JFrame frame;
 	private JPanel panelMain;
 	private JPanel panelPoprzednieBudzety;
 	private CreateBudgetOptions myBudget = new CreateBudgetOptions();
-//	private CreateBudgetForNewMonth createBudgetForNewMonth = new CreateBudgetForNewMonth();
-	TextFieldValidator textFieldValidator = new TextFieldValidator();
-	private DatabaseWriter databaseWriter = new DatabaseWriter();
 	private DatabaseReader databaseReader = new DatabaseReader();
 	private JPanel panelMainBudgetsFromAllYears;
-	//private GenerateComponents generateComponents = new GenerateComponents();
 	private JPanel panelMainWithMonthsInYear;
 	private JPanel panelUsersIncome;
 	private JPanel panelUsers;
 	private JPanel panelIncome;
 	private JPanel panelAddOtherIncomes;
-	private JComboBox comboBoxOtherIncome;
 	private JButton btnAddOtherIncome;
 	private JTextField textFieldOtherIncome;
-	private JComboBox comboBoxUsers;
 	private JLabel lblIncomeOtherError;
 	private JPanel panelMonthlyBudgetCardLayout;
 	private JPanel panelMonthlyBudget;
@@ -99,7 +51,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private JButton btnBudgetForNewMonth;
 	private JPanel panelExpenditure;
 	private JDateChooser dateChooserExpenditureDate;
-	private JComboBox comboBoxExpenditureCategory;
 	private JTextField textFieldExpenditureAmount;
 	private JLabel lblexpenditureSum;
 	private JLabel lblIncomeSum;
@@ -107,7 +58,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private JScrollPane scrollPaneExpenditure;
 	private JPanel panelExpenditureView;
 	private JDateChooser dateChooserSavingsDate;
-	private JComboBox comboBoxSavingsCategory;
 	private JTextField textFieldSavingsAmount;
 	private JLabel lblSavingsSum;
 	private JLabel lblErrorAddExpenditure;
@@ -117,9 +67,11 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private JPanel panelSavingsView;
 	private JLabel lblInform;
 	private JLabel lblSumaPozostaychPrzychodw;
-	/**
-	 * Launch the application.
-	 */
+	private JComboBox<String> comboBoxOtherIncome;
+	private JComboBox<String> comboBoxUsers;
+	private JComboBox<String> comboBoxSavingsCategory;
+	private JComboBox<String> comboBoxExpenditureCategory;
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -133,16 +85,10 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public BudgetViews() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Bud\u017Cet domowy");
@@ -172,9 +118,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		JMenuItem mntmEdytujUstawieniaBudzetu = new JMenuItem("Edytuj ustawienia bud\u017Cetu");
 		menuPlik.add(mntmEdytujUstawieniaBudzetu);
 		////END MENU
-		
 	}
-	
 	
 	public void mainPanel(){
 		panelMain = new JPanel();
@@ -233,7 +177,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		
 		panelUsersIncome = new JPanel();
 		
-		
 		GroupLayout gl_panelUsersIncome = new GroupLayout(panelUsersIncome);
 		gl_panelUsersIncome.setHorizontalGroup(
 			gl_panelUsersIncome.createParallelGroup(Alignment.LEADING)
@@ -266,13 +209,12 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		btnAddOtherIncome = new JButton("Dodaj");
 		btnAddOtherIncome.setEnabled(false);
 		
-		
-		comboBoxOtherIncome = new JComboBox();
+		comboBoxOtherIncome = new JComboBox<String>();
 		
 		textFieldOtherIncome = new JTextField();
 		textFieldOtherIncome.setColumns(10);
 		
-		comboBoxUsers = new JComboBox();
+		comboBoxUsers = new JComboBox<String>();
 		
 		lblIncomeOtherError = new JLabel("");
 		lblIncomeOtherError.setForeground(Color.RED);
@@ -414,7 +356,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 					.addGap(313))
 		);
 		
-		
 		panelSavingsView = new JPanel();
 		scrollPaneSavingsView.setViewportView(panelSavingsView);
 		GridBagLayout gbl_panelSavingsView = new GridBagLayout();
@@ -423,8 +364,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		gbl_panelSavingsView.columnWeights = new double[]{Double.MIN_VALUE};
 		gbl_panelSavingsView.rowWeights = new double[]{Double.MIN_VALUE};
 		panelSavingsView.setLayout(gbl_panelSavingsView);
-		
-		
 		
 		panelExpenditureView = new JPanel();
 		scrollPaneExpenditure.setViewportView(panelExpenditureView);
@@ -443,7 +382,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		gbl_panelOtherIncomeView.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gbl_panelOtherIncomeView.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		panelOtherIncomeView.setLayout(gbl_panelOtherIncomeView);
-
 		
 		JLabel lblSumaPrzychodow = new JLabel("Suma przychod\u00F3w:");
 		
@@ -495,7 +433,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		
 		dateChooserSavingsDate = new JDateChooser();
 		
-		comboBoxSavingsCategory = new JComboBox();
+		comboBoxSavingsCategory = new JComboBox<String>();
 		
 		textFieldSavingsAmount = new JTextField();
 		textFieldSavingsAmount.setColumns(10);
@@ -551,7 +489,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		);
 		panelSavings.setLayout(gl_panelSavings);
 		
-		
 		dateChooserExpenditureDate = new JDateChooser();
 		
 		JLabel lblRodzajwydatku = new JLabel("Rodzaj Wydatku:");
@@ -560,7 +497,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		
 		JLabel lblData = new JLabel("Data:");
 		
-		comboBoxExpenditureCategory = new JComboBox();
+		comboBoxExpenditureCategory = new JComboBox<String>();
 		
 		textFieldExpenditureAmount = new JTextField();
 		textFieldExpenditureAmount.setColumns(10);
@@ -632,28 +569,11 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		generateButtonsWithBudgetsNames(panelBudgetName, panelMainBudgetsFromAllYears, panelMainWithMonthsInYear, panelUsers, panelIncome, panelMonthlyBudget, panelMonthlyBudgetEmpty, panelOtherIncomeView, comboBoxUsers, comboBoxOtherIncome, comboBoxExpenditureCategory, comboBoxSavingsCategory, panelExpenditureView, panelSavingsView, lblInform, lblexpenditureSum, lblSavingsSum, lblOtherIncomeSum, lblIncomeSum);
 		buttonAction.addExpenditureOrSavingsToDatabaseAfterClickingButton(btnExpenditureAdd, comboBoxExpenditureCategory, comboBoxUsers, textFieldExpenditureAmount, lblErrorAddExpenditure, dateChooserExpenditureDate, expenditureCategoryMap, "Expenditure", panelExpenditureView, panelSavingsView, lblexpenditureSum, lblSavingsSum);
 		buttonAction.addExpenditureOrSavingsToDatabaseAfterClickingButton(btnSavingsAdd, comboBoxSavingsCategory, comboBoxUsers, textFieldSavingsAmount, lblErrorAddSavings, dateChooserSavingsDate, savingsCategoryMap, "Savings", panelExpenditureView, panelSavingsView, lblexpenditureSum, lblSavingsSum);
-		
-		
-		
-		
-		
-	
 	}
 	
 	public void poprzednieBudzetyPanel(){
 		panelPoprzednieBudzety = new JPanel();
 		frame.getContentPane().add(panelPoprzednieBudzety, "name_8807481040704");
 		panelPoprzednieBudzety.setLayout(null);
-	}
-	
-	
-	private void setPanelMainVisible(){
-		panelMain.setVisible(true);
-		panelPoprzednieBudzety.setVisible(false);
-	}
-	
-	private void setPanelOldBudgetsVisible(){
-		panelMain.setVisible(false);
-		panelPoprzednieBudzety.setVisible(true);
 	}
 }

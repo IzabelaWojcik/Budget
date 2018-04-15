@@ -12,7 +12,6 @@ import javax.swing.GroupLayout.Alignment;
 import java.awt.CardLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -32,14 +31,13 @@ import java.awt.Rectangle;
 import learning.budget.DatabaseReader;
 import learning.budget.DatabaseWriter;
 import learning.budget.TextFieldValidator;
-
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
 public class CreateBudgetOptions extends JDialog {
-
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JPanel panel1;
 	private JPanel panel1_Users;
@@ -162,9 +160,7 @@ public class CreateBudgetOptions extends JDialog {
 	private DatabaseReader databaseReader = new DatabaseReader();
 	private DatabaseWriter databaseWriter = new DatabaseWriter();
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 		try {
 			CreateBudgetOptions dialog = new CreateBudgetOptions();
@@ -175,9 +171,6 @@ public class CreateBudgetOptions extends JDialog {
 		}
 	}
 
-	/**
-	 * Create the dialog.
-	 */
 	public CreateBudgetOptions() {
 		setTitle("Nowy projekt");
 		setBounds(100, 100, 578, 565);
@@ -1505,7 +1498,6 @@ public class CreateBudgetOptions extends JDialog {
 						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		panel.setLayout(gl_panel);
 		
-		
 		GroupLayout gl_panel3 = new GroupLayout(panel3);
 		gl_panel3.setHorizontalGroup(
 			gl_panel3.createParallelGroup(Alignment.LEADING)
@@ -2051,7 +2043,6 @@ public class CreateBudgetOptions extends JDialog {
 		String s = textFieldHowManyUsersToDisplay.getText();
 		int num = 0;
 		JTextField jTextFields[];
-		int repetiviveUniqueNames = 0;
 		try {
 			panel1_Users.removeAll();
 			num = Integer.parseInt(s);
@@ -2090,9 +2081,6 @@ public class CreateBudgetOptions extends JDialog {
 						}else{
 							btnDalej1.setEnabled(false);
 						}
-						
-						 //usersMap.put(key, value);
-						// System.out.println(usersMap);
 						if (usersMap.size() == userNumber && currentFieldIsEmptyOrHasOnlySpaces == false) {
 							btnDalej1.setEnabled(true);
 						} else {
@@ -2225,17 +2213,15 @@ public class CreateBudgetOptions extends JDialog {
 		}
 		return true;
 	}
-	////////
+	
 	private int checkIfUserNameIsUniqueName(String userName){
 		HashMap<Integer, String> userIdNameMap = databaseReader.readUsersFromDatabasetoHashMap();
 		for(Entry<Integer, String> entry: userIdNameMap.entrySet()){
 			if(userName.equals(entry.getValue())){
-			//	return false;
 				return 0;
 			}
 		}
 		return 1;
-		//return true;
 	}
 	
 	private void writeDataToDatabase(){
@@ -2256,8 +2242,6 @@ public class CreateBudgetOptions extends JDialog {
 		databaseWriter.writeCategoryMapToDatabase(oszczednosciFromTxtFieldMap,  idBudget, "Savings_category");
 		databaseWriter.writeDayOfBeginingNewBudgetMonthToDatabase(dayOfNewBudgetMonth, idBudget);
 	}
-
-
 
 	public int getMaxNumberOfUsers(){
 		return maxNumberOfUsersInBudget;

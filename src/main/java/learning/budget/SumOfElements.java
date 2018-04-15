@@ -1,5 +1,4 @@
 package learning.budget;
-import java.text.DecimalFormat;
 
 import javax.swing.JLabel;
 
@@ -24,5 +23,4 @@ public class SumOfElements {
 	public void setSumToZero(){
 		sum = 0;
 	}
-
 }

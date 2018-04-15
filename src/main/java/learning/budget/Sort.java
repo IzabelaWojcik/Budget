@@ -7,7 +7,6 @@ import java.util.HashMap;
 public class Sort {
 	private DatabaseReader databaseReader = new DatabaseReader();
 	private ArrayList<UsersIncomeObject> usersIncomeObjectList = databaseReader.readIncomefromDatabase();
-	private DataFormatter dataFormatter = new DataFormatter();
 	private DateOptions dateOptions = new DateOptions();
 
 	public ArrayList<Integer> sortAscending(ArrayList<Integer> listToSort) {

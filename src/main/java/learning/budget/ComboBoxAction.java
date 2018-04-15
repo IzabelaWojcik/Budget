@@ -3,7 +3,6 @@ package learning.budget;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
 import javax.swing.JComboBox;
 
 public class ComboBoxAction {
@@ -88,5 +87,4 @@ public class ComboBoxAction {
 			}
 		}
 	}
-
 }

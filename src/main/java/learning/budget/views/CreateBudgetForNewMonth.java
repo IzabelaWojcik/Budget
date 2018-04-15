@@ -1,58 +1,30 @@
 package learning.budget.views;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-
-import learning.budget.DataFormatter;
-import learning.budget.DatabaseReader;
-import learning.budget.DatabaseWriter;
 import learning.budget.GenerateComponents;
-import learning.budget.TextFieldValidator;
 import java.awt.Dimension;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import com.toedter.calendar.JDateChooser;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map.Entry;
 import java.awt.event.ActionEvent;
 
 public class CreateBudgetForNewMonth extends JDialog {
-
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JPanel panelIncomeValues;
 	private JPanel panelIncomUsersNames;
 	private JPanel panelIncom;
 	private JPanel panelIncomeErrorLabels;
 	private JButton okButton;
-	private JButton cancelButton;
-	private HashMap<Integer, Double> incomeMap = new HashMap<Integer, Double>();
-	private DatabaseWriter databaseWriter = new DatabaseWriter();
-	private DatabaseReader databaseReader = new DatabaseReader();
 	private GenerateComponents generateComponents = new GenerateComponents();
-	
-	private DataFormatter dataFormatter = new DataFormatter();
-	///////////////////
-	//private long time = System.currentTimeMillis();            ///}data -								}
-	//private java.sql.Date sqlDate = new java.sql.Date(time);   ///}dzisiejsza, da si� zapisac do bazy }razem 
-	////////////////
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 		try {
 			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth();
@@ -63,9 +35,6 @@ public class CreateBudgetForNewMonth extends JDialog {
 		}
 	}
 
-	/**
-	 * Create the dialog.
-	 */
 	public CreateBudgetForNewMonth() {
 		setTitle("Nowy Bud\u017Cet");
 		setBounds(100, 100, 496, 434);
@@ -126,7 +95,6 @@ public class CreateBudgetForNewMonth extends JDialog {
 					.addComponent(panelIncom, GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
 					.addContainerGap())
 		);
-
 		
 		generateComponents.generateUsersAndIncomeTextFields(panelIncomUsersNames, panelIncomeValues, panelIncomeErrorLabels, okButton);
 		contentPanel.setLayout(gl_contentPanel);
@@ -139,42 +107,12 @@ public class CreateBudgetForNewMonth extends JDialog {
 				okButton.setEnabled(false);
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-//						try{
-//							/////
-//							int budgetId =;
-//							int idOfIncome = 1;
-//							int dateOfBegginingNewBudgetMonth = databaseReader.readDateOfBegginingNewBudgerMonthFromDatabase(budgetId);
-//							int month = 
-//							int year = 		
-//							int sqlDate = dateOfBegginingNewBudgetMonth + "-" + month + "-" + year;
-//							for(Entry<Integer, Double> s : incomeMap.entrySet()){
-//								int idUser = s.getKey();
-//								double amount = s.getValue();
-//								databaseWriter.writeIncomeToDatabase(amount, sqlDate, idUser, idOfIncome, budgetId);
-//							}
-//							dispose();
-//						}catch(NullPointerException | ParseException except){
-//							JOptionPane.showMessageDialog(null, "Wybierz dat�");
-//						}
 					}
 				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
-//			{
-//				cancelButton = new JButton("Cancel");
-//				cancelButton.addActionListener(new ActionListener() {
-//					public void actionPerformed(ActionEvent e) {
-//						dispose();
-//					}
-//				});
-//				cancelButton.setActionCommand("Cancel");
-//				buttonPane.add(cancelButton);
-//			}
 		}
 	}
-
-	
-
 }
