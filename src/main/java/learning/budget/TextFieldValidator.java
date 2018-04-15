@@ -60,5 +60,4 @@ public class TextFieldValidator {
 			return false;
 		}
 	}
-	
 }

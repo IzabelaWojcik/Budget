@@ -71,7 +71,6 @@ public class DatabaseReader {
 		return usersFromDatabaseMap;
 	}
 	
-	
 	public ArrayList<UsersIncomeObject> readIncomefromDatabase() {
 		String tablename = "Income";
 		ArrayList<UsersIncomeObject> usersIncomeList= new ArrayList<UsersIncomeObject>();
@@ -185,7 +184,6 @@ public class DatabaseReader {
 		return savingsObjectList;
 	}
 	
-	//
 	public ArrayList<SavingsObject> readSavingsWithItsIdFromDataBase(){
 		String tablename = "Savings";
 		ArrayList<SavingsObject> savingsObjectList = new ArrayList<SavingsObject>();
@@ -193,7 +191,6 @@ public class DatabaseReader {
 		try{
 			ResultSet rs = makeConnection(tablename);
 			while(rs.next()){
-				int idSavings = rs.getInt(1);
 				int savingsCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
 				double amount = rs.getDouble(2);

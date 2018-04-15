@@ -1,6 +1,5 @@
 package learning.budget;
 
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -10,43 +9,29 @@ import java.awt.event.KeyEvent;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-
-import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JDayChooser;
-
 import learning.budget.views.CreateBudgetOptions;
 
 public class GenerateComponents {
-
 	private DatabaseReader databaseReader = new DatabaseReader();
 	private HashMap<Integer, String> budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
 	private DateOptions dateOptions = new DateOptions();
 	private ArrayList<UsersIncomeObject> usersIncomeObjectList = databaseReader.readIncomefromDatabase();
-	private ArrayList<UsersObject> usersObjectList = databaseReader.readUsersFromDatabase();
 	private HashMap<Integer, String> usersNameHashMap = databaseReader.readUsersFromDatabasetoHashMap();
 	private HashMap<Integer, String> incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
 	private HashMap<Integer, String> expenditureCategoryMap = databaseReader
 			.readCategoryFromDatabase("Expenditure_category");
 	private HashMap<Integer, String> savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
 	private LayoutOptions layoutOptions = new LayoutOptions();
-	private ArrayList<ExpendiutureObject> expenditureObjectList = databaseReader.readExpenditureFromDataBase();
-	private ArrayList<SavingsObject> savingObjectList = databaseReader.readSavingsFromDataBase();
 	private CreateBudgetOptions cbo = new CreateBudgetOptions();
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
 	private int num = cbo.getMaxNumberOfUsers();
 	private int userNumber = 0;
-	private int idOfBudget;
 	private static String YEARANDMONTH;
 	private ComboBoxAction comboBoxAction = new ComboBoxAction();
 	private Sort sort = new Sort();
@@ -58,8 +43,8 @@ public class GenerateComponents {
 
 	protected void generateButtonsWithBudgetsNames(JPanel panelWithBudgetsName, JPanel panelWithYears,
 			JPanel panelWithMonths, JPanel panelUser, JPanel panelIncome, JPanel panelBudget, JPanel panelBudgetEmpty,
-			JPanel panelOtherIncomeView, JComboBox comboBoxUsers, JComboBox comboBoxOtherIncome,
-			JComboBox comboBoxExpenditureCategory, JComboBox comboBoxSavings, JPanel panelExpenditureView,
+			JPanel panelOtherIncomeView, JComboBox<String> comboBoxUsers, JComboBox<String> comboBoxOtherIncome,
+			JComboBox<String> comboBoxExpenditureCategory, JComboBox<String> comboBoxSavings, JPanel panelExpenditureView,
 			JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum, JLabel labelSavingsSum,
 			JLabel labelOtherIncomeSum, JLabel labelIncomeSum) {
 
@@ -86,12 +71,11 @@ public class GenerateComponents {
 
 	private void generateYearButtonsAfterClickingBudgetNamesButtons(JButton button, int budgetId, JPanel panelWithYears,
 			JPanel panelWithMonths, JPanel panelUser, JPanel panelIncome, JPanel panelBudget, JPanel panelBudgetEmpty,
-			JPanel panelOtherIncomeView, JComboBox comboBoxUsers, JComboBox comboBoxOtherIncome,
-			JComboBox comboBoxExpenditureCategory, JComboBox comboBoxSavings, JPanel panelExpenditureView,
+			JPanel panelOtherIncomeView, JComboBox<String> comboBoxUsers, JComboBox<String> comboBoxOtherIncome,
+			JComboBox<String> comboBoxExpenditureCategory, JComboBox<String> comboBoxSavings, JPanel panelExpenditureView,
 			JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum, JLabel labelSavingsSum,
 			JLabel labelOtherIncomeSum, JLabel labelIncomeSum) {
 		button.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				setPanelBudgetInvisible(panelBudget, panelBudgetEmpty);
 				lblInform.setText("");
@@ -121,7 +105,6 @@ public class GenerateComponents {
 									panelWithMonths, year, panelUser, panelIncome, panelBudget, panelBudgetEmpty,
 									panelOtherIncomeView, panelExpenditureView, panelSavingsView, lblInform,
 									lblExpenditureSum, labelSavingsSum, labelOtherIncomeSum, labelIncomeSum);
-
 						}
 					}
 
@@ -144,7 +127,6 @@ public class GenerateComponents {
 				panelExpenditureView.repaint();
 				panelSavingsView.revalidate();
 				panelSavingsView.repaint();
-
 			}
 		});
 	}
@@ -173,8 +155,6 @@ public class GenerateComponents {
 					String monthName = dataFormatter.changeMonhNumberFromMonthName(month);
 					jButtons[i] = new JButton(monthName + "");
 					panelWithMonths.add(jButtons[i]);
-					// generateMonthNameAndYearInfoAfterClickingMonthButton(jButtons[i],
-					// lblInform, year, month);
 					generateIncomeAfterClickingMonthButton(jButtons[i], panelUser, panelIncome, panelBudget,
 							panelBudgetEmpty, budgetId, year, month, lblInform, labelIncomeSum);
 					generateOtherIncomeAfterClickingMonthButton(jButtons[i], panelOtherIncomeView, budgetId, year,
@@ -237,7 +217,6 @@ public class GenerateComponents {
 			JPanel panelBudget, JPanel panelBudgetEmpty, int budgetId, int year, int month, JLabel lblInform,
 			JLabel labelIncomeSum) {
 		button.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				sumOfElements.setSumToZero();
 				labelIncomeSum.setText("0");
@@ -287,7 +266,6 @@ public class GenerateComponents {
 	protected void generateOtherIncomeAfterClickingMonthButton(JButton button, JPanel panelOtherIncomeView,
 			int budgetId, int year, int month, JLabel labelOtherIncomeSum) {
 		button.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				sumOfElements.setSumToZero();
 				labelOtherIncomeSum.setText("0");
@@ -341,7 +319,6 @@ public class GenerateComponents {
 	protected void generateExpenditureAfterClickingMonthButton(JButton button, JPanel panelExpenditureView,
 			int budgetId, int year, int month, JLabel labelExpenditureSum) {
 		button.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				sumOfElements.setSumToZero();
 				labelExpenditureSum.setText("0");
@@ -393,7 +370,6 @@ public class GenerateComponents {
 	protected void generateSavingsAfterClickingMonthButton(JButton button, JPanel panelSavingsView, int budgetId,
 			int year, int month, JLabel labelSavingsSum) {
 		button.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				sumOfElements.setSumToZero();
 				labelSavingsSum.setText("0");
@@ -441,13 +417,12 @@ public class GenerateComponents {
 		});
 	}
 
-	///////////////// dzia�a ale wyswietla uzytkownikow wszystkich budzetow,
+	/////////////////FIXME dzia�a ale wyswietla uzytkownikow wszystkich budzetow,
 	///////////////// zastosowanw w create budget for new m9onth
 	public void generateUsersAndIncomeTextFields(JPanel panel1, JPanel panel2, JPanel panel3, JButton button) {
 		int i = 0;
 		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
 		HashMap<Integer, Double> incomeMap = new HashMap<>();
-		ArrayList<UsersObject> usersObjectList = databaseReader.readUsersFromDatabase();
 		JLabel jLabelsUsersName[] = new JLabel[num];
 		JLabel jErrorLabels[] = new JLabel[num];
 		JTextField jtextFields[] = new JTextField[num];
@@ -507,6 +482,5 @@ public class GenerateComponents {
 		panel2.repaint();
 		panel3.validate();
 		panel3.repaint();
-
 	}
 }
