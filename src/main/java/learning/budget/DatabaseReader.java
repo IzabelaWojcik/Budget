@@ -8,10 +8,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 public class DatabaseReader implements IDatabaseReader{
-	Connection connection;
+	private static IDatabaseReader databaseReader; 
+	static Connection connection;
 	
-	public DatabaseReader(Connection con) {
+	private DatabaseReader() {}
+	
+	public static IDatabaseReader getInstance() {
+		if(databaseReader == null) databaseReader = new DatabaseReader();
+		return databaseReader;
+	}
+	
+	public static void setConnection(Connection con) {
 		connection = con;
 	}
 
