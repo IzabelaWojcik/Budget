@@ -85,7 +85,7 @@ public class Sort {
 			int day = dateOptions.getDayFromDate(date);
 			int idBudget = eo.getBudgetId();
 			if (yearClicked == year && monthClicked == month && budgetId == idBudget) {
-				if (!expenditureListToSort.contains(eo.getExpenditureId())) {
+				if (!expenditureListToSort.contains(eo)) {
 					listOfDays.add(day);
 					expenditureListToSort.add(eo);
 				}
@@ -122,7 +122,7 @@ public class Sort {
 			int day = dateOptions.getDayFromDate(date);
 			int idBudget = so.getBudgetId();
 			if (yearClicked == year && monthClicked == month && budgetId == idBudget) {
-				if (!savingsListToSort.contains(so.getSavingsId())) {
+				if (!savingsListToSort.contains(so)) {
 					listOfDays.add(day);
 					savingsListToSort.add(so);
 				}

@@ -48,7 +48,7 @@ public class DataFormatter {
 			if (monthNumber == 12)
 				month = "Grudzień";
 
-			if (!list.contains(month))
+			if (!list.contains(monthNumber))
 				listOfMonths.add(month);
 		}
 		return listOfMonths;
