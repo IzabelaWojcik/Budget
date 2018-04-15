@@ -8,20 +8,28 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DatabaseReader {
-	private Statement start = null;
-	private ResultSet rs = null;
-	private HashMap<Integer, String> usersFromDatabaseMap = new HashMap<Integer, String>();
 
-	DatabaseConnection databaseConnection = new DatabaseConnection();
-	Connection connection = databaseConnection.connectionWithDB();
-	DatabaseWriter databaseWriter = new DatabaseWriter();
+public class DatabaseReader implements IDatabaseReader{
+	private static IDatabaseReader databaseReader; 
+	static Connection connection;
+	
+	private DatabaseReader() {}
+	
+	public static IDatabaseReader getInstance() {
+		if(databaseReader == null) databaseReader = new DatabaseReader();
+		return databaseReader;
+	}
+	
+	public static void setConnection(Connection con) {
+		connection = con;
+	}
 
-	private ResultSet makeConnection(String tablename) throws SQLException {
-		start = connection.createStatement();
+	private ResultSet getDataFromTable(String tablename) throws SQLException {
+		Statement start = connection.createStatement();
 		String SQL = "Select * from " + "\"" + tablename + "\"";
-		rs = start.executeQuery(SQL);
+		ResultSet rs = start.executeQuery(SQL);
 		start = connection.createStatement();
+
 		return rs;
 	}
 	
@@ -29,7 +37,7 @@ public class DatabaseReader {
 		String tablename = "Budget_options";
 		int date = 0;
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			int idBudget = rs.getInt(3);
 			if(budgetId == idBudget) date = rs.getInt(2);
 		}catch(SQLException e){
@@ -42,7 +50,7 @@ public class DatabaseReader {
 		String tablename = "Users";
 		ArrayList<UsersObject> userList = new ArrayList<UsersObject>();
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int userId = rs.getInt(1);
 				String userName = rs.getString(2);
@@ -57,9 +65,10 @@ public class DatabaseReader {
 	}
 
 	public HashMap<Integer, String> readUsersFromDatabasetoHashMap() {
+		HashMap<Integer, String> usersFromDatabaseMap = new HashMap<Integer, String>();
 		String tablename = "Users";
 		try {
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while (rs.next()) {
 				int key = rs.getInt(1);
 				String value = rs.getString(2);
@@ -76,7 +85,7 @@ public class DatabaseReader {
 		ArrayList<UsersIncomeObject> usersIncomeList= new ArrayList<UsersIncomeObject>();
 		UsersIncomeObject usersIncomeObject = null;
 		try {
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while (rs.next()) {
 				double amount = rs.getDouble(2);
 				Date date = rs.getDate(3);
@@ -95,7 +104,7 @@ public class DatabaseReader {
 	public HashMap<Integer, String> readCategoryFromDatabase(String tablename){
 		HashMap<Integer, String> categoryMap = new HashMap<Integer, String>();
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int idCategory = rs.getInt(1);
 				String categoryName = rs.getString(2);
@@ -111,7 +120,7 @@ public class DatabaseReader {
 		String tablename = "Budget_name";
 		HashMap<Integer, String> budgetInNameMap = new HashMap<Integer, String>();
 		try {
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while (rs.next()) {
 				int key = rs.getInt(1);
 				String value = rs.getString(2);
@@ -128,7 +137,7 @@ public class DatabaseReader {
 		ArrayList<ExpendiutureObject> expenditureObjectList = new ArrayList<ExpendiutureObject>();
 		ExpendiutureObject expenditureObject = null;
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int expenditureCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
@@ -148,7 +157,7 @@ public class DatabaseReader {
 		ArrayList<ExpendiutureObject> expenditureObjectList = new ArrayList<ExpendiutureObject>();
 		ExpendiutureObject expenditureObject = null;
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int idExpenditure = rs.getInt(1);
 				int expenditureCategoryId = rs.getInt(4);
@@ -169,7 +178,7 @@ public class DatabaseReader {
 		ArrayList<SavingsObject> savingsObjectList = new ArrayList<SavingsObject>();
 		SavingsObject savingsObject = null;
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int savingsCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
@@ -189,7 +198,7 @@ public class DatabaseReader {
 		ArrayList<SavingsObject> savingsObjectList = new ArrayList<SavingsObject>();
 		SavingsObject savingsObject = null;
 		try{
-			ResultSet rs = makeConnection(tablename);
+			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
 				int savingsCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);

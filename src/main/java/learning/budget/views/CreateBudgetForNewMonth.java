@@ -1,19 +1,24 @@
 package learning.budget.views;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import learning.budget.DatabaseConnection;
+import learning.budget.DatabaseReader;
+import learning.budget.DatabaseWriter;
 import learning.budget.GenerateComponents;
-import java.awt.Dimension;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JLabel;
-import java.awt.event.ActionListener;
+import learning.budget.IDatabaseReader;
+import learning.budget.IDatabaseWriter;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class CreateBudgetForNewMonth extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -23,11 +28,17 @@ public class CreateBudgetForNewMonth extends JDialog {
 	private JPanel panelIncom;
 	private JPanel panelIncomeErrorLabels;
 	private JButton okButton;
-	private GenerateComponents generateComponents = new GenerateComponents();
+	private IDatabaseWriter databaseWriter;
+	private IDatabaseReader databaseReader;
+	private GenerateComponents generateComponents;
 
 	public static void main(String[] args) {
 		try {
-			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth();
+			IDatabaseWriter databaseWriter = DatabaseWriter.getInstance();
+			DatabaseWriter.setConnection(DatabaseConnection.getInstance());
+			IDatabaseReader databaseReader = DatabaseReader.getInstance();
+			DatabaseReader.setConnection(DatabaseConnection.getInstance());
+			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth(databaseReader, databaseWriter);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -35,7 +46,12 @@ public class CreateBudgetForNewMonth extends JDialog {
 		}
 	}
 
-	public CreateBudgetForNewMonth() {
+	public CreateBudgetForNewMonth(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWritter) {
+		databaseReader = _databaseReader;
+		databaseWriter = _databaseWritter;
+		
+		generateComponents = new GenerateComponents(databaseReader, databaseWriter);
+				
 		setTitle("Nowy Bud\u017Cet");
 		setBounds(100, 100, 496, 434);
 		getContentPane().setLayout(new BorderLayout());

@@ -28,8 +28,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 import java.awt.Point;
 import java.awt.Rectangle;
+
+import learning.budget.DatabaseConnection;
 import learning.budget.DatabaseReader;
 import learning.budget.DatabaseWriter;
+import learning.budget.IDatabaseReader;
+import learning.budget.IDatabaseWriter;
 import learning.budget.TextFieldValidator;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -157,13 +161,17 @@ public class CreateBudgetOptions extends JDialog {
 	private JTextField textFieldBudgetName;
 	private String budgetName;
 	private int idBudget = 0;
-	private DatabaseReader databaseReader = new DatabaseReader();
-	private DatabaseWriter databaseWriter = new DatabaseWriter();
+	private IDatabaseReader databaseReader;
+	private IDatabaseWriter databaseWriter;
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
 
 	public static void main(String[] args) {
 		try {
-			CreateBudgetOptions dialog = new CreateBudgetOptions();
+			IDatabaseWriter databaseWriter = DatabaseWriter.getInstance();
+			DatabaseWriter.setConnection(DatabaseConnection.getInstance());
+			IDatabaseReader databaseReader = DatabaseReader.getInstance();
+			DatabaseReader.setConnection(DatabaseConnection.getInstance());
+			CreateBudgetOptions dialog = new CreateBudgetOptions(databaseReader, databaseWriter);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -171,7 +179,10 @@ public class CreateBudgetOptions extends JDialog {
 		}
 	}
 
-	public CreateBudgetOptions() {
+	public CreateBudgetOptions(IDatabaseReader _databaseReader, IDatabaseWriter _dDatabaseWriter) {
+		databaseReader = _databaseReader;
+		databaseWriter = _dDatabaseWriter;
+		
 		setTitle("Nowy projekt");
 		setBounds(100, 100, 578, 565);
 		getContentPane().setLayout(new BorderLayout());

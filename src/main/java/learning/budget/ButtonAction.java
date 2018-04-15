@@ -16,21 +16,33 @@ import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 
 public class ButtonAction extends GenerateComponents {
-	private DatabaseWriter databaseWriter = new DatabaseWriter();
-	private DatabaseReader databaseReader = new DatabaseReader();
-	private HashMap<Integer, String> incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
-	private ArrayList<UsersIncomeObject> userIncomeObjectList = databaseReader.readIncomefromDatabase();
-	private HashMap<Integer, String> usersNameIdMap = databaseReader.readUsersFromDatabasetoHashMap();
+	//FIXME: check if parent has that members, if it has, remove them from here
+	
+	private IDatabaseWriter databaseWriter;
+	private HashMap<Integer, String> incomeCategoryMap;
+	private ArrayList<UsersIncomeObject> userIncomeObjectList;
+	private HashMap<Integer, String> usersNameIdMap;
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
 	private DataFormatter dataFormatter = new DataFormatter();
-	ArrayList<ExpendiutureObject> expenditureObjectList = databaseReader.readExpenditureFromDataBase();
-	ArrayList<SavingsObject> savingsObjectList = databaseReader.readSavingsFromDataBase();
-	private HashMap<Integer, String> expenditureCategoryMap = databaseReader
-			.readCategoryFromDatabase("Expenditure_category");
-	private HashMap<Integer, String> savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+	ArrayList<ExpendiutureObject> expenditureObjectList;
+	ArrayList<SavingsObject> savingsObjectList;
+	private HashMap<Integer, String> expenditureCategoryMap;
+	private HashMap<Integer, String> savingsCategoryMap;
 	private DateOptions dateOptions = new DateOptions();
-	private Sort sort = new Sort();
+	private Sort sort = new Sort(databaseReader);
 
+	public ButtonAction(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
+		super(_databaseReader, _databaseWriter);
+		
+		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
+		userIncomeObjectList = databaseReader.readIncomefromDatabase();
+		usersNameIdMap = databaseReader.readUsersFromDatabasetoHashMap();
+		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
+		savingsObjectList = databaseReader.readSavingsFromDataBase();
+		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
+		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+	}
+	
 	public void addOtherIncomeToDatabaseAfterClickingButton(JButton button, JComboBox<String> cbUser,
 			JComboBox<String> cbOtherIncome, JTextField txFieldAmount, JLabel lblError, JDateChooser dateChooser,
 			JPanel panelOtherIncomeView, JLabel labelOtherIncomeSum) {
@@ -300,8 +312,7 @@ public class ButtonAction extends GenerateComponents {
 	}
 
 	public int getYearFromButtonClicked() {
-		GenerateComponents generateComponents = new GenerateComponents();
-		String yearAndMonthFromClickingButton = generateComponents.getYearAndMonth();
+		String yearAndMonthFromClickingButton = getYearAndMonth();
 		int yearFromClickedButton = 0;
 		if (yearAndMonthFromClickingButton.length() == 6) {
 			yearFromClickedButton = Integer.parseInt(yearAndMonthFromClickingButton.substring(2, 6));
@@ -312,8 +323,7 @@ public class ButtonAction extends GenerateComponents {
 	}
 
 	public int getMonthFromButtonClicked() {
-		GenerateComponents generateComponents = new GenerateComponents();
-		String yearAndMonthFromClickingButton = generateComponents.getYearAndMonth();
+		String yearAndMonthFromClickingButton = getYearAndMonth();
 		int monthFromClickedButton = 0;
 		if (yearAndMonthFromClickingButton.length() == 6) {
 			monthFromClickedButton = Integer.parseInt(yearAndMonthFromClickingButton.substring(0, 1));

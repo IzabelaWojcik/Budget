@@ -14,8 +14,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import learning.budget.ButtonAction;
+import learning.budget.DatabaseConnection;
 import learning.budget.DatabaseReader;
+import learning.budget.DatabaseWriter;
+import learning.budget.IDatabaseReader;
+import learning.budget.IDatabaseWriter;
 import learning.budget.TextFieldAction;
+import learning.budget.TextFieldValidator;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.util.HashMap;
@@ -30,8 +36,10 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private JFrame frame;
 	private JPanel panelMain;
 	private JPanel panelPoprzednieBudzety;
-	private CreateBudgetOptions myBudget = new CreateBudgetOptions();
-	private DatabaseReader databaseReader = new DatabaseReader();
+	private CreateBudgetOptions myBudget;
+	TextFieldValidator textFieldValidator = new TextFieldValidator();
+	private IDatabaseWriter databaseWriter;
+	private IDatabaseReader databaseReader;
 	private JPanel panelMainBudgetsFromAllYears;
 	private JPanel panelMainWithMonthsInYear;
 	private JPanel panelUsersIncome;
@@ -62,8 +70,8 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private JLabel lblSavingsSum;
 	private JLabel lblErrorAddExpenditure;
 	private JLabel lblErrorAddSavings;
-	private HashMap<Integer, String> expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
-	private HashMap<Integer, String> savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+	private HashMap<Integer, String> expenditureCategoryMap;
+	private HashMap<Integer, String> savingsCategoryMap;
 	private JPanel panelSavingsView;
 	private JLabel lblInform;
 	private JLabel lblSumaPozostaychPrzychodw;
@@ -76,7 +84,11 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					BudgetViews window = new BudgetViews();
+					IDatabaseWriter databaseWriter = DatabaseWriter.getInstance();
+					DatabaseWriter.setConnection(DatabaseConnection.getInstance());
+					IDatabaseReader databaseReader = DatabaseReader.getInstance();
+					DatabaseReader.setConnection(DatabaseConnection.getInstance());
+					BudgetViews window = new BudgetViews(databaseReader, databaseWriter);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -85,7 +97,14 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		});
 	}
 
-	public BudgetViews() {
+	public BudgetViews(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
+		super(_databaseReader, _databaseWriter);
+		databaseReader = _databaseReader;
+		databaseWriter = _databaseWriter;
+		
+		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
+		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+		 myBudget = new CreateBudgetOptions(databaseReader, databaseWriter);
 		initialize();
 	}
 
@@ -560,7 +579,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		panelMain.setLayout(gl_panelMain);
 		
 		TextFieldAction txFielsAction = new TextFieldAction();
-		ButtonAction buttonAction = new ButtonAction();
+		ButtonAction buttonAction = new ButtonAction(databaseReader, databaseWriter);
 		
 		txFielsAction.checkIfTextFieldHaveNumberValue(textFieldOtherIncome, lblIncomeOtherError, btnAddOtherIncome);
 		txFielsAction.checkIfTextFieldHaveNumberValue(textFieldExpenditureAmount, lblErrorAddExpenditure, btnExpenditureAdd);

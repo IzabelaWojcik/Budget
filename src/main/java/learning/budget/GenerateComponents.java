@@ -18,25 +18,41 @@ import javax.swing.JTextField;
 import learning.budget.views.CreateBudgetOptions;
 
 public class GenerateComponents {
-	private DatabaseReader databaseReader = new DatabaseReader();
-	private HashMap<Integer, String> budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
+	protected IDatabaseReader databaseReader;
+	protected IDatabaseWriter databaseWriter;
+	private HashMap<Integer, String> budgetIdNameMap;
 	private DateOptions dateOptions = new DateOptions();
-	private ArrayList<UsersIncomeObject> usersIncomeObjectList = databaseReader.readIncomefromDatabase();
-	private HashMap<Integer, String> usersNameHashMap = databaseReader.readUsersFromDatabasetoHashMap();
-	private HashMap<Integer, String> incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
-	private HashMap<Integer, String> expenditureCategoryMap = databaseReader
-			.readCategoryFromDatabase("Expenditure_category");
-	private HashMap<Integer, String> savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+	private ArrayList<UsersIncomeObject> usersIncomeObjectList;
+	private HashMap<Integer, String> usersNameHashMap;
+	private HashMap<Integer, String> incomeCategoryMap;
+	private HashMap<Integer, String> expenditureCategoryMap;
+	private HashMap<Integer, String> savingsCategoryMap;
 	private LayoutOptions layoutOptions = new LayoutOptions();
-	private CreateBudgetOptions cbo = new CreateBudgetOptions();
+	private CreateBudgetOptions cbo;
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
-	private int num = cbo.getMaxNumberOfUsers();
+	private int num;
 	private int userNumber = 0;
 	private static String YEARANDMONTH;
-	private ComboBoxAction comboBoxAction = new ComboBoxAction();
-	private Sort sort = new Sort();
+	private ComboBoxAction comboBoxAction;
+	private Sort sort;
 	private SumOfElements sumOfElements = new SumOfElements();
 
+	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
+		databaseReader = _databaseReader;
+		databaseWriter = _databaseWriter;
+		
+		cbo = new CreateBudgetOptions(databaseReader, databaseWriter);
+		num = cbo.getMaxNumberOfUsers();
+		budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
+		usersIncomeObjectList = databaseReader.readIncomefromDatabase();
+		usersNameHashMap = databaseReader.readUsersFromDatabasetoHashMap();
+		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
+		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
+		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+		comboBoxAction = new ComboBoxAction(databaseReader);
+		sort = new Sort(databaseReader);
+	}
+	
 	public String getYearAndMonth() {
 		return YEARANDMONTH;
 	}
