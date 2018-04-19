@@ -36,6 +36,8 @@ public class GenerateComponents {
 	private ComboBoxAction comboBoxAction;
 	private Sort sort;
 	private SumOfElements sumOfElements = new SumOfElements();
+	private ArrayList<ExpenditureObject> expenditureObjectListWithItsId;
+	private ArrayList<SavingsObject> savingsObjectListWithItsId;
 
 	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
 		databaseReader = _databaseReader;
@@ -49,8 +51,10 @@ public class GenerateComponents {
 		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
 		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
 		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDataBase();
+		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDataBase();
 		comboBoxAction = new ComboBoxAction(databaseReader);
-		sort = new Sort(databaseReader);
+		sort = new Sort();
 	}
 	
 	public String getYearAndMonth() {
@@ -107,7 +111,7 @@ public class GenerateComponents {
 				comboBoxExpenditureCategory.removeAllItems();
 				comboBoxSavings.removeAllItems();
 				HashMap<Integer, ArrayList<Integer>> mapOfYearsInConcreteBudgetId = sort
-						.mapOfSortedYearsInConcreteBudgerId();
+						.sortYearsInConcredeBudgetId(usersIncomeObjectList);
 				for (Entry<Integer, ArrayList<Integer>> entry : mapOfYearsInConcreteBudgetId.entrySet()) {
 					Integer idBudget = entry.getKey();
 					int sizeOfListOfYears = entry.getValue().size();
@@ -164,7 +168,7 @@ public class GenerateComponents {
 				panelOtherIncomeView.removeAll();
 				panelExpenditureView.removeAll();
 				panelSavingsView.removeAll();
-				ArrayList<Integer> listOfMonths = sort.getSortedMonthsForConcreteYearAndBudgetId(budgetId, year);
+				ArrayList<Integer> listOfMonths = sort.sortMonthsForConcreteYearAndBudgetId(usersIncomeObjectList, budgetId, year);
 				JButton[] jButtons = new JButton[listOfMonths.size()];
 				for (int i = 0; i < listOfMonths.size(); i++) {
 					int month = listOfMonths.get(i);
@@ -338,7 +342,7 @@ public class GenerateComponents {
 			public void actionPerformed(ActionEvent e) {
 				sumOfElements.setSumToZero();
 				labelExpenditureSum.setText("0");
-				ArrayList<ExpendiutureObject> expenditureObjectSortedList = sort.sortExpenditureAfterItsDay(year, month,
+				ArrayList<ExpenditureObject> expenditureObjectSortedList = sort.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, year, month,
 						budgetId);
 				panelExpenditureView.removeAll();
 				int sizeOfExpenditureObjectList = expenditureObjectSortedList.size();
@@ -350,7 +354,7 @@ public class GenerateComponents {
 				int i = 0;
 				Date date;
 				layoutOptions.setGridy(0);
-				for (ExpendiutureObject eo : expenditureObjectSortedList) {
+				for (ExpenditureObject eo : expenditureObjectSortedList) {
 					idBudget = eo.getBudgetId();
 					date = eo.getExpenditureDate();
 					dateYear = dateOptions.getYearFromDate(date);
@@ -389,7 +393,7 @@ public class GenerateComponents {
 			public void actionPerformed(ActionEvent e) {
 				sumOfElements.setSumToZero();
 				labelSavingsSum.setText("0");
-				ArrayList<SavingsObject> savingsObjectSortedList = sort.sortSavingsAfterItsDay(year, month, budgetId);
+				ArrayList<SavingsObject> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, year, month, budgetId);
 				panelSavingsView.removeAll();
 				int sizeOfSavingsObjectSortedList = savingsObjectSortedList.size();
 				JLabel jLabelDate[] = new JLabel[sizeOfSavingsObjectSortedList];

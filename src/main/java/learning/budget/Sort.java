@@ -2,62 +2,40 @@ package learning.budget;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Sort {
-	private IDatabaseReader databaseReader;
-	private ArrayList<UsersIncomeObject> usersIncomeObjectList; 
 	private DateOptions dateOptions = new DateOptions();
-
-	public Sort(IDatabaseReader _databaseReader) {
-		databaseReader = _databaseReader;
-		usersIncomeObjectList = databaseReader.readIncomefromDatabase();
-	}
-	public ArrayList<Integer> sortAscending(ArrayList<Integer> listToSort) {
-		listToSort.sort(null);
-		return listToSort;
-	}
-
-	public ArrayList<Integer> sortDescending(ArrayList<Integer> listToSort) {
-		sortAscending(listToSort);
-		ArrayList<Integer> reversedList = new ArrayList<Integer>();
-		if (listToSort.size() > 0) {
-			for (int i = listToSort.size() - 1; i >= 0; i--) {
-				int element = listToSort.get(i);
-				reversedList.add(element);
-			}
-		}
-		return reversedList;
-	}
-
-	public HashMap<Integer, ArrayList<Integer>> mapOfSortedYearsInConcreteBudgerId() {
-		HashMap<Integer, ArrayList<Integer>> mapOfYearsAndBudgetId = new HashMap<Integer, ArrayList<Integer>>();
-		ArrayList<Integer> sortedListOfYears = new ArrayList<Integer>();
-		for (UsersIncomeObject uio : usersIncomeObjectList) {
+	
+	public HashMap<Integer, ArrayList<Integer>> sortYearsInConcredeBudgetId(ArrayList<UsersIncomeObject> usersIncomeObjectList){
+		HashMap<Integer, ArrayList<Integer>> mapOfBudgetIdAndYears = new HashMap<Integer, ArrayList<Integer>>();
+		for(UsersIncomeObject uio: usersIncomeObjectList) {
 			int idBudget = uio.getBudgetId();
 			Date date = uio.getIncomeDate();
+			//FIXME date
 			int year = dateOptions.getYearFromDate(date);
-			if (!mapOfYearsAndBudgetId.containsKey(idBudget)) {
+			if (!mapOfBudgetIdAndYears.containsKey(idBudget)) {
 				ArrayList<Integer> listOfYears = new ArrayList<Integer>();
 				listOfYears.add(year);
-				mapOfYearsAndBudgetId.put(idBudget, listOfYears);
+				mapOfBudgetIdAndYears.put(idBudget, listOfYears);
 			} else {
-				ArrayList<Integer> listOfYears = mapOfYearsAndBudgetId.get(idBudget);
+				ArrayList<Integer> listOfYears = mapOfBudgetIdAndYears.get(idBudget);
 				if (!listOfYears.contains(year)) {
 					listOfYears.add(year);
-					sortedListOfYears = sortDescending(listOfYears);
-					mapOfYearsAndBudgetId.put(idBudget, sortedListOfYears);
+					Collections.sort(listOfYears, Collections.reverseOrder());
+					mapOfBudgetIdAndYears.put(idBudget, listOfYears);
 				}
 			}
 		}
-		return mapOfYearsAndBudgetId;
+		return mapOfBudgetIdAndYears;
 	}
-
-	public ArrayList<Integer> getSortedMonthsForConcreteYearAndBudgetId(int budgetId, int year) {
+	
+	public ArrayList<Integer> sortMonthsForConcreteYearAndBudgetId(ArrayList<UsersIncomeObject> usersIncomeObjectList, int budgetId, int year) {
 		ArrayList<Integer> listOfMonths = new ArrayList<Integer>();
-		ArrayList<Integer> sortedMonthsList = new ArrayList<Integer>();
 		for (UsersIncomeObject uio : usersIncomeObjectList) {
 			int idBudget = uio.getBudgetId();
+			//FIXME date
 			int yearOfBudget = dateOptions.getYearFromDate(uio.getIncomeDate());
 			if (idBudget == budgetId) {
 				if (yearOfBudget == year) {
@@ -68,37 +46,36 @@ public class Sort {
 				}
 			}
 		}
-		sortedMonthsList = sortDescending(listOfMonths);
-		return sortedMonthsList;
+		Collections.sort(listOfMonths,Collections.reverseOrder());
+		return listOfMonths;
 	}
-
-	public ArrayList<ExpendiutureObject> sortExpenditureAfterItsDay(int yearClicked, int monthClicked, int budgetId) {
-		ArrayList<ExpendiutureObject> expenditureObjectListWithExpenditureId = databaseReader
-				.readExpenditureWithItsIdFromDataBase();
+	
+	public ArrayList<ExpenditureObject> sortExpenditureAfterItsDay(ArrayList<ExpenditureObject> expenditureObjectListWithExpenditureId, int yearClicked, int monthClicked, int budgetId) {
 		ArrayList<Integer> listOfDays = new ArrayList<Integer>();
-		ArrayList<ExpendiutureObject> expenditureSortedList = new ArrayList<ExpendiutureObject>();
-		ArrayList<ExpendiutureObject> expenditureListToSort = new ArrayList<ExpendiutureObject>();
-		for (ExpendiutureObject eo : expenditureObjectListWithExpenditureId) {
+		
+		ArrayList<ExpenditureObject> expenditureListToSort = new ArrayList<ExpenditureObject>();
+		for (ExpenditureObject eo : expenditureObjectListWithExpenditureId) {
 			Date date = eo.getExpenditureDate();
+			//FIXME date
 			int year = dateOptions.getYearFromDate(date);
 			int month = dateOptions.getMonthFromDate(date);
 			int day = dateOptions.getDayFromDate(date);
 			int idBudget = eo.getBudgetId();
-			if (yearClicked == year && monthClicked == month && budgetId == idBudget) {
-				if (!expenditureListToSort.contains(eo)) {
-					listOfDays.add(day);
-					expenditureListToSort.add(eo);
-				}
-
+			if (yearClicked == year && monthClicked == month && budgetId == idBudget && !expenditureListToSort.contains(eo)) {
+				listOfDays.add(day);
+				expenditureListToSort.add(eo);
 			}
 		}
-		sortAscending(listOfDays);
-		for (int days : listOfDays) {
+		
+		ArrayList<ExpenditureObject> expenditureSortedList = new ArrayList<ExpenditureObject>();
+		Collections.sort(listOfDays);
+		for (int dayInList : listOfDays) {
 			if (!expenditureListToSort.isEmpty()) {
-				for (ExpendiutureObject eo : expenditureListToSort) {
+				for (ExpenditureObject eo : expenditureListToSort) {
 					Date date = eo.getExpenditureDate();
+					//FIXME date
 					int day = dateOptions.getDayFromDate(date);
-					if (day == days) {
+					if (day == dayInList) {
 						if (!expenditureSortedList.contains(eo)) {
 							expenditureSortedList.add(eo);
 						}
@@ -109,14 +86,13 @@ public class Sort {
 		return expenditureSortedList;
 	}
 
-	public ArrayList<SavingsObject> sortSavingsAfterItsDay(int yearClicked, int monthClicked, int budgetId) {
-		ArrayList<SavingsObject> savingsObjectsListWithSavingsId = databaseReader
-				.readSavingsWithItsIdFromDataBase();
+	public ArrayList<SavingsObject> sortSavingsAfterItsDay(ArrayList<SavingsObject> savingsObjectsListWithSavingsId, int yearClicked, int monthClicked, int budgetId) {
 		ArrayList<Integer> listOfDays = new ArrayList<Integer>();
 		ArrayList<SavingsObject> savingsSortedList = new ArrayList<SavingsObject>();
 		ArrayList<SavingsObject> savingsListToSort = new ArrayList<SavingsObject>();
 		for (SavingsObject so : savingsObjectsListWithSavingsId) {
 			Date date = so.getSavingsDate();
+			//FIXME date
 			int year = dateOptions.getYearFromDate(date);
 			int month = dateOptions.getMonthFromDate(date);
 			int day = dateOptions.getDayFromDate(date);
@@ -128,13 +104,14 @@ public class Sort {
 				}
 			}
 		}
-		sortAscending(listOfDays);
-		for (int days : listOfDays) {
+		Collections.sort(listOfDays);
+		for (int dayInList : listOfDays) {
 			if (!savingsListToSort.isEmpty()) {
 				for (SavingsObject so : savingsListToSort) {
 					Date date = so.getSavingsDate();
+					//FIXME date
 					int day = dateOptions.getDayFromDate(date);
-					if (day == days) {
+					if (day == dayInList) {
 						if (!savingsSortedList.contains(so)) {
 							savingsSortedList.add(so);
 						}

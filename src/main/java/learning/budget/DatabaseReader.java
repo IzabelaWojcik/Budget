@@ -132,10 +132,10 @@ public class DatabaseReader implements IDatabaseReader{
 		return budgetInNameMap;
 	}
 
-	public ArrayList<ExpendiutureObject> readExpenditureFromDataBase(){
+	public ArrayList<ExpenditureObject> readExpenditureFromDataBase(){
 		String tablename = "Expenditure";
-		ArrayList<ExpendiutureObject> expenditureObjectList = new ArrayList<ExpendiutureObject>();
-		ExpendiutureObject expenditureObject = null;
+		ArrayList<ExpenditureObject> expenditureObjectList = new ArrayList<ExpenditureObject>();
+		ExpenditureObject expenditureObject = null;
 		try{
 			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
@@ -143,7 +143,7 @@ public class DatabaseReader implements IDatabaseReader{
 				int budgetId = rs.getInt(5);
 				double amount = rs.getDouble(2);
 				Date date = rs.getDate(3);
-				expenditureObject  = new ExpendiutureObject(expenditureCategoryId, amount, date, budgetId);
+				expenditureObject  = new ExpenditureObject(expenditureCategoryId, amount, date, budgetId);
 				expenditureObjectList.add(expenditureObject);
 			}
 		}catch (SQLException e) {
@@ -152,10 +152,10 @@ public class DatabaseReader implements IDatabaseReader{
 		return expenditureObjectList;
 	}
 
-	public ArrayList<ExpendiutureObject> readExpenditureWithItsIdFromDataBase(){
+	public ArrayList<ExpenditureObject> readExpenditureWithItsIdFromDataBase(){
 		String tablename = "Expenditure";
-		ArrayList<ExpendiutureObject> expenditureObjectList = new ArrayList<ExpendiutureObject>();
-		ExpendiutureObject expenditureObject = null;
+		ArrayList<ExpenditureObject> expenditureObjectList = new ArrayList<ExpenditureObject>();
+		ExpenditureObject expenditureObject = null;
 		try{
 			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
@@ -164,7 +164,7 @@ public class DatabaseReader implements IDatabaseReader{
 				int budgetId = rs.getInt(5);
 				double amount = rs.getDouble(2);
 				Date date = rs.getDate(3);
-				expenditureObject  = new ExpendiutureObject(idExpenditure, expenditureCategoryId, amount, date, budgetId);
+				expenditureObject  = new ExpenditureObject(idExpenditure, expenditureCategoryId, amount, date, budgetId);
 				expenditureObjectList.add(expenditureObject);
 			}
 		}catch (SQLException e) {

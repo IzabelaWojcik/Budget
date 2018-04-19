@@ -17,9 +17,9 @@ public interface IDatabaseReader {
 
 	public HashMap<Integer, String> readBudgetIdNameFromDatabase();
 
-	public ArrayList<ExpendiutureObject> readExpenditureFromDataBase();
+	public ArrayList<ExpenditureObject> readExpenditureFromDataBase();
 
-	public ArrayList<ExpendiutureObject> readExpenditureWithItsIdFromDataBase();
+	public ArrayList<ExpenditureObject> readExpenditureWithItsIdFromDataBase();
 
 	public ArrayList<SavingsObject> readSavingsFromDataBase();
 

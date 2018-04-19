@@ -39,11 +39,11 @@ public class ComboBoxAction {
 	}
 
 	public void writeExpenditureCategoryToComboBox(JComboBox<String> cbBox, int budgetId) {
-		ArrayList<ExpendiutureObject> expenditureList = databaseReader.readExpenditureFromDataBase();
+		ArrayList<ExpenditureObject> expenditureList = databaseReader.readExpenditureFromDataBase();
 		HashMap<Integer, String> expenditureCategoryMap = databaseReader
 				.readCategoryFromDatabase("Expenditure_category");
 		ArrayList<String> expenditureUniqueItemList = new ArrayList<String>();
-		for (ExpendiutureObject eo : expenditureList) {
+		for (ExpenditureObject eo : expenditureList) {
 			int idBudget = eo.getBudgetId();
 			int idExpenditureCategory = eo.getExpenditureCategoryId();
 			if (budgetId == idBudget) {

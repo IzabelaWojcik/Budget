@@ -2,21 +2,21 @@ package learning.budget;
 
 import java.sql.Date;
 
-public class ExpendiutureObject {
+public class ExpenditureObject {
 	private int idExpenditureCategory;
 	private double amount;
 	private int idBudget;
 	private Date dateOfExpenditure;
 	private int idExpenditure;
 	
-	public ExpendiutureObject(int idOfExpenditureCategory, double valueOfAmount, Date date, int idOfBudget){
+	public ExpenditureObject(int idOfExpenditureCategory, double valueOfAmount, Date date, int idOfBudget){
 		idExpenditureCategory = idOfExpenditureCategory;
 		amount = valueOfAmount;
 		dateOfExpenditure = date;
 		idBudget = idOfBudget;
 	}
 	
-	public ExpendiutureObject(int idOfExpenditure, int idOfExpenditureCategory, double valueOfAmount, Date date, int idOfBudget){
+	public ExpenditureObject(int idOfExpenditure, int idOfExpenditureCategory, double valueOfAmount, Date date, int idOfBudget){
 		idExpenditure = idOfExpenditure;
 		idExpenditureCategory = idOfExpenditureCategory;
 		amount = valueOfAmount;

@@ -24,12 +24,15 @@ public class ButtonAction extends GenerateComponents {
 	private HashMap<Integer, String> usersNameIdMap;
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
 	private DataFormatter dataFormatter = new DataFormatter();
-	ArrayList<ExpendiutureObject> expenditureObjectList;
+	ArrayList<ExpenditureObject> expenditureObjectList;
 	ArrayList<SavingsObject> savingsObjectList;
 	private HashMap<Integer, String> expenditureCategoryMap;
 	private HashMap<Integer, String> savingsCategoryMap;
 	private DateOptions dateOptions = new DateOptions();
-	private Sort sort = new Sort(databaseReader);
+	private Sort sort = new Sort();
+	private ArrayList<ExpenditureObject> expenditureObjectListWithItsId;
+	private ArrayList<SavingsObject> savingsObjectListWithItsId;
+
 
 	public ButtonAction(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
 		super(_databaseReader, _databaseWriter);
@@ -38,9 +41,11 @@ public class ButtonAction extends GenerateComponents {
 		userIncomeObjectList = databaseReader.readIncomefromDatabase();
 		usersNameIdMap = databaseReader.readUsersFromDatabasetoHashMap();
 		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
+		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDataBase();
 		savingsObjectList = databaseReader.readSavingsFromDataBase();
 		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
 		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDataBase();
 	}
 	
 	public void addOtherIncomeToDatabaseAfterClickingButton(JButton button, JComboBox<String> cbUser,
@@ -149,8 +154,8 @@ public class ButtonAction extends GenerateComponents {
 			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked, JLabel lblExpenditureSum) {
 		panelExpenditureView.removeAll();
 		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
-		ArrayList<ExpendiutureObject> expenditureObjectSortedList = sort
-				.sortExpenditureAfterItsDay(yearChoosenWithButtonClicked, monthChoosenWithButtonClicked, budgetId);
+		ArrayList<ExpenditureObject> expenditureObjectSortedList = sort
+				.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, yearChoosenWithButtonClicked, monthChoosenWithButtonClicked, budgetId);
 		DateOptions dateOptions = new DateOptions();
 		LayoutOptions layoutOptions = new LayoutOptions();
 		int dateYear = 0, dateMonth = 0, idExpenditureCategory;
@@ -166,7 +171,7 @@ public class ButtonAction extends GenerateComponents {
 		JLabel jLabelsExpenditureAmount[] = new JLabel[sizeOfExpenditureObjectList];
 
 		layoutOptions.setGridy(0);
-		for (ExpendiutureObject eo : expenditureObjectSortedList) {
+		for (ExpenditureObject eo : expenditureObjectSortedList) {
 			idBudget = eo.getBudgetId();
 			date = eo.getExpenditureDate();
 			dateYear = dateOptions.getYearFromDate(date);
@@ -200,7 +205,7 @@ public class ButtonAction extends GenerateComponents {
 			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked) {
 		panelSavingsView.removeAll();
 		savingsObjectList = databaseReader.readSavingsFromDataBase();
-		ArrayList<SavingsObject> savingsObjectSortedList = sort.sortSavingsAfterItsDay(yearChoosenWithButtonClicked,
+		ArrayList<SavingsObject> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, yearChoosenWithButtonClicked,
 				monthChoosenWithButtonClicked, budgetId);
 		DateOptions dateOptions = new DateOptions();
 		LayoutOptions layoutOptions = new LayoutOptions();
