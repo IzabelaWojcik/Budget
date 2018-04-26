@@ -19,7 +19,6 @@ import learning.budget.DatabaseReader;
 import learning.budget.DatabaseWriter;
 import learning.budget.IDatabaseReader;
 import learning.budget.IDatabaseWriter;
-import learning.budget.TextFieldAction;
 import learning.budget.TextFieldValidator;
 
 import javax.swing.GroupLayout;
@@ -37,7 +36,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private JPanel panelMain;
 	private JPanel panelPoprzednieBudzety;
 	private CreateBudgetOptions myBudget;
-	TextFieldValidator textFieldValidator = new TextFieldValidator();
+	TextFieldValidator textFieldValidator;
 	private IDatabaseWriter databaseWriter;
 	private IDatabaseReader databaseReader;
 	private JPanel panelMainBudgetsFromAllYears;
@@ -102,6 +101,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWriter;
 		
+		textFieldValidator = new TextFieldValidator();
 		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
 		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
 		 myBudget = new CreateBudgetOptions(databaseReader, databaseWriter);
@@ -578,12 +578,11 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		panelMainWithMonthsInYear.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		panelMain.setLayout(gl_panelMain);
 		
-		TextFieldAction txFielsAction = new TextFieldAction();
 		ButtonAction buttonAction = new ButtonAction(databaseReader, databaseWriter);
 		
-		txFielsAction.checkIfTextFieldHaveNumberValue(textFieldOtherIncome, lblIncomeOtherError, btnAddOtherIncome);
-		txFielsAction.checkIfTextFieldHaveNumberValue(textFieldExpenditureAmount, lblErrorAddExpenditure, btnExpenditureAdd);
-		txFielsAction.checkIfTextFieldHaveNumberValue(textFieldSavingsAmount, lblErrorAddSavings, btnSavingsAdd);
+		textFieldValidator.valueIsANumberForOneTextField(textFieldOtherIncome, lblIncomeOtherError, btnAddOtherIncome);
+		textFieldValidator.valueIsANumberForOneTextField(textFieldExpenditureAmount, lblErrorAddExpenditure, btnExpenditureAdd);
+		textFieldValidator.valueIsANumberForOneTextField(textFieldSavingsAmount, lblErrorAddSavings, btnSavingsAdd);
 		buttonAction.addOtherIncomeToDatabaseAfterClickingButton(btnAddOtherIncome, comboBoxUsers, comboBoxOtherIncome, textFieldOtherIncome, lblIncomeOtherError, dateChooser, panelOtherIncomeView, lblOtherIncomeSum);
 		generateButtonsWithBudgetsNames(panelBudgetName, panelMainBudgetsFromAllYears, panelMainWithMonthsInYear, panelUsers, panelIncome, panelMonthlyBudget, panelMonthlyBudgetEmpty, panelOtherIncomeView, comboBoxUsers, comboBoxOtherIncome, comboBoxExpenditureCategory, comboBoxSavingsCategory, panelExpenditureView, panelSavingsView, lblInform, lblexpenditureSum, lblSavingsSum, lblOtherIncomeSum, lblIncomeSum);
 		buttonAction.addExpenditureOrSavingsToDatabaseAfterClickingButton(btnExpenditureAdd, comboBoxExpenditureCategory, comboBoxUsers, textFieldExpenditureAmount, lblErrorAddExpenditure, dateChooserExpenditureDate, expenditureCategoryMap, "Expenditure", panelExpenditureView, panelSavingsView, lblexpenditureSum, lblSavingsSum);
