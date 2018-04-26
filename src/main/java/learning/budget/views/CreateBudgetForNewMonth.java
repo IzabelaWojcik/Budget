@@ -112,7 +112,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 					.addContainerGap())
 		);
 		
-		generateComponents.generateUsersAndIncomeTextFields(panelIncomUsersNames, panelIncomeValues, panelIncomeErrorLabels, okButton);
+		generateComponents.generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(panelIncomUsersNames, panelIncomeValues, panelIncomeErrorLabels, okButton);
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();

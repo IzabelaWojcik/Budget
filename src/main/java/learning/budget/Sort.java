@@ -1,20 +1,18 @@
 package learning.budget;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.time.LocalDate;
 
 public class Sort {
-	private DateOptions dateOptions = new DateOptions();
 	
 	public HashMap<Integer, ArrayList<Integer>> sortYearsInConcredeBudgetId(ArrayList<UsersIncomeObject> usersIncomeObjectList){
 		HashMap<Integer, ArrayList<Integer>> mapOfBudgetIdAndYears = new HashMap<Integer, ArrayList<Integer>>();
 		for(UsersIncomeObject uio: usersIncomeObjectList) {
 			int idBudget = uio.getBudgetId();
-			Date date = uio.getIncomeDate();
-			//FIXME date
-			int year = dateOptions.getYearFromDate(date);
+			LocalDate date = uio.getIncomeDate();
+			int year = date.getYear();
 			if (!mapOfBudgetIdAndYears.containsKey(idBudget)) {
 				ArrayList<Integer> listOfYears = new ArrayList<Integer>();
 				listOfYears.add(year);
@@ -35,11 +33,12 @@ public class Sort {
 		ArrayList<Integer> listOfMonths = new ArrayList<Integer>();
 		for (UsersIncomeObject uio : usersIncomeObjectList) {
 			int idBudget = uio.getBudgetId();
-			//FIXME date
-			int yearOfBudget = dateOptions.getYearFromDate(uio.getIncomeDate());
+			LocalDate date = uio.getIncomeDate();
+			int yearOfBudget = date.getYear();
 			if (idBudget == budgetId) {
 				if (yearOfBudget == year) {
-					int month = dateOptions.getMonthFromDate(uio.getIncomeDate());
+					//FIXME int month = dateOptions.getMonthFromDate(uio.getIncomeDate()); czy trzeba tu otwierac date ponownie
+					int month = date.getMonthValue();
 					if (!listOfMonths.contains(month)) {
 						listOfMonths.add(month);
 					}
@@ -55,11 +54,10 @@ public class Sort {
 		
 		ArrayList<ExpenditureObject> expenditureListToSort = new ArrayList<ExpenditureObject>();
 		for (ExpenditureObject eo : expenditureObjectListWithExpenditureId) {
-			Date date = eo.getExpenditureDate();
-			//FIXME date
-			int year = dateOptions.getYearFromDate(date);
-			int month = dateOptions.getMonthFromDate(date);
-			int day = dateOptions.getDayFromDate(date);
+			LocalDate date = eo.getExpenditureDate();
+			int year = date.getYear();
+			int month = date.getMonthValue();
+			int day = date.getDayOfMonth();
 			int idBudget = eo.getBudgetId();
 			if (yearClicked == year && monthClicked == month && budgetId == idBudget && !expenditureListToSort.contains(eo)) {
 				listOfDays.add(day);
@@ -72,9 +70,8 @@ public class Sort {
 		for (int dayInList : listOfDays) {
 			if (!expenditureListToSort.isEmpty()) {
 				for (ExpenditureObject eo : expenditureListToSort) {
-					Date date = eo.getExpenditureDate();
-					//FIXME date
-					int day = dateOptions.getDayFromDate(date);
+					LocalDate date = eo.getExpenditureDate();
+					int day = date.getDayOfMonth();
 					if (day == dayInList) {
 						if (!expenditureSortedList.contains(eo)) {
 							expenditureSortedList.add(eo);
@@ -91,11 +88,10 @@ public class Sort {
 		ArrayList<SavingsObject> savingsSortedList = new ArrayList<SavingsObject>();
 		ArrayList<SavingsObject> savingsListToSort = new ArrayList<SavingsObject>();
 		for (SavingsObject so : savingsObjectsListWithSavingsId) {
-			Date date = so.getSavingsDate();
-			//FIXME date
-			int year = dateOptions.getYearFromDate(date);
-			int month = dateOptions.getMonthFromDate(date);
-			int day = dateOptions.getDayFromDate(date);
+			LocalDate date = so.getSavingsDate();
+			int year = date.getYear();
+			int month = date.getMonthValue();
+			int day = date.getDayOfMonth();
 			int idBudget = so.getBudgetId();
 			if (yearClicked == year && monthClicked == month && budgetId == idBudget) {
 				if (!savingsListToSort.contains(so)) {
@@ -108,9 +104,8 @@ public class Sort {
 		for (int dayInList : listOfDays) {
 			if (!savingsListToSort.isEmpty()) {
 				for (SavingsObject so : savingsListToSort) {
-					Date date = so.getSavingsDate();
-					//FIXME date
-					int day = dateOptions.getDayFromDate(date);
+					LocalDate date = so.getSavingsDate();
+					int day = date.getDayOfMonth();
 					if (day == dayInList) {
 						if (!savingsSortedList.contains(so)) {
 							savingsSortedList.add(so);

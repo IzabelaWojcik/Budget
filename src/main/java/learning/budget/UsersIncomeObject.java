@@ -1,15 +1,15 @@
 package learning.budget;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class UsersIncomeObject {
 	private int idUser;
 	private int idIncomeCategory;
 	private double amount;
 	private int idBudget;
-	private Date dateOfIncome;
+	private LocalDate dateOfIncome;
 	
-	public UsersIncomeObject(int idOfUser, int idOfIncomeCategory, double valueOfAmount, Date date, int idOfBudget){
+	public UsersIncomeObject(int idOfUser, int idOfIncomeCategory, double valueOfAmount, LocalDate date, int idOfBudget){
 		idUser = idOfUser;
 		idIncomeCategory = idOfIncomeCategory;
 		amount = valueOfAmount;
@@ -25,7 +25,7 @@ public class UsersIncomeObject {
 		return idIncomeCategory;
 	}
 	
-	public Date getIncomeDate(){
+	public LocalDate getIncomeDate(){
 		return dateOfIncome;
 	}
 	

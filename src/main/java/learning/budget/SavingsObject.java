@@ -1,22 +1,22 @@
 package learning.budget;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class SavingsObject {
 	private int idSavingsCategory;
 	private double amount;
 	private int idBudget;
-	private Date dateOfSavings;
+	private LocalDate dateOfSavings;
 	private int idSavings;
 	
-	public SavingsObject(int idOfSavingsCategory, double valueOfAmount, Date date, int idOfBudget){
+	public SavingsObject(int idOfSavingsCategory, double valueOfAmount, LocalDate date, int idOfBudget){
 		idSavingsCategory = idOfSavingsCategory;
 		amount = valueOfAmount;
 		dateOfSavings = date;
 		idBudget = idOfBudget;
 	}
 	
-	public SavingsObject(int idOfSavings, int idOfSavingsCategory, double valueOfAmount, Date date, int idOfBudget){
+	public SavingsObject(int idOfSavings, int idOfSavingsCategory, double valueOfAmount, LocalDate date, int idOfBudget){
 		idSavings = idOfSavings;
 		idSavingsCategory = idOfSavingsCategory;
 		amount = valueOfAmount;
@@ -28,7 +28,7 @@ public class SavingsObject {
 		return idSavingsCategory;
 	}
 	
-	public Date getSavingsDate(){
+	public LocalDate getSavingsDate(){
 		return dateOfSavings;
 	}
 	

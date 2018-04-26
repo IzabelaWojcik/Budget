@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -21,7 +21,6 @@ public class GenerateComponents {
 	protected IDatabaseReader databaseReader;
 	protected IDatabaseWriter databaseWriter;
 	private HashMap<Integer, String> budgetIdNameMap;
-	private DateOptions dateOptions = new DateOptions();
 	private ArrayList<UsersIncomeObject> usersIncomeObjectList;
 	private HashMap<Integer, String> usersNameHashMap;
 	private HashMap<Integer, String> incomeCategoryMap;
@@ -245,6 +244,7 @@ public class GenerateComponents {
 				panelUser.removeAll();
 				panelIncome.removeAll();
 				int sizeOfUsersIncomeObjectList = usersIncomeObjectList.size();
+				LocalDate date;
 				JLabel lblUsers[] = new JLabel[sizeOfUsersIncomeObjectList];
 				JLabel lblIncome[] = new JLabel[sizeOfUsersIncomeObjectList];
 				int i = 0, idBudget, idUser, idIncomeCategory, yearOfBudget, monthOfBudget, idcategoryOfIncome = 1;
@@ -252,8 +252,9 @@ public class GenerateComponents {
 				double amount;
 				for (UsersIncomeObject uio : usersIncomeObjectList) {
 					idBudget = uio.getBudgetId();
-					yearOfBudget = dateOptions.getYearFromDate(uio.getIncomeDate());
-					monthOfBudget = dateOptions.getMonthFromDate(uio.getIncomeDate());
+					date = uio.getIncomeDate();
+					yearOfBudget = date.getYear();
+					monthOfBudget = date.getMonthValue();
 					idIncomeCategory = uio.getIncomeCategoryId();
 					if (idBudget == budgetId) {
 						if (yearOfBudget == year && monthOfBudget == month && idIncomeCategory == idcategoryOfIncome) {
@@ -295,13 +296,15 @@ public class GenerateComponents {
 				JLabel jLabelsIncomeCategory[] = new JLabel[sizeOfUsersIncomeObjectList];
 				JLabel jLabelsIncomeAmount[] = new JLabel[sizeOfUsersIncomeObjectList];
 				int dateMonth, dateYear, idUser, idIncomeCategory, idBudget, idcategoryOfIncome = 1;
+				LocalDate date;
 				double amount;
 				int i = 0;
 				layoutOptions.setGridy(0);
 				for (UsersIncomeObject uio : usersIncomeObjectList) {
 					idBudget = uio.getBudgetId();
-					dateYear = dateOptions.getYearFromDate(uio.getIncomeDate());
-					dateMonth = dateOptions.getMonthFromDate(uio.getIncomeDate());
+					date = uio.getIncomeDate();
+					dateYear = date.getYear();
+					dateMonth = date.getMonthValue();
 					idIncomeCategory = uio.getIncomeCategoryId();
 					if (idBudget == budgetId) {
 						if (dateYear == year && dateMonth == month) {
@@ -352,13 +355,13 @@ public class GenerateComponents {
 				int dateMonth, dateYear, idExpenditureCategory, idBudget;
 				double amount;
 				int i = 0;
-				Date date;
+				LocalDate date;
 				layoutOptions.setGridy(0);
 				for (ExpenditureObject eo : expenditureObjectSortedList) {
 					idBudget = eo.getBudgetId();
 					date = eo.getExpenditureDate();
-					dateYear = dateOptions.getYearFromDate(date);
-					dateMonth = dateOptions.getMonthFromDate(date);
+					dateYear = date.getYear();
+					dateMonth = date.getMonthValue();
 					idExpenditureCategory = eo.getExpenditureCategoryId();
 					if (idBudget == budgetId) {
 						if (dateYear == year && dateMonth == month) {
@@ -402,13 +405,13 @@ public class GenerateComponents {
 				int dateMonth, dateYear, idSavingsCategory, idBudget;
 				double amount;
 				int i = 0;
-				Date date;
+				LocalDate date;
 				layoutOptions.setGridy(0);
 				for (SavingsObject so : savingsObjectSortedList) {
 					idBudget = so.getBudgetId();
 					date = so.getSavingsDate();
-					dateYear = dateOptions.getYearFromDate(date);
-					dateMonth = dateOptions.getMonthFromDate(date);
+					dateYear = date.getYear();
+					dateMonth = date.getMonthValue();
 					idSavingsCategory = so.getSavingsCategoryId();
 					if (idBudget == budgetId) {
 						if (dateYear == year && dateMonth == month) {
@@ -439,7 +442,7 @@ public class GenerateComponents {
 
 	/////////////////FIXME dzia�a ale wyswietla uzytkownikow wszystkich budzetow,
 	///////////////// zastosowanw w create budget for new m9onth
-	public void generateUsersAndIncomeTextFields(JPanel panel1, JPanel panel2, JPanel panel3, JButton button) {
+	public void generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(JPanel panel1, JPanel panel2, JPanel panel3, JButton button) {
 		int i = 0;
 		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
 		HashMap<Integer, Double> incomeMap = new HashMap<>();
@@ -479,22 +482,35 @@ public class GenerateComponents {
 						if (isNumber) {
 							double amount = Double.parseDouble(value);
 							incomeMap.put(key, amount);
+							//
+							System.out.println(amount + " " + key);
 						}
 
 						if (incomeMap.size() == userNumber) {
+							
+							//
+							System.out.println("income map user nr = " +incomeMap.size() + " " +  userNumber);
 							button.setEnabled(true);
+
 						} else {
+							//
+							System.out.println("   income map user nr " +incomeMap.size() + " " +  userNumber);
+
 							button.setEnabled(false);
 						}
 					} catch (java.lang.NumberFormatException nfe) {
-						curentErrorLabel.setText("Podaj kwot�");
+						curentErrorLabel.setText("Podaj kwotę");
 						button.setEnabled(false);
 					}
 				}
 			});
 			i++;
-			if (i >= num)
+			//
+			System.out.println(" i " + i);
+			if (i >= num) {
+				System.out.println("i = " + i);
 				return;
+			}
 		}
 		panel1.validate();
 		panel1.repaint();

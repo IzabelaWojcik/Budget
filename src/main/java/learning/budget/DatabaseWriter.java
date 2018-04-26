@@ -3,6 +3,7 @@ package learning.budget;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,6 +25,7 @@ public class DatabaseWriter implements IDatabaseWriter {
 	
 	private void executeUpdate(String update) {
 		try {
+			//TODO where put start.close(); 
 			start = connection.createStatement();
 			start.executeUpdate(update);
 		} catch (SQLException e) {
@@ -60,16 +62,16 @@ public class DatabaseWriter implements IDatabaseWriter {
 		executeUpdate(update);
 	}
 
-	public void writeIncomeToDatabase(double amount, java.sql.Date date, int idUser, int idIncomeCategory,
-			int idBudget) {
+	public void writeIncomeToDatabase(double amount, LocalDate localDate, int idUser, int idIncomeCategory, int idBudget) {
 		String tablename = "Income";
+		java.sql.Date date =java.sql.Date.valueOf(localDate);
 		String update = "insert into " + "\"" + tablename + "\"" + "values(" + amount + "," + "\'" + date + "\'" + ","
 				+ idUser + "," + idIncomeCategory + "," + idBudget + ")";
 		executeUpdate(update);
 	}
 
-	public void writeExpenditureOrSavingsToDatabase(double amount, java.sql.Date date, int idCategory, int idBudget,
-			String tablename) {
+	public void writeExpenditureOrSavingsToDatabase(double amount, LocalDate localDate, int idCategory, int idBudget, String tablename) {
+		java.sql.Date date = java.sql.Date.valueOf(localDate);
 		String update = "insert into " + "\"" + tablename + "\"" + "values(" + amount + "," + "\'" + date + "\'" + ","
 				+ idCategory + "," + idBudget + ")";
 		executeUpdate(update);

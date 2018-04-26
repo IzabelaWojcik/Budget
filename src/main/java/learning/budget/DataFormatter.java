@@ -3,6 +3,10 @@ package learning.budget;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JTextField;
@@ -83,12 +87,26 @@ public class DataFormatter {
 		return month;
 	}
 
-	public java.sql.Date dateFormatterForJDateChooser(JDateChooser dateChooser) throws ParseException {
+	public java.sql.Date dateSqlFormatterForJDateChooser(JDateChooser dateChooser) throws ParseException {
 		dateChooser.setDateFormatString("dd-MM-yyyy");
 		String dateFromDateChooser = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		Date parsed = dateFormat.parse(dateFromDateChooser);
 		java.sql.Date sqlDate = new java.sql.Date(parsed.getTime());
 		return sqlDate;
+	}
+	
+	public LocalDate dateLocalFormatterForJDateChooser(JDateChooser dateChooser) throws ParseException {
+		dateChooser.setDateFormatString("dd-MM-yyyy");
+		String dateFromDateChooser = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		Date parsed = dateFormat.parse(dateFromDateChooser);
+		LocalDate localDate = Instant.ofEpochMilli(parsed.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+		
+	    DateTimeFormatter formatters = DateTimeFormatter.ofPattern("dd-MM-uuuu");
+	    String text = localDate.format(formatters);
+	    LocalDate parsedDate = LocalDate.parse(text, formatters);
+		
+		return parsedDate;
 	}
 }

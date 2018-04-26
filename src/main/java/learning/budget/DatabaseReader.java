@@ -1,13 +1,14 @@
 package learning.budget;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 public class DatabaseReader implements IDatabaseReader{
 	private static IDatabaseReader databaseReader; 
@@ -28,8 +29,9 @@ public class DatabaseReader implements IDatabaseReader{
 		Statement start = connection.createStatement();
 		String SQL = "Select * from " + "\"" + tablename + "\"";
 		ResultSet rs = start.executeQuery(SQL);
+		//TODO check if create statment must be used twice, 
+		//TODO st.close();???
 		start = connection.createStatement();
-
 		return rs;
 	}
 	
@@ -88,11 +90,14 @@ public class DatabaseReader implements IDatabaseReader{
 			ResultSet rs = getDataFromTable(tablename);
 			while (rs.next()) {
 				double amount = rs.getDouble(2);
-				Date date = rs.getDate(3);
+				java.sql.Date sqlDate = rs.getDate(3);
 				int idUser = rs.getInt(4);
 				int idIncome = rs.getInt(5);
 				int idBudget = rs.getInt(6);
-				usersIncomeObject = new UsersIncomeObject(idUser, idIncome, amount, date, idBudget);
+				
+				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				
+				usersIncomeObject = new UsersIncomeObject(idUser, idIncome, amount, localDate, idBudget);
 				if(!usersIncomeList.contains(usersIncomeObject)) usersIncomeList.add(usersIncomeObject);
 			}
 		} catch (SQLException e) {
@@ -142,8 +147,11 @@ public class DatabaseReader implements IDatabaseReader{
 				int expenditureCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
 				double amount = rs.getDouble(2);
-				Date date = rs.getDate(3);
-				expenditureObject  = new ExpenditureObject(expenditureCategoryId, amount, date, budgetId);
+				java.sql.Date sqlDate = rs.getDate(3);
+				
+				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				
+				expenditureObject  = new ExpenditureObject(expenditureCategoryId, amount, localDate, budgetId);
 				expenditureObjectList.add(expenditureObject);
 			}
 		}catch (SQLException e) {
@@ -163,8 +171,11 @@ public class DatabaseReader implements IDatabaseReader{
 				int expenditureCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
 				double amount = rs.getDouble(2);
-				Date date = rs.getDate(3);
-				expenditureObject  = new ExpenditureObject(idExpenditure, expenditureCategoryId, amount, date, budgetId);
+				java.sql.Date sqlDate = rs.getDate(3);
+				
+				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				
+				expenditureObject  = new ExpenditureObject(idExpenditure, expenditureCategoryId, amount, localDate, budgetId);
 				expenditureObjectList.add(expenditureObject);
 			}
 		}catch (SQLException e) {
@@ -183,8 +194,11 @@ public class DatabaseReader implements IDatabaseReader{
 				int savingsCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
 				double amount = rs.getDouble(2);
-				Date date = rs.getDate(3);
-				savingsObject  = new SavingsObject(savingsCategoryId, amount, date, budgetId);
+				java.sql.Date sqlDate = rs.getDate(3);
+				
+				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				
+				savingsObject  = new SavingsObject(savingsCategoryId, amount, localDate, budgetId);
 				savingsObjectList.add(savingsObject);
 			}
 		}catch (SQLException e) {
@@ -203,8 +217,11 @@ public class DatabaseReader implements IDatabaseReader{
 				int savingsCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
 				double amount = rs.getDouble(2);
-				Date date = rs.getDate(3);
-				savingsObject  = new SavingsObject(savingsCategoryId, amount, date, budgetId);
+				java.sql.Date sqlDate = rs.getDate(3);
+				
+				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				
+				savingsObject  = new SavingsObject(savingsCategoryId, amount, localDate, budgetId);
 				savingsObjectList.add(savingsObject);
 			}
 		}catch (SQLException e) {

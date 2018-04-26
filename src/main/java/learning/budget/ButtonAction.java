@@ -2,8 +2,8 @@ package learning.budget;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -28,7 +28,6 @@ public class ButtonAction extends GenerateComponents {
 	ArrayList<SavingsObject> savingsObjectList;
 	private HashMap<Integer, String> expenditureCategoryMap;
 	private HashMap<Integer, String> savingsCategoryMap;
-	private DateOptions dateOptions = new DateOptions();
 	private Sort sort = new Sort();
 	private ArrayList<ExpenditureObject> expenditureObjectListWithItsId;
 	private ArrayList<SavingsObject> savingsObjectListWithItsId;
@@ -36,6 +35,8 @@ public class ButtonAction extends GenerateComponents {
 
 	public ButtonAction(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
 		super(_databaseReader, _databaseWriter);
+		databaseReader = _databaseReader;
+		databaseWriter = _databaseWriter;
 		
 		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
 		userIncomeObjectList = databaseReader.readIncomefromDatabase();
@@ -67,12 +68,12 @@ public class ButtonAction extends GenerateComponents {
 					int idUser = getUserIdFromUserMap(cbUser);
 					int idBudget = getBudgetIdFromUserMapAndIUserIncomeMap(cbUser);
 
-					java.sql.Date sqlDate;
+					LocalDate localDate;
 
 					try {
-						sqlDate = dataFormatter.dateFormatterForJDateChooser(dateChooser);
+						localDate = dataFormatter.dateLocalFormatterForJDateChooser(dateChooser);
 
-						databaseWriter.writeIncomeToDatabase(amount, sqlDate, idUser, idIncomeCategory, idBudget);
+						databaseWriter.writeIncomeToDatabase(amount, localDate, idUser, idIncomeCategory, idBudget);
 						txFieldAmount.setText("");
 						cbUser.setSelectedIndex(0);
 						cbOtherIncome.setSelectedIndex(-1);
@@ -80,8 +81,8 @@ public class ButtonAction extends GenerateComponents {
 						int monthFromClickedButton = getMonthFromButtonClicked();
 						int yearFromClickedButton = getYearFromButtonClicked();
 
-						int yearFromDateChooser = dateOptions.getYearFromDate(sqlDate);
-						int monthFromDateChooser = dateOptions.getMonthFromDate(sqlDate);
+						int yearFromDateChooser = localDate.getYear();
+						int monthFromDateChooser = localDate.getMonthValue();
 
 						refreshOtherIncomeView(panelOtherIncomeView, cbUser, idBudget, monthFromClickedButton,
 								yearFromClickedButton);
@@ -113,21 +114,20 @@ public class ButtonAction extends GenerateComponents {
 					}
 					int idBudget = getBudgetIdFromUserMapAndIUserIncomeMap(cbUser);
 
-					java.sql.Date sqlDate;
+					LocalDate localDate;
 
 					try {
-						sqlDate = dataFormatter.dateFormatterForJDateChooser(dateChooser);
-
-						databaseWriter.writeExpenditureOrSavingsToDatabase(amount, sqlDate, idCategory, idBudget,
-								tablename);
+						localDate = dataFormatter.dateLocalFormatterForJDateChooser(dateChooser);
+						System.out.println(amount +" "+ localDate + " " + idCategory+ " " + idBudget+ " " +tablename);
+						databaseWriter.writeExpenditureOrSavingsToDatabase(amount, localDate, idCategory, idBudget, tablename);
 						txFieldAmount.setText("");
 						cbCategory.setSelectedIndex(-1);
 
 						int monthFromClickedButton = getMonthFromButtonClicked();
 						int yearFromClickedButton = getYearFromButtonClicked();
 
-						int yearFromDateChooser = dateOptions.getYearFromDate(sqlDate);
-						int monthFromDateChooser = dateOptions.getMonthFromDate(sqlDate);
+						int yearFromDateChooser = localDate.getYear(); 
+						int monthFromDateChooser = localDate.getMonthValue();
 
 						if (tablename.equals("Expenditure")) {
 							refreshExpenditureView(panelExpenditureView, cbUser, idBudget, monthFromClickedButton,
@@ -143,7 +143,7 @@ public class ButtonAction extends GenerateComponents {
 								refreshSumLabel(labelSavingsSum, amount);
 						}
 					} catch (ParseException e1) {
-						JOptionPane.showMessageDialog(null, "Wybierz dat�");
+						JOptionPane.showMessageDialog(null, "Wybierz datę");
 					}
 				}
 			}
@@ -156,10 +156,9 @@ public class ButtonAction extends GenerateComponents {
 		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
 		ArrayList<ExpenditureObject> expenditureObjectSortedList = sort
 				.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, yearChoosenWithButtonClicked, monthChoosenWithButtonClicked, budgetId);
-		DateOptions dateOptions = new DateOptions();
 		LayoutOptions layoutOptions = new LayoutOptions();
 		int dateYear = 0, dateMonth = 0, idExpenditureCategory;
-		Date date;
+		LocalDate date;
 		double amount;
 		int i = 0;
 
@@ -169,13 +168,12 @@ public class ButtonAction extends GenerateComponents {
 		JLabel jLabelDate[] = new JLabel[sizeOfExpenditureObjectList];
 		JLabel jLabelsExpenditureCategory[] = new JLabel[sizeOfExpenditureObjectList];
 		JLabel jLabelsExpenditureAmount[] = new JLabel[sizeOfExpenditureObjectList];
-
 		layoutOptions.setGridy(0);
 		for (ExpenditureObject eo : expenditureObjectSortedList) {
 			idBudget = eo.getBudgetId();
 			date = eo.getExpenditureDate();
-			dateYear = dateOptions.getYearFromDate(date);
-			dateMonth = dateOptions.getMonthFromDate(date);
+			dateYear = date.getYear();
+			dateMonth = date.getMonthValue();
 			idExpenditureCategory = eo.getExpenditureCategoryId();
 
 			if (idBudget == budgetId) {
@@ -207,10 +205,9 @@ public class ButtonAction extends GenerateComponents {
 		savingsObjectList = databaseReader.readSavingsFromDataBase();
 		ArrayList<SavingsObject> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, yearChoosenWithButtonClicked,
 				monthChoosenWithButtonClicked, budgetId);
-		DateOptions dateOptions = new DateOptions();
 		LayoutOptions layoutOptions = new LayoutOptions();
 		int dateYear = 0, dateMonth = 0, idSavingsCategory;
-		Date date;
+		LocalDate date;
 		double amount;
 		int i = 0;
 
@@ -225,8 +222,8 @@ public class ButtonAction extends GenerateComponents {
 		for (SavingsObject so : savingsObjectSortedList) {
 			idBudget = so.getBudgetId();
 			date = so.getSavingsDate();
-			dateYear = dateOptions.getYearFromDate(date);
-			dateMonth = dateOptions.getMonthFromDate(date);
+			dateYear = date.getYear();
+			dateMonth = date.getMonthValue();
 			idSavingsCategory = so.getSavingsCategoryId();
 			if (idBudget == budgetId) {
 				if (dateYear == yearChoosenWithButtonClicked && dateMonth == monthChoosenWithButtonClicked) {
@@ -253,10 +250,9 @@ public class ButtonAction extends GenerateComponents {
 			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked) {
 		panelOtherIncomeView.removeAll();
 		userIncomeObjectList = databaseReader.readIncomefromDatabase();
-		DateOptions dateOptions = new DateOptions();
 		LayoutOptions layoutOptions = new LayoutOptions();
 		int dateYear = 0, dateMonth = 0, idIncomeCategory;
-		Date date;
+		LocalDate date;
 		double amount;
 		int i = 0;
 		int idcategoryOfIncome = 1;
@@ -272,8 +268,8 @@ public class ButtonAction extends GenerateComponents {
 		for (UsersIncomeObject uio : userIncomeObjectList) {
 			idBudget = uio.getBudgetId();
 			date = uio.getIncomeDate();
-			dateYear = dateOptions.getYearFromDate(date);
-			dateMonth = dateOptions.getMonthFromDate(date);
+			dateYear = date.getYear();
+			dateMonth = date.getMonthValue();
 			idIncomeCategory = uio.getIncomeCategoryId();
 			if (idBudget == budgetId) {
 				if (dateYear == yearChoosenWithButtonClicked && dateMonth == monthChoosenWithButtonClicked) {
