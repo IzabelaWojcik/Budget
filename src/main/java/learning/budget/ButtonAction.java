@@ -118,7 +118,6 @@ public class ButtonAction extends GenerateComponents {
 
 					try {
 						localDate = dataFormatter.dateLocalFormatterForJDateChooser(dateChooser);
-						System.out.println(amount +" "+ localDate + " " + idCategory+ " " + idBudget+ " " +tablename);
 						databaseWriter.writeExpenditureOrSavingsToDatabase(amount, localDate, idCategory, idBudget, tablename);
 						txFieldAmount.setText("");
 						cbCategory.setSelectedIndex(-1);

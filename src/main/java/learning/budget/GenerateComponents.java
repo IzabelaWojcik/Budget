@@ -20,6 +20,7 @@ import learning.budget.views.CreateBudgetOptions;
 public class GenerateComponents {
 	protected IDatabaseReader databaseReader;
 	protected IDatabaseWriter databaseWriter;
+	private DataFormatter dataFormatter;
 	private HashMap<Integer, String> budgetIdNameMap;
 	private ArrayList<UsersIncomeObject> usersIncomeObjectList;
 	private HashMap<Integer, String> usersNameHashMap;
@@ -34,7 +35,6 @@ public class GenerateComponents {
 	private static String YEARANDMONTH;
 	private ComboBoxAction comboBoxAction;
 	private Sort sort;
-	private SumOfElements sumOfElements = new SumOfElements();
 	private ArrayList<ExpenditureObject> expenditureObjectListWithItsId;
 	private ArrayList<SavingsObject> savingsObjectListWithItsId;
 
@@ -52,6 +52,7 @@ public class GenerateComponents {
 		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
 		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDataBase();
 		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDataBase();
+		dataFormatter = new DataFormatter();
 		comboBoxAction = new ComboBoxAction(databaseReader);
 		sort = new Sort();
 	}
@@ -195,7 +196,6 @@ public class GenerateComponents {
 				panelExpenditureView.repaint();
 				panelSavingsView.revalidate();
 				panelSavingsView.repaint();
-				sumOfElements.setSumToZero();
 			}
 		});
 	}
@@ -237,7 +237,7 @@ public class GenerateComponents {
 			JLabel labelIncomeSum) {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sumOfElements.setSumToZero();
+				double sum = 0;
 				labelIncomeSum.setText("0");
 				panelBudget.setVisible(true);
 				panelBudgetEmpty.setVisible(false);
@@ -267,9 +267,11 @@ public class GenerateComponents {
 							lblIncome[i] = new JLabel(amount + "");
 							panelUser.add(lblUsers[i]);
 							panelIncome.add(lblIncome[i]);
-
-							double sum = sumOfElements.sumElements(amount);
-							sumOfElements.showSumInLabel(labelIncomeSum, sum);
+							
+							sum += amount;
+							String sumAmount = dataFormatter.setAmountFormat(sum);
+							labelIncomeSum.setText(sumAmount);
+							
 							i++;
 						}
 					}
@@ -288,7 +290,7 @@ public class GenerateComponents {
 			int budgetId, int year, int month, JLabel labelOtherIncomeSum) {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sumOfElements.setSumToZero();
+				double sum = 0;
 				labelOtherIncomeSum.setText("0");
 				panelOtherIncomeView.removeAll();
 				int sizeOfUsersIncomeObjectList = usersIncomeObjectList.size();
@@ -322,9 +324,10 @@ public class GenerateComponents {
 								jLabelsIncomeAmount[i] = new JLabel(String.valueOf(amount));
 								layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelOtherIncomeView,
 										jLabelsUsers[i], jLabelsIncomeCategory[i], jLabelsIncomeAmount[i]);
-
-								double sum = sumOfElements.sumElements(amount);
-								sumOfElements.showSumInLabel(labelOtherIncomeSum, sum);
+								
+								sum += amount;
+								String sumAmount = dataFormatter.setAmountFormat(sum);
+								labelOtherIncomeSum.setText(sumAmount);
 
 								i++;
 								if (i >= sizeOfUsersIncomeObjectList)
@@ -343,7 +346,6 @@ public class GenerateComponents {
 			int budgetId, int year, int month, JLabel labelExpenditureSum) {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sumOfElements.setSumToZero();
 				labelExpenditureSum.setText("0");
 				ArrayList<ExpenditureObject> expenditureObjectSortedList = sort.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, year, month,
 						budgetId);
@@ -355,6 +357,7 @@ public class GenerateComponents {
 				int dateMonth, dateYear, idExpenditureCategory, idBudget;
 				double amount;
 				int i = 0;
+				double sum = 0;
 				LocalDate date;
 				layoutOptions.setGridy(0);
 				for (ExpenditureObject eo : expenditureObjectSortedList) {
@@ -375,8 +378,9 @@ public class GenerateComponents {
 							layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelExpenditureView,
 									jLabelDate[i], jLabelsExpenditureCategory[i], jLabelsExpenditureAmount[i]);
 
-							double sum = sumOfElements.sumElements(amount);
-							sumOfElements.showSumInLabel(labelExpenditureSum, sum);
+							sum += amount;
+							String sumAmount = dataFormatter.setAmountFormat(sum);
+							labelExpenditureSum.setText(sumAmount);
 
 							i++;
 							if (i >= sizeOfExpenditureObjectList)
@@ -394,7 +398,7 @@ public class GenerateComponents {
 			int year, int month, JLabel labelSavingsSum) {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sumOfElements.setSumToZero();
+				double sum = 0;
 				labelSavingsSum.setText("0");
 				ArrayList<SavingsObject> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, year, month, budgetId);
 				panelSavingsView.removeAll();
@@ -425,9 +429,10 @@ public class GenerateComponents {
 							layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelSavingsView, jLabelDate[i],
 									jLabelsSavingsCategory[i], jLabelsSavingsAmount[i]);
 
-							double sum = sumOfElements.sumElements(amount);
-							sumOfElements.showSumInLabel(labelSavingsSum, sum);
-
+							sum += amount;
+							String sumAmount = dataFormatter.setAmountFormat(sum);
+							labelSavingsSum.setText(sumAmount);
+							
 							i++;
 							if (i >= sizeOfSavingsObjectSortedList)
 								return;
