@@ -37,7 +37,6 @@ public class Sort {
 			int yearOfBudget = date.getYear();
 			if (idBudget == budgetId) {
 				if (yearOfBudget == year) {
-					//FIXME int month = dateOptions.getMonthFromDate(uio.getIncomeDate()); czy trzeba tu otwierac date ponownie
 					int month = date.getMonthValue();
 					if (!listOfMonths.contains(month)) {
 						listOfMonths.add(month);
@@ -51,7 +50,6 @@ public class Sort {
 	
 	public ArrayList<ExpenditureObject> sortExpenditureAfterItsDay(ArrayList<ExpenditureObject> expenditureObjectListWithExpenditureId, int yearClicked, int monthClicked, int budgetId) {
 		ArrayList<Integer> listOfDays = new ArrayList<Integer>();
-		
 		ArrayList<ExpenditureObject> expenditureListToSort = new ArrayList<ExpenditureObject>();
 		for (ExpenditureObject eo : expenditureObjectListWithExpenditureId) {
 			LocalDate date = eo.getExpenditureDate();
