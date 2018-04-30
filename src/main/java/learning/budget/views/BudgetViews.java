@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import learning.budget.ButtonAction;
 import learning.budget.DatabaseConnection;
+import learning.budget.DatabaseNotInitialized;
 import learning.budget.DatabaseReader;
 import learning.budget.DatabaseWriter;
 import learning.budget.IDatabaseReader;
@@ -84,31 +85,39 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 			public void run() {
 				try {
 					IDatabaseWriter databaseWriter = DatabaseWriter.getInstance();
-					DatabaseWriter.setConnection(DatabaseConnection.getInstance());
+					//DatabaseWriter.setConnection(DatabaseConnection.getInstance());
 					IDatabaseReader databaseReader = DatabaseReader.getInstance();
 					DatabaseReader.setConnection(DatabaseConnection.getInstance());
 					BudgetViews window = new BudgetViews(databaseReader, databaseWriter);
 					window.frame.setVisible(true);
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
 
-	public BudgetViews(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
+	public BudgetViews(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
 		super(_databaseReader, _databaseWriter);
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWriter;
-		
-		textFieldValidator = new TextFieldValidator();
-		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
-		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
-		 myBudget = new CreateBudgetOptions(databaseReader, databaseWriter);
-		initialize();
+		try {
+
+			textFieldValidator = new TextFieldValidator();
+
+			expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
+
+			savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
+			myBudget = new CreateBudgetOptions(databaseReader, databaseWriter);
+			initialize();
+		} catch (DatabaseNotInitialized e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	private void initialize() {
+	private void initialize() throws DatabaseNotInitialized {
 		frame = new JFrame();
 		frame.setTitle("Bud\u017Cet domowy");
 		frame.setBounds(100, 100, 1082, 898);
@@ -139,7 +148,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		////END MENU
 	}
 	
-	public void mainPanel(){
+	public void mainPanel() throws DatabaseNotInitialized{
 		panelMain = new JPanel();
 		frame.getContentPane().add(panelMain, "name_8689288017164");
 		

@@ -30,6 +30,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import learning.budget.DatabaseConnection;
+import learning.budget.DatabaseNotInitialized;
 import learning.budget.DatabaseReader;
 import learning.budget.DatabaseWriter;
 import learning.budget.IDatabaseReader;
@@ -315,7 +316,13 @@ public class CreateBudgetOptions extends JDialog {
 				@Override
 				public void keyPressed(KeyEvent e) {
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						boolean budgetNameIsUnique = checkIfBudgetNameIsUniqueName();
+						boolean budgetNameIsUnique = false;
+						try {
+							budgetNameIsUnique = checkIfBudgetNameIsUniqueName();
+						} catch (DatabaseNotInitialized e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						boolean textFieldIsEmpty = textFieldValidator.checkIfTextFieldIsEmpty(textFieldBudgetName);
 						if(!budgetNameIsUnique){
 							JOptionPane.showMessageDialog(null, "Podana nazwa jun istnieje");
@@ -335,7 +342,13 @@ public class CreateBudgetOptions extends JDialog {
 			
 			btnDalej1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					boolean budgetNameIsUnique = checkIfBudgetNameIsUniqueName();
+					boolean budgetNameIsUnique = false;
+					try {
+						budgetNameIsUnique = checkIfBudgetNameIsUniqueName();
+					} catch (DatabaseNotInitialized e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					boolean textFieldIsEmpty = textFieldValidator.checkIfTextFieldIsEmpty(textFieldBudgetName);
 					if(textFieldIsEmpty){
 						JOptionPane.showMessageDialog(null, "Wpisz nazwn budnetu");
@@ -1600,7 +1613,12 @@ public class CreateBudgetOptions extends JDialog {
 		btnZakoncz4 = new JButton("Zako\u0144cz");
 		btnZakoncz4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				writeDataToDatabase();
+				try {
+					writeDataToDatabase();
+				} catch (DatabaseNotInitialized e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				dispose();
 			}
 		});
@@ -2082,7 +2100,13 @@ public class CreateBudgetOptions extends JDialog {
 						String value = currentField.getText().toString();
 						boolean currentFieldIsEmptyOrHasOnlySpaces = textFieldValidator.checkIfTextFieldIsEmpty(currentField);
 
-						int userNameIsUnique = checkIfUserNameIsUniqueName(currentField.getText());
+						int userNameIsUnique = 0;
+						try {
+							userNameIsUnique = checkIfUserNameIsUniqueName(currentField.getText());
+						} catch (DatabaseNotInitialized e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						if(userNameIsUnique != 1){
 							JOptionPane.showMessageDialog(null, "Nazwa unytkownika musi byn unikalna");
 						}
@@ -2214,7 +2238,7 @@ public class CreateBudgetOptions extends JDialog {
 			btnZakoncz4.setEnabled(false);
 	}
 	
-	private boolean checkIfBudgetNameIsUniqueName(){
+	private boolean checkIfBudgetNameIsUniqueName() throws DatabaseNotInitialized{
 		budgetName = textFieldBudgetName.getText();
 		HashMap<Integer, String> budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
 		for(Entry<Integer, String> entry: budgetIdNameMap.entrySet()){
@@ -2225,7 +2249,7 @@ public class CreateBudgetOptions extends JDialog {
 		return true;
 	}
 	
-	private int checkIfUserNameIsUniqueName(String userName){
+	private int checkIfUserNameIsUniqueName(String userName) throws DatabaseNotInitialized{
 		HashMap<Integer, String> userIdNameMap = databaseReader.readUsersFromDatabasetoHashMap();
 		for(Entry<Integer, String> entry: userIdNameMap.entrySet()){
 			if(userName.equals(entry.getValue())){
@@ -2235,7 +2259,7 @@ public class CreateBudgetOptions extends JDialog {
 		return 1;
 	}
 	
-	private void writeDataToDatabase(){
+	private void writeDataToDatabase() throws DatabaseNotInitialized{
 		budgetName = textFieldBudgetName.getText();
 		databaseWriter.writeBudgetNameToDatabase(budgetName);
 		HashMap<Integer, String> budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();

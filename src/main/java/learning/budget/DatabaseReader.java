@@ -24,18 +24,23 @@ public class DatabaseReader implements IDatabaseReader{
 	public static void setConnection(Connection con) {
 		connection = con;
 	}
-
-	private ResultSet getDataFromTable(String tablename) throws SQLException {
-		Statement start = connection.createStatement();
-		String SQL = "Select * from " + "\"" + tablename + "\"";
-		ResultSet rs = start.executeQuery(SQL);
-		//TODO check if create statment must be used twice, 
-		//TODO st.close();???
-		start = connection.createStatement();
+	
+	private ResultSet getDataFromTable(String tablename) throws SQLException, DatabaseNotInitialized {
+		ResultSet rs;
+		try {
+			Statement start = connection.createStatement();
+			String SQL = "Select * from " + "\"" + tablename + "\"";
+			rs = start.executeQuery(SQL);
+			// TODO check if create statment must be used twice,
+			// TODO st.close();???
+			start = connection.createStatement();
+		} catch (NullPointerException e) {
+			throw new DatabaseNotInitialized();
+		}
 		return rs;
 	}
 	
-	public int readDateOfBegginingNewBudgerMonthFromDatabase(int budgetId){
+	public int readDateOfBegginingNewBudgerMonthFromDatabase(int budgetId) throws DatabaseNotInitialized{
 		String tablename = "Budget_options";
 		int date = 0;
 		try{
@@ -48,7 +53,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return date;
 	}
 	
-	public ArrayList<UsersObject> readUsersFromDatabase(){
+	public ArrayList<UsersObject> readUsersFromDatabase() throws DatabaseNotInitialized{
 		String tablename = "Users";
 		ArrayList<UsersObject> userList = new ArrayList<UsersObject>();
 		try{
@@ -66,7 +71,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return userList;
 	}
 
-	public HashMap<Integer, String> readUsersFromDatabasetoHashMap() {
+	public HashMap<Integer, String> readUsersFromDatabasetoHashMap() throws DatabaseNotInitialized {
 		HashMap<Integer, String> usersFromDatabaseMap = new HashMap<Integer, String>();
 		String tablename = "Users";
 		try {
@@ -82,7 +87,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return usersFromDatabaseMap;
 	}
 	
-	public ArrayList<UsersIncomeObject> readIncomefromDatabase() {
+	public ArrayList<UsersIncomeObject> readIncomefromDatabase() throws DatabaseNotInitialized {
 		String tablename = "Income";
 		ArrayList<UsersIncomeObject> usersIncomeList= new ArrayList<UsersIncomeObject>();
 		UsersIncomeObject usersIncomeObject = null;
@@ -106,7 +111,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return usersIncomeList;
 	}
 	
-	public HashMap<Integer, String> readCategoryFromDatabase(String tablename){
+	public HashMap<Integer, String> readCategoryFromDatabase(String tablename) throws DatabaseNotInitialized{
 		HashMap<Integer, String> categoryMap = new HashMap<Integer, String>();
 		try{
 			ResultSet rs = getDataFromTable(tablename);
@@ -121,7 +126,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return categoryMap;
 	}
 	
-	public HashMap<Integer, String> readBudgetIdNameFromDatabase(){
+	public HashMap<Integer, String> readBudgetIdNameFromDatabase() throws DatabaseNotInitialized{
 		String tablename = "Budget_name";
 		HashMap<Integer, String> budgetInNameMap = new HashMap<Integer, String>();
 		try {
@@ -137,7 +142,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return budgetInNameMap;
 	}
 
-	public ArrayList<ExpenditureObject> readExpenditureFromDataBase(){
+	public ArrayList<ExpenditureObject> readExpenditureFromDataBase() throws DatabaseNotInitialized{
 		String tablename = "Expenditure";
 		ArrayList<ExpenditureObject> expenditureObjectList = new ArrayList<ExpenditureObject>();
 		ExpenditureObject expenditureObject = null;
@@ -160,7 +165,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return expenditureObjectList;
 	}
 
-	public ArrayList<ExpenditureObject> readExpenditureWithItsIdFromDataBase(){
+	public ArrayList<ExpenditureObject> readExpenditureWithItsIdFromDataBase() throws DatabaseNotInitialized{
 		String tablename = "Expenditure";
 		ArrayList<ExpenditureObject> expenditureObjectList = new ArrayList<ExpenditureObject>();
 		ExpenditureObject expenditureObject = null;
@@ -184,7 +189,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return expenditureObjectList;
 	}
 	
-	public ArrayList<SavingsObject> readSavingsFromDataBase(){
+	public ArrayList<SavingsObject> readSavingsFromDataBase() throws DatabaseNotInitialized{
 		String tablename = "Savings";
 		ArrayList<SavingsObject> savingsObjectList = new ArrayList<SavingsObject>();
 		SavingsObject savingsObject = null;
@@ -207,7 +212,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return savingsObjectList;
 	}
 	
-	public ArrayList<SavingsObject> readSavingsWithItsIdFromDataBase(){
+	public ArrayList<SavingsObject> readSavingsWithItsIdFromDataBase() throws DatabaseNotInitialized{
 		String tablename = "Savings";
 		ArrayList<SavingsObject> savingsObjectList = new ArrayList<SavingsObject>();
 		SavingsObject savingsObject = null;

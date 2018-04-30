@@ -38,7 +38,7 @@ public class GenerateComponents {
 	private ArrayList<ExpenditureObject> expenditureObjectListWithItsId;
 	private ArrayList<SavingsObject> savingsObjectListWithItsId;
 
-	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
+	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWriter;
 		
@@ -129,10 +129,16 @@ public class GenerateComponents {
 					}
 
 				}
-				comboBoxAction.writeUsersToComboBox(comboBoxUsers, budgetId);
-				comboBoxAction.writeOtherIncomeCategoryToComboBox(comboBoxOtherIncome, budgetId);
-				comboBoxAction.writeExpenditureCategoryToComboBox(comboBoxExpenditureCategory, budgetId);
-				comboBoxAction.writeSavingsCategoryToComboBox(comboBoxSavings, budgetId);
+				try {
+					comboBoxAction.writeUsersToComboBox(comboBoxUsers, budgetId);
+					comboBoxAction.writeOtherIncomeCategoryToComboBox(comboBoxOtherIncome, budgetId);
+					comboBoxAction.writeExpenditureCategoryToComboBox(comboBoxExpenditureCategory, budgetId);
+					comboBoxAction.writeSavingsCategoryToComboBox(comboBoxSavings, budgetId);
+
+				} catch (DatabaseNotInitialized e1) {
+					// TODO handle exceptions in proper place
+					e1.printStackTrace();
+				}
 				panelWithYears.revalidate();
 				panelWithYears.repaint();
 				panelWithMonths.revalidate();
@@ -447,7 +453,7 @@ public class GenerateComponents {
 
 	/////////////////FIXME dzia�a ale wyswietla uzytkownikow wszystkich budzetow,
 	///////////////// zastosowanw w create budget for new m9onth
-	public void generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(JPanel panel1, JPanel panel2, JPanel panel3, JButton button) {
+	public void generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(JPanel panel1, JPanel panel2, JPanel panel3, JButton button) throws DatabaseNotInitialized {
 		int i = 0;
 		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
 		HashMap<Integer, Double> incomeMap = new HashMap<>();

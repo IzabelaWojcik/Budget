@@ -33,7 +33,7 @@ public class ButtonAction extends GenerateComponents {
 	private ArrayList<SavingsObject> savingsObjectListWithItsId;
 
 
-	public ButtonAction(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) {
+	public ButtonAction(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
 		super(_databaseReader, _databaseWriter);
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWriter;
@@ -89,7 +89,8 @@ public class ButtonAction extends GenerateComponents {
 						if (yearFromClickedButton == yearFromDateChooser
 								&& monthFromClickedButton == monthFromDateChooser)
 							refreshSumLabel(labelOtherIncomeSum, amount);
-					} catch (ParseException e1) {
+					} catch (ParseException | DatabaseNotInitialized e1) {
+						//FIXME: handle exceptions in proper place
 						JOptionPane.showMessageDialog(null, "Wybierz dat�");
 					}
 				}
@@ -141,7 +142,7 @@ public class ButtonAction extends GenerateComponents {
 									&& monthFromClickedButton == monthFromDateChooser)
 								refreshSumLabel(labelSavingsSum, amount);
 						}
-					} catch (ParseException e1) {
+					} catch (ParseException | DatabaseNotInitialized e1) {
 						JOptionPane.showMessageDialog(null, "Wybierz datę");
 					}
 				}
@@ -150,7 +151,7 @@ public class ButtonAction extends GenerateComponents {
 	}
 
 	public void refreshExpenditureView(JPanel panelExpenditureView, JComboBox<String> cbUser, int budgetId,
-			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked, JLabel lblExpenditureSum) {
+			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked, JLabel lblExpenditureSum) throws DatabaseNotInitialized {
 		panelExpenditureView.removeAll();
 		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
 		ArrayList<ExpenditureObject> expenditureObjectSortedList = sort
@@ -199,7 +200,7 @@ public class ButtonAction extends GenerateComponents {
 	}
 
 	public void refreshSavingsView(JPanel panelSavingsView, JComboBox<String> cbUser, int budgetId,
-			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked) {
+			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked) throws DatabaseNotInitialized {
 		panelSavingsView.removeAll();
 		savingsObjectList = databaseReader.readSavingsFromDataBase();
 		ArrayList<SavingsObject> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, yearChoosenWithButtonClicked,
@@ -246,7 +247,7 @@ public class ButtonAction extends GenerateComponents {
 	}
 
 	public void refreshOtherIncomeView(JPanel panelOtherIncomeView, JComboBox<String> cbUser, int budgetId,
-			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked) {
+			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked) throws DatabaseNotInitialized {
 		panelOtherIncomeView.removeAll();
 		userIncomeObjectList = databaseReader.readIncomefromDatabase();
 		LayoutOptions layoutOptions = new LayoutOptions();

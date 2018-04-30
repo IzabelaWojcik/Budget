@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import learning.budget.DatabaseConnection;
+import learning.budget.DatabaseNotInitialized;
 import learning.budget.DatabaseReader;
 import learning.budget.DatabaseWriter;
 import learning.budget.GenerateComponents;
@@ -46,7 +47,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 		}
 	}
 
-	public CreateBudgetForNewMonth(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWritter) {
+	public CreateBudgetForNewMonth(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWritter) throws DatabaseNotInitialized {
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWritter;
 		

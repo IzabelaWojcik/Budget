@@ -13,14 +13,16 @@ public class ComboBoxAction {
 	}
 	
 
-	public void writeOtherIncomeCategoryToComboBox(JComboBox<String> cbBox, int budgetId) {
+	public void writeOtherIncomeCategoryToComboBox(JComboBox<String> cbBox, int budgetId) throws DatabaseNotInitialized {
 		ArrayList<UsersIncomeObject> userIncomeList = databaseReader.readIncomefromDatabase();
 		HashMap<Integer, String> otherIncomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
 		ArrayList<String> otherIncomeUniqueItemList = new ArrayList<String>();
+		
 		int idPayment = 1;
 		for (UsersIncomeObject uio : userIncomeList) {
 			int idBudget = uio.getBudgetId();
 			int idIncomeCategory = uio.getIncomeCategoryId();
+			
 			if (budgetId == idBudget) {
 				for (Entry<Integer, String> entry : otherIncomeCategoryMap.entrySet()) {
 					if (entry.getKey() == idIncomeCategory) {
@@ -38,7 +40,7 @@ public class ComboBoxAction {
 		}
 	}
 
-	public void writeExpenditureCategoryToComboBox(JComboBox<String> cbBox, int budgetId) {
+	public void writeExpenditureCategoryToComboBox(JComboBox<String> cbBox, int budgetId) throws DatabaseNotInitialized {
 		ArrayList<ExpenditureObject> expenditureList = databaseReader.readExpenditureFromDataBase();
 		HashMap<Integer, String> expenditureCategoryMap = databaseReader
 				.readCategoryFromDatabase("Expenditure_category");
@@ -61,7 +63,7 @@ public class ComboBoxAction {
 		}
 	}
 
-	public void writeSavingsCategoryToComboBox(JComboBox<String> cbBox, int budgetId) {
+	public void writeSavingsCategoryToComboBox(JComboBox<String> cbBox, int budgetId) throws DatabaseNotInitialized {
 		ArrayList<SavingsObject> savingsList = databaseReader.readSavingsFromDataBase();
 		HashMap<Integer, String> savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
 		ArrayList<String> savingUniqueItemList = new ArrayList<String>();
@@ -83,7 +85,7 @@ public class ComboBoxAction {
 		}
 	}
 
-	public void writeUsersToComboBox(JComboBox<String> cbBox, int budgetId) {
+	public void writeUsersToComboBox(JComboBox<String> cbBox, int budgetId) throws DatabaseNotInitialized {
 		ArrayList<UsersObject> usersList = databaseReader.readUsersFromDatabase();
 		for (UsersObject uo : usersList) {
 			int idBudget = uo.getBudgerId();
