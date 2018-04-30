@@ -70,7 +70,9 @@ public class CreateBudgetForNewMonth extends JDialog {
 		
 		panelIncomeErrorLabels = new ErrorLabels();
 		panelIncomeErrorLabels.fill(generateComponents.getUserNames().size());
-	
+
+		okButton = new JButton("OK");
+
 		panelIncomeValues = new UserIncomnePanel();
 		panelIncomeValues.fillWithUserIncomnes(generateComponents.getUserNames().size(), panelIncomeErrorLabels.getComponents(), okButton);
 		
@@ -123,7 +125,6 @@ public class CreateBudgetForNewMonth extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				okButton = new JButton("OK");
 				okButton.setEnabled(false);
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
