@@ -1,6 +1,7 @@
 package learning.budget;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -460,7 +461,7 @@ public class GenerateComponents {
 	
 	/////////////////FIXME dzia�a ale wyswietla uzytkownikow wszystkich budzetow,
 	///////////////// zastosowanw w create budget for new m9onth
-	public void generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(JPanel panel2, JPanel panel3, JButton button) throws DatabaseNotInitialized {
+	public void generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(JPanel panel2, Component[] errorLabels, JButton button) throws DatabaseNotInitialized {
 		int i = 0;
 		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
 		HashMap<Integer, Double> incomeMap = new HashMap<>();
@@ -473,14 +474,9 @@ public class GenerateComponents {
 			jtextFields[i] = new JTextField(10);
 			JTextField currentField = jtextFields[i];
 
-			jErrorLabels[i] = new JLabel("");
-			jErrorLabels[i].setForeground(Color.RED);
-			jErrorLabels[i].setPreferredSize(new Dimension(130, 20));
-			jErrorLabels[i].setHorizontalAlignment(JLabel.LEFT);
-			JLabel curentErrorLabel = jErrorLabels[i];
+			JLabel curentErrorLabel = (JLabel)errorLabels[i];
 
 			panel2.add(jtextFields[i]);
-			panel3.add(jErrorLabels[i]);
 
 			userNumber++;
 
@@ -527,7 +523,5 @@ public class GenerateComponents {
 		}
 		panel2.validate();
 		panel2.repaint();
-		panel3.validate();
-		panel3.repaint();
 	}
 }

@@ -27,7 +27,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 	private JPanel panelIncomeValues;
 	private UserNamesPanel panelIncomUsersNames;
 	private JPanel panelIncom;
-	private JPanel panelIncomeErrorLabels;
+	private ErrorLabels panelIncomeErrorLabels;
 	private JButton okButton;
 	private IDatabaseWriter databaseWriter;
 	private IDatabaseReader databaseReader;
@@ -68,7 +68,9 @@ public class CreateBudgetForNewMonth extends JDialog {
 		
 		panelIncomeValues = new JPanel();
 
-		panelIncomeErrorLabels = new JPanel();
+		panelIncomeErrorLabels = new ErrorLabels();
+		panelIncomeErrorLabels.fill(generateComponents.getUserNames().size());
+	
 		GroupLayout gl_panelIncom = new GroupLayout(panelIncom);
 		gl_panelIncom.setHorizontalGroup(
 			gl_panelIncom.createParallelGroup(Alignment.LEADING)
@@ -112,7 +114,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 					.addContainerGap())
 		);
 		
-		generateComponents.generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(panelIncomeValues, panelIncomeErrorLabels, okButton);
+		generateComponents.generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(panelIncomeValues, panelIncomeErrorLabels.getComponents(), okButton);
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();
