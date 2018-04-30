@@ -459,32 +459,4 @@ public class GenerateComponents {
 		
 		return new ArrayList<String>(usersFromDatabaseMap.values());
 	}
-	
-	/////////////////FIXME dzia�a ale wyswietla uzytkownikow wszystkich budzetow,
-	///////////////// zastosowanw w create budget for new m9onth
-	public void generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(JPanel panel2, Component[] errorLabels, JButton button) throws DatabaseNotInitialized {
-		int i = 0;
-		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
-		JTextField jtextFields[] = new JTextField[num];
-
-		for (Entry<Integer, String> s : usersFromDatabaseMap.entrySet()) {
-
-			jtextFields[i] = new JTextField(10);
-
-			panel2.add(jtextFields[i]);
-
-			userNumber++;
-
-			jtextFields[i].addKeyListener(new UserIncomeInputFiledListener(jtextFields[i], (JLabel)errorLabels[i], button));
-			i++;
-			//
-			System.out.println(" i " + i);
-			if (i >= num) {
-				System.out.println("i = " + i);
-				return;
-			}
-		}
-		panel2.validate();
-		panel2.repaint();
-	}
 }
