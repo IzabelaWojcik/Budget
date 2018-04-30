@@ -15,7 +15,7 @@ public class UserIncomnePanel extends JPanel {
 			JTextField textField = new JTextField(10);
 			
 			add(textField);
-			textField.addKeyListener(new UserIncomneInputFiledListener(textField, (JLabel)errorLabels[i], button));
+			textField.addKeyListener(new UserIncomeInputFiledListener(textField, (JLabel)errorLabels[i], button));
 		}
 		
 		validate();

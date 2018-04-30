@@ -9,7 +9,7 @@ import javax.swing.JTextField;
 
 import learning.budget.TextFieldValidator;
 
-public class UserIncomneInputFiledListener extends KeyAdapter {
+public class UserIncomeInputFiledListener extends KeyAdapter {
 	private final JTextField field;
 	//TODO: create interface for type below and user DI
 	private final TextFieldValidator textFieldValidator = new TextFieldValidator();
@@ -17,7 +17,7 @@ public class UserIncomneInputFiledListener extends KeyAdapter {
 	private JButton button;
 	private JLabel errorLabel;
 	
-	public UserIncomneInputFiledListener(JTextField field, JLabel errorLabel, JButton button) {
+	public UserIncomeInputFiledListener(JTextField field, JLabel errorLabel, JButton button) {
 		this.field = field;
 		this.errorLabel = errorLabel;
 		this.button = button;

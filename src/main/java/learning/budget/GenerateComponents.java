@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import learning.budget.views.CreateBudgetOptions;
-import learning.budget.views.UserIncomneInputFiledListener;
+import learning.budget.views.UserIncomeInputFiledListener;
 
 public class GenerateComponents {
 	protected IDatabaseReader databaseReader;
@@ -475,7 +475,7 @@ public class GenerateComponents {
 
 			userNumber++;
 
-			jtextFields[i].addKeyListener(new UserIncomneInputFiledListener(jtextFields[i], (JLabel)errorLabels[i], button));
+			jtextFields[i].addKeyListener(new UserIncomeInputFiledListener(jtextFields[i], (JLabel)errorLabels[i], button));
 			i++;
 			//
 			System.out.println(" i " + i);
