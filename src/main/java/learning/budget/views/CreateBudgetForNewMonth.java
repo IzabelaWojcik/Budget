@@ -20,11 +20,13 @@ import learning.budget.IDatabaseReader;
 import learning.budget.IDatabaseWriter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateBudgetForNewMonth extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JPanel panelIncomeValues;
+	private UserIncomnePanel panelIncomeValues;
 	private UserNamesPanel panelIncomUsersNames;
 	private JPanel panelIncom;
 	private ErrorLabels panelIncomeErrorLabels;
@@ -66,11 +68,12 @@ public class CreateBudgetForNewMonth extends JDialog {
 		panelIncomUsersNames = new UserNamesPanel(new Dimension(50, 50), new FlowLayout(FlowLayout.CENTER, 5, 5));
 		panelIncomUsersNames.fillWithUserNames(generateComponents.getUserNames());
 		
-		panelIncomeValues = new JPanel();
-
 		panelIncomeErrorLabels = new ErrorLabels();
 		panelIncomeErrorLabels.fill(generateComponents.getUserNames().size());
 	
+		panelIncomeValues = new UserIncomnePanel();
+		panelIncomeValues.fillWithUserIncomnes(generateComponents.getUserNames().size(), panelIncomeErrorLabels.getComponents(), okButton);
+		
 		GroupLayout gl_panelIncom = new GroupLayout(panelIncom);
 		gl_panelIncom.setHorizontalGroup(
 			gl_panelIncom.createParallelGroup(Alignment.LEADING)
@@ -114,7 +117,6 @@ public class CreateBudgetForNewMonth extends JDialog {
 					.addContainerGap())
 		);
 		
-		generateComponents.generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(panelIncomeValues, panelIncomeErrorLabels.getComponents(), okButton);
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();
