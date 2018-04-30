@@ -12,11 +12,7 @@ public class ErrorLabels extends JPanel {
 	
 	void fill(int numberOfLabels) {
 		for (int i = 0; i < numberOfLabels && i < MAX_NUMBER_OF_USERS_IN_BUDGET; i++) {
-			JLabel label = new JLabel();
-			label.setForeground(Color.RED);
-			label.setPreferredSize(new Dimension(130, 20));
-			label.setHorizontalAlignment(JLabel.LEFT);
-			
+			JLabel label = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
 			add(label);
 		}
 		
