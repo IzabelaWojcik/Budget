@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 
 public class TextFieldValidator {
 
+	//FIXME: this method should only validate passed string - it should not fill JLabel and it should not have control on button
 	public boolean valueIsANumberForGeneratedTextFields(String str, JLabel lblError, JButton button) {
 		String number_pattern1 = "^[0-9]{0,9}\\.[0-9]{0,2}$";
 		String number_pattern2 = "^[0-9]{0,9}";

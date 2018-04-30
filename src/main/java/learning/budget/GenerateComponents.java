@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import learning.budget.views.CreateBudgetOptions;
+import learning.budget.views.UserIncomneInputFiledListener;
 
 public class GenerateComponents {
 	protected IDatabaseReader databaseReader;
@@ -464,55 +465,17 @@ public class GenerateComponents {
 	public void generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(JPanel panel2, Component[] errorLabels, JButton button) throws DatabaseNotInitialized {
 		int i = 0;
 		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
-		HashMap<Integer, Double> incomeMap = new HashMap<>();
-		JLabel jErrorLabels[] = new JLabel[num];
 		JTextField jtextFields[] = new JTextField[num];
 
 		for (Entry<Integer, String> s : usersFromDatabaseMap.entrySet()) {
-			int currentUserId = s.getKey();
 
 			jtextFields[i] = new JTextField(10);
-			JTextField currentField = jtextFields[i];
-
-			JLabel curentErrorLabel = (JLabel)errorLabels[i];
 
 			panel2.add(jtextFields[i]);
 
 			userNumber++;
 
-			jtextFields[i].addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyReleased(KeyEvent e) {
-					try {
-						int key = currentUserId;
-						String value = currentField.getText().toString();
-						boolean isNumber = textFieldValidator.valueIsANumberForGeneratedTextFields(value,
-								curentErrorLabel, button);
-						if (isNumber) {
-							double amount = Double.parseDouble(value);
-							incomeMap.put(key, amount);
-							//
-							System.out.println(amount + " " + key);
-						}
-
-						if (incomeMap.size() == userNumber) {
-							
-							//
-							System.out.println("income map user nr = " +incomeMap.size() + " " +  userNumber);
-							button.setEnabled(true);
-
-						} else {
-							//
-							System.out.println("   income map user nr " +incomeMap.size() + " " +  userNumber);
-
-							button.setEnabled(false);
-						}
-					} catch (java.lang.NumberFormatException nfe) {
-						curentErrorLabel.setText("Podaj kwotę");
-						button.setEnabled(false);
-					}
-				}
-			});
+			jtextFields[i].addKeyListener(new UserIncomneInputFiledListener(jtextFields[i], (JLabel)errorLabels[i], button));
 			i++;
 			//
 			System.out.println(" i " + i);
