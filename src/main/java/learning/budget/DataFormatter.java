@@ -60,6 +60,7 @@ public class DataFormatter {
 		return sqlDate;
 	}
 
+	//TODO check if I need so many date formating
 	public LocalDate dateLocalFormatterForJDateChooser(JDateChooser dateChooser) throws ParseException {
 		dateChooser.setDateFormatString("dd-MM-yyyy");
 		String dateFromDateChooser = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();

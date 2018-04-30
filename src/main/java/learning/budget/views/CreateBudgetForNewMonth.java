@@ -25,7 +25,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JPanel panelIncomeValues;
-	private JPanel panelIncomUsersNames;
+	private UserNamesPanel panelIncomUsersNames;
 	private JPanel panelIncom;
 	private JPanel panelIncomeErrorLabels;
 	private JButton okButton;
@@ -63,10 +63,9 @@ public class CreateBudgetForNewMonth extends JDialog {
 		panelIncom.setMaximumSize(new Dimension(500, 500));
 		panelIncom.setBorder(null);
 
-		panelIncomUsersNames = new JPanel();
-		panelIncomUsersNames.setMaximumSize(new Dimension(50, 50));
-		panelIncomUsersNames.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
+		panelIncomUsersNames = new UserNamesPanel(new Dimension(50, 50), new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panelIncomUsersNames.fillWithUserNames(generateComponents.getUserNames());
+		
 		panelIncomeValues = new JPanel();
 
 		panelIncomeErrorLabels = new JPanel();
@@ -113,7 +112,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 					.addContainerGap())
 		);
 		
-		generateComponents.generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(panelIncomUsersNames, panelIncomeValues, panelIncomeErrorLabels, okButton);
+		generateComponents.generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(panelIncomeValues, panelIncomeErrorLabels, okButton);
 		contentPanel.setLayout(gl_contentPanel);
 		{
 			JPanel buttonPane = new JPanel();

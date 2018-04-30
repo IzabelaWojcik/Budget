@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -92,9 +93,9 @@ public class GenerateComponents {
 	private void generateYearButtonsAfterClickingBudgetNamesButtons(JButton button, int budgetId, JPanel panelWithYears,
 			JPanel panelWithMonths, JPanel panelUser, JPanel panelIncome, JPanel panelBudget, JPanel panelBudgetEmpty,
 			JPanel panelOtherIncomeView, JComboBox<String> comboBoxUsers, JComboBox<String> comboBoxOtherIncome,
-			JComboBox<String> comboBoxExpenditureCategory, JComboBox<String> comboBoxSavings, JPanel panelExpenditureView,
-			JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum, JLabel labelSavingsSum,
-			JLabel labelOtherIncomeSum, JLabel labelIncomeSum) {
+			JComboBox<String> comboBoxExpenditureCategory, JComboBox<String> comboBoxSavings,
+			JPanel panelExpenditureView, JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum,
+			JLabel labelSavingsSum, JLabel labelOtherIncomeSum, JLabel labelIncomeSum) {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setPanelBudgetInvisible(panelBudget, panelBudgetEmpty);
@@ -451,20 +452,22 @@ public class GenerateComponents {
 		});
 	}
 
+	public List<String> getUserNames() throws DatabaseNotInitialized {
+		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
+		
+		return new ArrayList<String>(usersFromDatabaseMap.values());
+	}
+	
 	/////////////////FIXME dzia�a ale wyswietla uzytkownikow wszystkich budzetow,
 	///////////////// zastosowanw w create budget for new m9onth
-	public void generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(JPanel panel1, JPanel panel2, JPanel panel3, JButton button) throws DatabaseNotInitialized {
+	public void generateUsersAndIncomeTextFieldsInCreateBudgetForNewMonth(JPanel panel2, JPanel panel3, JButton button) throws DatabaseNotInitialized {
 		int i = 0;
 		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
 		HashMap<Integer, Double> incomeMap = new HashMap<>();
-		JLabel jLabelsUsersName[] = new JLabel[num];
 		JLabel jErrorLabels[] = new JLabel[num];
 		JTextField jtextFields[] = new JTextField[num];
 
 		for (Entry<Integer, String> s : usersFromDatabaseMap.entrySet()) {
-			jLabelsUsersName[i] = new JLabel(s.getValue() + ": ");
-			jLabelsUsersName[i].setPreferredSize(new Dimension(90, 20));
-			jLabelsUsersName[i].setHorizontalAlignment(JLabel.RIGHT);
 			int currentUserId = s.getKey();
 
 			jtextFields[i] = new JTextField(10);
@@ -476,7 +479,6 @@ public class GenerateComponents {
 			jErrorLabels[i].setHorizontalAlignment(JLabel.LEFT);
 			JLabel curentErrorLabel = jErrorLabels[i];
 
-			panel1.add(jLabelsUsersName[i]);
 			panel2.add(jtextFields[i]);
 			panel3.add(jErrorLabels[i]);
 
@@ -523,8 +525,6 @@ public class GenerateComponents {
 				return;
 			}
 		}
-		panel1.validate();
-		panel1.repaint();
 		panel2.validate();
 		panel2.repaint();
 		panel3.validate();
