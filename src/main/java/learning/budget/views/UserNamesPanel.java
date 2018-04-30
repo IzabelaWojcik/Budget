@@ -1,4 +1,5 @@
 package learning.budget.views;
+import static learning.budget.Constants.MAX_NUMBER_OF_USERS_IN_BUDGET;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -8,8 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class UserNamesPanel extends JPanel {
-	public final int MAX_NUMBER_OF_USERS_IN_BUDGET = 8;
-	
 	public UserNamesPanel(Dimension dimension, FlowLayout flowLayout) {
 		super(flowLayout);
 		setMaximumSize(dimension);
