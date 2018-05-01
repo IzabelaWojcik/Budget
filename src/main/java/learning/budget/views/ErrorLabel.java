@@ -19,7 +19,7 @@ public class ErrorLabel extends JLabel implements PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		JFormattedTextField field = (JFormattedTextField)evt.getSource();
 
-		if(field.isValid() || field.getText().isEmpty())
+		if((field.isValid() && field.isEditValid())|| field.getText().isEmpty())
 		{
 			setText("");
 		}

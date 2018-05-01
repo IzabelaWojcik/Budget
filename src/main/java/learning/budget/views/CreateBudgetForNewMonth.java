@@ -20,28 +20,23 @@ import learning.budget.IDatabaseReader;
 import learning.budget.IDatabaseWriter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateBudgetForNewMonth extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private UserIncomnePanel panelIncomeValues;
-	private UserNamesPanel panelIncomUsersNames;
 	private JPanel panelIncom;
-	private ErrorLabels panelIncomeErrorLabels;
 	private JButton okButton;
-	private IDatabaseWriter databaseWriter;
 	private IDatabaseReader databaseReader;
-	private GenerateComponents generateComponents;
 
 	public static void main(String[] args) {
 		try {
-			IDatabaseWriter databaseWriter = DatabaseWriter.getInstance();
 			DatabaseWriter.setConnection(DatabaseConnection.getInstance());
 			IDatabaseReader databaseReader = DatabaseReader.getInstance();
 			DatabaseReader.setConnection(DatabaseConnection.getInstance());
-			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth(databaseReader, databaseWriter);
+			CreateBudgetForNewMonth dialog = new CreateBudgetForNewMonth(databaseReader);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -49,12 +44,9 @@ public class CreateBudgetForNewMonth extends JDialog {
 		}
 	}
 
-	public CreateBudgetForNewMonth(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWritter) throws DatabaseNotInitialized {
+	public CreateBudgetForNewMonth(IDatabaseReader _databaseReader) throws DatabaseNotInitialized {
 		databaseReader = _databaseReader;
-		databaseWriter = _databaseWritter;
 		
-		generateComponents = new GenerateComponents(databaseReader, databaseWriter);
-				
 		setTitle("Nowy Bud\u017Cet");
 		setBounds(100, 100, 496, 434);
 		getContentPane().setLayout(new BorderLayout());
@@ -64,39 +56,16 @@ public class CreateBudgetForNewMonth extends JDialog {
 		panelIncom = new JPanel();
 		panelIncom.setMaximumSize(new Dimension(500, 500));
 		panelIncom.setBorder(null);
-
-		List<String> userNames = generateComponents.getUserNames();
-		int numberOfUsers = userNames.size();
-		
-		panelIncomUsersNames = new UserNamesPanel(new Dimension(50, 50), new FlowLayout(FlowLayout.CENTER, 5, 5));
-		panelIncomUsersNames.fillWithUserNames(userNames);
-		
-		panelIncomeErrorLabels = new ErrorLabels();
-		panelIncomeErrorLabels.fill(numberOfUsers);
-
 		okButton = new JButton("OK");
 
-		panelIncomeValues = new UserIncomnePanel();
-		panelIncomeValues.fillWithUserIncomnes(panelIncomeErrorLabels.getComponents(), new UserIncomeInputFiledListener(okButton));
-		
-		GroupLayout gl_panelIncom = new GroupLayout(panelIncom);
-		gl_panelIncom.setHorizontalGroup(
-			gl_panelIncom.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelIncom.createSequentialGroup()
-					.addComponent(panelIncomUsersNames, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panelIncomeValues, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panelIncomeErrorLabels, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(123, Short.MAX_VALUE))
-		);
-		gl_panelIncom.setVerticalGroup(
-			gl_panelIncom.createParallelGroup(Alignment.LEADING)
-				.addComponent(panelIncomUsersNames, GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-				.addComponent(panelIncomeValues, GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-				.addComponent(panelIncomeErrorLabels, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-		);
-		panelIncom.setLayout(gl_panelIncom);
+		PropertyChangeListener listener = new UserIncomeInputFiledListener(okButton);
+		List<String> userNames = new ArrayList<>(databaseReader.readUsersFromDatabasetoHashMap().values());
+
+		for(String name : userNames){
+			UserInputPanel inputPanel = new UserInputPanel(name);
+			inputPanel.addPropertyChangeListener(listener);
+			panelIncom.add(inputPanel);
+		}
 		
 		JLabel lblWpiszPrzychody = new JLabel("Wpisz przychody:");
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
