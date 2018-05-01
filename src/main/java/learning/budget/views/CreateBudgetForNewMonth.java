@@ -65,16 +65,19 @@ public class CreateBudgetForNewMonth extends JDialog {
 		panelIncom.setMaximumSize(new Dimension(500, 500));
 		panelIncom.setBorder(null);
 
+		List<String> userNames = generateComponents.getUserNames();
+		int numberOfUsers = userNames.size();
+		
 		panelIncomUsersNames = new UserNamesPanel(new Dimension(50, 50), new FlowLayout(FlowLayout.CENTER, 5, 5));
-		panelIncomUsersNames.fillWithUserNames(generateComponents.getUserNames());
+		panelIncomUsersNames.fillWithUserNames(userNames);
 		
 		panelIncomeErrorLabels = new ErrorLabels();
-		panelIncomeErrorLabels.fill(generateComponents.getUserNames().size());
+		panelIncomeErrorLabels.fill(numberOfUsers);
 
 		okButton = new JButton("OK");
 
 		panelIncomeValues = new UserIncomnePanel();
-		panelIncomeValues.fillWithUserIncomnes(generateComponents.getUserNames().size(), panelIncomeErrorLabels.getComponents(), new UserIncomeInputFiledListener(okButton));
+		panelIncomeValues.fillWithUserIncomnes(panelIncomeErrorLabels.getComponents(), new UserIncomeInputFiledListener(okButton));
 		
 		GroupLayout gl_panelIncom = new GroupLayout(panelIncom);
 		gl_panelIncom.setHorizontalGroup(

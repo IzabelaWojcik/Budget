@@ -13,7 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class UserIncomnePanel extends JPanel {
-	void fillWithUserIncomnes(int numberOfInputFields, Component[] errorLabels, PropertyChangeListener inputListener) {
+	void fillWithUserIncomnes(Component[] errorLabels, PropertyChangeListener inputListener) {
+		int numberOfInputFields = errorLabels.length;
+
 		for (int i = 0; i < numberOfInputFields && i < MAX_NUMBER_OF_USERS_IN_BUDGET; i++) {
 			JTextField textField = new JFormattedTextField(NumberFormat.getInstance());
 			textField.setColumns(10);
