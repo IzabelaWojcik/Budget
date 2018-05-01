@@ -74,7 +74,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 		okButton = new JButton("OK");
 
 		panelIncomeValues = new UserIncomnePanel();
-		panelIncomeValues.fillWithUserIncomnes(generateComponents.getUserNames().size(), panelIncomeErrorLabels.getComponents(), okButton);
+		panelIncomeValues.fillWithUserIncomnes(generateComponents.getUserNames().size(), panelIncomeErrorLabels.getComponents(), new UserIncomeInputFiledListener(okButton));
 		
 		GroupLayout gl_panelIncom = new GroupLayout(panelIncom);
 		gl_panelIncom.setHorizontalGroup(
