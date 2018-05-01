@@ -14,7 +14,8 @@ import com.toedter.calendar.JDateChooser;
 
 public class DataFormatter {
 
-	public String setAmountFormat(double amount) {
+	//FIXME: this should not be called as setter
+	public static String setAmountFormat(double amount) {
 		DecimalFormat df = new DecimalFormat("#.##");
 		String formattedAmount = df.format(amount);
 		String formattedAmountWithDotInsteadComa = formattedAmount.replace(",", ".");

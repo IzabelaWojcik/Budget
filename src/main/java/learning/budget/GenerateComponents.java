@@ -1,7 +1,11 @@
 package learning.budget;
 
+import static learning.budget.Constants.INCOME_TYPE_SALARY;
+import static learning.budget.DataFormatter.setAmountFormat;
+
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,9 +13,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -91,7 +99,7 @@ public class GenerateComponents {
 		panelWithBudgetsName.revalidate();
 		panelWithBudgetsName.repaint();
 	}
-
+	
 	private void generateYearButtonsAfterClickingBudgetNamesButtons(JButton button, int budgetId, JPanel panelWithYears,
 			JPanel panelWithMonths, JPanel panelUser, JPanel panelIncome, JPanel panelBudget, JPanel panelBudgetEmpty,
 			JPanel panelOtherIncomeView, JComboBox<String> comboBoxUsers, JComboBox<String> comboBoxOtherIncome,
@@ -101,18 +109,13 @@ public class GenerateComponents {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setPanelBudgetInvisible(panelBudget, panelBudgetEmpty);
-				lblInform.setText("");
-				panelWithMonths.removeAll();
-				panelWithYears.removeAll();
-				panelUser.removeAll();
-				panelIncome.removeAll();
-				panelOtherIncomeView.removeAll();
-				panelExpenditureView.removeAll();
-				panelSavingsView.removeAll();
-				comboBoxUsers.removeAllItems();
-				comboBoxOtherIncome.removeAllItems();
-				comboBoxExpenditureCategory.removeAllItems();
-				comboBoxSavings.removeAllItems();
+
+				List<Container> components = Arrays.asList(lblInform, panelWithYears, panelWithMonths, panelUser,
+						panelIncome, panelOtherIncomeView, panelExpenditureView, panelSavingsView, comboBoxUsers,
+						comboBoxOtherIncome, comboBoxExpenditureCategory, comboBoxSavings);
+
+				components.stream().forEach(c -> {c.removeAll();});
+				
 				HashMap<Integer, ArrayList<Integer>> mapOfYearsInConcreteBudgetId = sort
 						.sortYearsInConcredeBudgetId(usersIncomeObjectList);
 				for (Entry<Integer, ArrayList<Integer>> entry : mapOfYearsInConcreteBudgetId.entrySet()) {
@@ -142,20 +145,8 @@ public class GenerateComponents {
 					// TODO handle exceptions in proper place
 					e1.printStackTrace();
 				}
-				panelWithYears.revalidate();
-				panelWithYears.repaint();
-				panelWithMonths.revalidate();
-				panelWithMonths.repaint();
-				panelUser.revalidate();
-				panelUser.repaint();
-				panelIncome.revalidate();
-				panelIncome.repaint();
-				panelOtherIncomeView.revalidate();
-				panelOtherIncomeView.repaint();
-				panelExpenditureView.revalidate();
-				panelExpenditureView.repaint();
-				panelSavingsView.revalidate();
-				panelSavingsView.repaint();
+				
+				components.stream().forEach(c -> {c.revalidate(); c.repaint();});
 			}
 		});
 	}
@@ -300,51 +291,28 @@ public class GenerateComponents {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				double sum = 0;
-				labelOtherIncomeSum.setText("0");
 				panelOtherIncomeView.removeAll();
-				int sizeOfUsersIncomeObjectList = usersIncomeObjectList.size();
-				JLabel jLabelsUsers[] = new JLabel[sizeOfUsersIncomeObjectList];
-				JLabel jLabelsIncomeCategory[] = new JLabel[sizeOfUsersIncomeObjectList];
-				JLabel jLabelsIncomeAmount[] = new JLabel[sizeOfUsersIncomeObjectList];
-				int dateMonth, dateYear, idUser, idIncomeCategory, idBudget, idcategoryOfIncome = 1;
-				LocalDate date;
-				double amount;
-				int i = 0;
-				layoutOptions.setGridy(0);
-				for (UsersIncomeObject uio : usersIncomeObjectList) {
-					idBudget = uio.getBudgetId();
-					date = uio.getIncomeDate();
-					dateYear = date.getYear();
-					dateMonth = date.getMonthValue();
-					idIncomeCategory = uio.getIncomeCategoryId();
-					if (idBudget == budgetId) {
-						if (dateYear == year && dateMonth == month) {
-							if (idIncomeCategory != idcategoryOfIncome) {
-								idUser = uio.getUserId();
-								amount = uio.getAmount();
-								for (Entry<Integer, String> users : usersNameHashMap.entrySet()) {
-									if (users.getKey() == idUser)
-										jLabelsUsers[i] = new JLabel(users.getValue());
-								}
-								for (Entry<Integer, String> cat : incomeCategoryMap.entrySet()) {
-									if (cat.getKey() == idIncomeCategory)
-										jLabelsIncomeCategory[i] = new JLabel(cat.getValue());
-								}
-								jLabelsIncomeAmount[i] = new JLabel(String.valueOf(amount));
-								layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelOtherIncomeView,
-										jLabelsUsers[i], jLabelsIncomeCategory[i], jLabelsIncomeAmount[i]);
-								
-								sum += amount;
-								String sumAmount = dataFormatter.setAmountFormat(sum);
-								labelOtherIncomeSum.setText(sumAmount);
 
-								i++;
-								if (i >= sizeOfUsersIncomeObjectList)
-									return;
-							}
-						}
-					}
+				LayoutOptions layoutOptions = new LayoutOptions();
+
+				List<UsersIncomeObject> userIncomeObjectListConstrainedToBudgeDateAndIncomeCategory = usersIncomeObjectList.stream()
+						.filter(uio -> uio.getBudgetId() == budgetId && uio.getIncomeDate().getYear() == year
+								&& uio.getIncomeDate().getMonthValue() == month
+								&& uio.getIncomeCategoryId() != INCOME_TYPE_SALARY)
+						.collect(Collectors.toList());
+
+				for (UsersIncomeObject uio : userIncomeObjectListConstrainedToBudgeDateAndIncomeCategory) {
+					JLabel jLabelsUsers = new JLabel(usersNameHashMap.get(uio.getUserId()));
+					JLabel jLabelsIncomeCategory = new JLabel(incomeCategoryMap.get(uio.getIncomeCategoryId()));
+					JLabel jLabelsIncomeAmount = new JLabel(String.valueOf(uio.getAmount()));
+					
+					layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelOtherIncomeView, jLabelsUsers,
+							jLabelsIncomeCategory, jLabelsIncomeAmount);
+
+					sum += uio.getAmount();
+
 				}
+				labelOtherIncomeSum.setText(setAmountFormat(sum));
 				panelOtherIncomeView.revalidate();
 				panelOtherIncomeView.repaint();
 			}
