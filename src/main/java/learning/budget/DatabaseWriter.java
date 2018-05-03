@@ -27,6 +27,8 @@ public class DatabaseWriter implements IDatabaseWriter {
 		try {
 			//TODO where put start.close(); 
 			start = connection.createStatement();
+			if(start == null)
+				System.out.println("not tu sien ie zainiacjaislowal");
 			start.executeUpdate(update);
 		} catch (SQLException e) {
 			e.printStackTrace();

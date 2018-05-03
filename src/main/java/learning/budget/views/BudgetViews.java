@@ -85,7 +85,8 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 			public void run() {
 				try {
 					IDatabaseWriter databaseWriter = DatabaseWriter.getInstance();
-					//DatabaseWriter.setConnection(DatabaseConnection.getInstance());
+					DatabaseWriter.setConnection(DatabaseConnection.getInstance());
+					
 					IDatabaseReader databaseReader = DatabaseReader.getInstance();
 					DatabaseReader.setConnection(DatabaseConnection.getInstance());
 					BudgetViews window = new BudgetViews(databaseReader, databaseWriter);

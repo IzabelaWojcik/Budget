@@ -43,7 +43,7 @@ public class GenerateComponents {
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
 	private int num;
 	private int userNumber = 0;
-	private static String YEARANDMONTH;
+	private static String yearAndMonth;
 	private ComboBoxAction comboBoxAction;
 	private Sort sort;
 	private ArrayList<ExpenditureObject> expenditureObjectListWithItsId;
@@ -69,7 +69,7 @@ public class GenerateComponents {
 	}
 	
 	public String getYearAndMonth() {
-		return YEARANDMONTH;
+		return yearAndMonth;
 	}
 
 	protected void generateButtonsWithBudgetsNames(JPanel panelWithBudgetsName, JPanel panelWithYears,
@@ -206,30 +206,25 @@ public class GenerateComponents {
 	}
 
 	public void setPanelBudgetInvisible(JPanel panelBudget, JPanel panelBudgetEmpty) {
-		panelBudget.setVisible(false);
-		panelBudgetEmpty.setVisible(true);
+		
 	}
 
-	public void generateMonthNameAndYearInfoAfterClickingMonthButton(JButton button, JLabel lblInform, int year,
-			int month) {
-		button.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				DataFormatter dataFormatter = new DataFormatter();
-				String monthName = dataFormatter.changeMonhNumberFromMonthName(month);
-				lblInform.setText(year + " " + monthName.toUpperCase());
-			}
-		});
-	}
-
+	//FIXME that will be to delete if i pass LocalDate to function instead of year and month, or i can pass month name
 	public String generateMonthNameAndYearInfoAfterClickingMonthButton(JLabel lblInform, int year, int month) {
 		String date = month + " " + year;
-		YEARANDMONTH = date;
+		yearAndMonth = date;
 		DataFormatter dataFormatter = new DataFormatter();
 		String monthName = dataFormatter.changeMonhNumberFromMonthName(month);
 		lblInform.setText(year + " " + monthName.toUpperCase());
-		return YEARANDMONTH;
+		return yearAndMonth;
+	}
+	
+	public String generateMonthNameAndYearInfoAfterClickingMonthButton(JLabel lblInform, LocalDate date) {
+		int year = date.getYear();
+		String month = date.getMonth().toString();
+		yearAndMonth = month + " " + year;
+		lblInform.setText(year + " " + month.toUpperCase());
+		return yearAndMonth;
 	}
 
 	protected void generateIncomeAfterClickingMonthButton(JButton button, JPanel panelUser, JPanel panelIncome,
@@ -238,50 +233,33 @@ public class GenerateComponents {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				double sum = 0;
-				labelIncomeSum.setText("0");
+				
+				List<Container> components = Arrays.asList(panelIncome, panelUser);
+				components.stream().forEach(c -> {c.removeAll();});
+				
 				panelBudget.setVisible(true);
 				panelBudgetEmpty.setVisible(false);
-				panelUser.removeAll();
-				panelIncome.removeAll();
-				int sizeOfUsersIncomeObjectList = usersIncomeObjectList.size();
-				LocalDate date;
-				JLabel lblUsers[] = new JLabel[sizeOfUsersIncomeObjectList];
-				JLabel lblIncome[] = new JLabel[sizeOfUsersIncomeObjectList];
-				int i = 0, idBudget, idUser, idIncomeCategory, yearOfBudget, monthOfBudget, idcategoryOfIncome = 1;
-				YEARANDMONTH = generateMonthNameAndYearInfoAfterClickingMonthButton(lblInform, year, month);
-				double amount;
-				for (UsersIncomeObject uio : usersIncomeObjectList) {
-					idBudget = uio.getBudgetId();
-					date = uio.getIncomeDate();
-					yearOfBudget = date.getYear();
-					monthOfBudget = date.getMonthValue();
-					idIncomeCategory = uio.getIncomeCategoryId();
-					if (idBudget == budgetId) {
-						if (yearOfBudget == year && monthOfBudget == month && idIncomeCategory == idcategoryOfIncome) {
-							idUser = uio.getUserId();
-							amount = uio.getAmount();
-							for (Entry<Integer, String> users : usersNameHashMap.entrySet()) {
-								if (users.getKey() == idUser)
-									lblUsers[i] = new JLabel(users.getValue());
-							}
-							lblIncome[i] = new JLabel(amount + "");
-							panelUser.add(lblUsers[i]);
-							panelIncome.add(lblIncome[i]);
+
+				yearAndMonth = generateMonthNameAndYearInfoAfterClickingMonthButton(lblInform, year, month);
+
+				List<UsersIncomeObject> usersIncomeObjectSalaryListConstrainedByBudgetDateAndCategoryId = usersIncomeObjectList.stream()
+						.filter(uio -> uio.getBudgetId() == budgetId && uio.getIncomeDate().getYear() == year
+						&& uio.getIncomeDate().getMonthValue() == month 
+						&& uio.getIncomeCategoryId() == INCOME_TYPE_SALARY)
+						.collect(Collectors.toList());
+				
+				for (UsersIncomeObject uio : usersIncomeObjectSalaryListConstrainedByBudgetDateAndCategoryId) {
+					JLabel jLabelUsers = new JLabel(usersNameHashMap.get(uio.getUserId()));
+					JLabel jLabelIncomaAmount = new JLabel(String.valueOf(uio.getAmount()));
+					
+					panelUser.add(jLabelUsers);
+					panelIncome.add(jLabelIncomaAmount);
+					
+					sum += uio.getAmount();
 							
-							sum += amount;
-							String sumAmount = dataFormatter.setAmountFormat(sum);
-							labelIncomeSum.setText(sumAmount);
-							
-							i++;
-						}
-					}
-					if (i >= sizeOfUsersIncomeObjectList)
-						return;
 				}
-				panelUser.revalidate();
-				panelUser.repaint();
-				panelIncome.revalidate();
-				panelIncome.repaint();
+				labelIncomeSum.setText(setAmountFormat(sum));
+				components.stream().forEach(c -> {c.revalidate(); c.repaint();});
 			}
 		});
 	}
@@ -323,48 +301,29 @@ public class GenerateComponents {
 			int budgetId, int year, int month, JLabel labelExpenditureSum) {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				labelExpenditureSum.setText("0");
+				//FIXME removed that list
 				ArrayList<ExpenditureObject> expenditureObjectSortedList = sort.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, year, month,
 						budgetId);
-				panelExpenditureView.removeAll();
-				int sizeOfExpenditureObjectList = expenditureObjectSortedList.size();
-				JLabel jLabelDate[] = new JLabel[sizeOfExpenditureObjectList];
-				JLabel jLabelsExpenditureCategory[] = new JLabel[sizeOfExpenditureObjectList];
-				JLabel jLabelsExpenditureAmount[] = new JLabel[sizeOfExpenditureObjectList];
-				int dateMonth, dateYear, idExpenditureCategory, idBudget;
-				double amount;
-				int i = 0;
 				double sum = 0;
-				LocalDate date;
-				layoutOptions.setGridy(0);
-				for (ExpenditureObject eo : expenditureObjectSortedList) {
-					idBudget = eo.getBudgetId();
-					date = eo.getExpenditureDate();
-					dateYear = date.getYear();
-					dateMonth = date.getMonthValue();
-					idExpenditureCategory = eo.getExpenditureCategoryId();
-					if (idBudget == budgetId) {
-						if (dateYear == year && dateMonth == month) {
-							amount = eo.getAmount();
-							for (Entry<Integer, String> cat : expenditureCategoryMap.entrySet()) {
-								if (cat.getKey() == idExpenditureCategory)
-									jLabelsExpenditureCategory[i] = new JLabel(cat.getValue());
-							}
-							jLabelsExpenditureAmount[i] = new JLabel(String.valueOf(amount));
-							jLabelDate[i] = new JLabel(date.toString());
-							layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelExpenditureView,
-									jLabelDate[i], jLabelsExpenditureCategory[i], jLabelsExpenditureAmount[i]);
+				panelExpenditureView.removeAll();
+				LayoutOptions layoutOptions = new LayoutOptions();
+				
+				List<ExpenditureObject> expenditureObjectSortedListConstrainedToBudgetDate = expenditureObjectSortedList.stream()
+						.filter(eo -> eo.getBudgetId() == budgetId && eo.getExpenditureDate().getYear() == year 
+						&& eo.getExpenditureDate().getMonthValue() == month)
+						.collect(Collectors.toList());
+				
+				for (ExpenditureObject eo : expenditureObjectSortedListConstrainedToBudgetDate) {
+					JLabel jLabelDate = new JLabel(eo.getExpenditureDate().toString());
+					JLabel jLabelsExpenditureAmount = new JLabel(String.valueOf(eo.getAmount()));	
+					JLabel jLabelsExpenditureCategory = new JLabel(expenditureCategoryMap.get(eo.getExpenditureCategoryId()));
+					
+					layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelExpenditureView,
+							jLabelDate, jLabelsExpenditureCategory, jLabelsExpenditureAmount);
 
-							sum += amount;
-							String sumAmount = dataFormatter.setAmountFormat(sum);
-							labelExpenditureSum.setText(sumAmount);
-
-							i++;
-							if (i >= sizeOfExpenditureObjectList)
-								return;
-						}
-					}
+					sum += eo.getAmount();
 				}
+				labelExpenditureSum.setText(setAmountFormat(sum));
 				panelExpenditureView.revalidate();
 				panelExpenditureView.repaint();
 			}
@@ -375,47 +334,28 @@ public class GenerateComponents {
 			int year, int month, JLabel labelSavingsSum) {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				double sum = 0;
-				labelSavingsSum.setText("0");
+				//FIXME remove that list
 				ArrayList<SavingsObject> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, year, month, budgetId);
+				double sum = 0;
 				panelSavingsView.removeAll();
-				int sizeOfSavingsObjectSortedList = savingsObjectSortedList.size();
-				JLabel jLabelDate[] = new JLabel[sizeOfSavingsObjectSortedList];
-				JLabel jLabelsSavingsCategory[] = new JLabel[sizeOfSavingsObjectSortedList];
-				JLabel jLabelsSavingsAmount[] = new JLabel[sizeOfSavingsObjectSortedList];
-				int dateMonth, dateYear, idSavingsCategory, idBudget;
-				double amount;
-				int i = 0;
-				LocalDate date;
-				layoutOptions.setGridy(0);
-				for (SavingsObject so : savingsObjectSortedList) {
-					idBudget = so.getBudgetId();
-					date = so.getSavingsDate();
-					dateYear = date.getYear();
-					dateMonth = date.getMonthValue();
-					idSavingsCategory = so.getSavingsCategoryId();
-					if (idBudget == budgetId) {
-						if (dateYear == year && dateMonth == month) {
-							amount = so.getAmount();
-							for (Entry<Integer, String> cat : savingsCategoryMap.entrySet()) {
-								if (cat.getKey() == idSavingsCategory)
-									jLabelsSavingsCategory[i] = new JLabel(cat.getValue());
-							}
-							jLabelsSavingsAmount[i] = new JLabel(String.valueOf(amount));
-							jLabelDate[i] = new JLabel(date.toString());
-							layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelSavingsView, jLabelDate[i],
-									jLabelsSavingsCategory[i], jLabelsSavingsAmount[i]);
+				
+				LayoutOptions layoutOptions = new LayoutOptions();
+				
+				List<SavingsObject> savingsObjectSortedListConstrainedToBudgetDate = savingsObjectSortedList.stream()
+						.filter(so -> so.getBudgetId() == budgetId && so.getSavingsDate().getYear() == year 
+						&& so.getSavingsDate().getMonthValue() == month)
+						.collect(Collectors.toList());
+	
+				for (SavingsObject so : savingsObjectSortedListConstrainedToBudgetDate) {
+					JLabel jLabelDate = new JLabel(so.getSavingsDate().toString());
+					JLabel jLabelsSavingsAmount = new JLabel(String.valueOf(so.getAmount()));
+					JLabel jLabelSavingsCategory = new JLabel(savingsCategoryMap.get(so.getSavingsCategoryId()));
+							layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelSavingsView, jLabelDate,
+							jLabelSavingsCategory, jLabelsSavingsAmount);
 
-							sum += amount;
-							String sumAmount = dataFormatter.setAmountFormat(sum);
-							labelSavingsSum.setText(sumAmount);
-							
-							i++;
-							if (i >= sizeOfSavingsObjectSortedList)
-								return;
-						}
-					}
+					sum += so.getAmount();
 				}
+				labelSavingsSum.setText(setAmountFormat(sum));
 				panelSavingsView.revalidate();
 				panelSavingsView.repaint();
 			}

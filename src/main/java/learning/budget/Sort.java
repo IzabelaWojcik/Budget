@@ -32,11 +32,9 @@ public class Sort {
 	public ArrayList<Integer> sortMonthsForConcreteYearAndBudgetId(ArrayList<UsersIncomeObject> usersIncomeObjectList, int budgetId, int year) {
 		ArrayList<Integer> listOfMonths = new ArrayList<Integer>();
 		for (UsersIncomeObject uio : usersIncomeObjectList) {
-			int idBudget = uio.getBudgetId();
 			LocalDate date = uio.getIncomeDate();
-			int yearOfBudget = date.getYear();
-			if (idBudget == budgetId) {
-				if (yearOfBudget == year) {
+			if (uio.getBudgetId() == budgetId) {
+				if (uio.getIncomeDate().getYear() == year) {
 					int month = date.getMonthValue();
 					if (!listOfMonths.contains(month)) {
 						listOfMonths.add(month);
@@ -48,7 +46,7 @@ public class Sort {
 		return listOfMonths;
 	}
 	
-	public ArrayList<ExpenditureObject> sortExpenditureAfterItsDay(ArrayList<ExpenditureObject> expenditureObjectListWithExpenditureId, int yearClicked, int monthClicked, int budgetId) {
+	public ArrayList<ExpenditureObject> sortExpenditureAfterItsDay(ArrayList<ExpenditureObject> expenditureObjectListWithExpenditureId, int yearClicked, int monthChoosenWithButtonClicked, int budgetId) {
 		ArrayList<Integer> listOfDays = new ArrayList<Integer>();
 		ArrayList<ExpenditureObject> expenditureListToSort = new ArrayList<ExpenditureObject>();
 		for (ExpenditureObject eo : expenditureObjectListWithExpenditureId) {
@@ -57,7 +55,7 @@ public class Sort {
 			int month = date.getMonthValue();
 			int day = date.getDayOfMonth();
 			int idBudget = eo.getBudgetId();
-			if (yearClicked == year && monthClicked == month && budgetId == idBudget && !expenditureListToSort.contains(eo)) {
+			if (yearClicked == year && monthChoosenWithButtonClicked == month && budgetId == idBudget && !expenditureListToSort.contains(eo)) {
 				listOfDays.add(day);
 				expenditureListToSort.add(eo);
 			}

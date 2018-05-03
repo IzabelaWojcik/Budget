@@ -119,6 +119,15 @@ public class ButtonAction extends GenerateComponents {
 
 					try {
 						localDate = dataFormatter.dateLocalFormatterForJDateChooser(dateChooser);
+						if (localDate == null) {
+							throw new NullPointerException("local date not init");
+						}
+						
+						if(databaseWriter == null)
+						{
+							throw new NullPointerException("database not init");
+						}
+						
 						databaseWriter.writeExpenditureOrSavingsToDatabase(amount, localDate, idCategory, idBudget, tablename);
 						txFieldAmount.setText("");
 						cbCategory.setSelectedIndex(-1);
