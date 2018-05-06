@@ -60,22 +60,16 @@ public class GenerateComponents {
 			JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum, JLabel labelSavingsSum,
 			JLabel labelOtherIncomeSum, JLabel labelIncomeSum) {
 
-		int budgetsQuantity = budgetIdNameMap.size();
-		JButton jButtons[] = new JButton[budgetsQuantity];
-		int i = 0;
 		int budgetCurrentId;
 		for (Entry<Integer, String> entry : budgetIdNameMap.entrySet()) {
 			budgetCurrentId = entry.getKey();
-			jButtons[i] = new JButton(entry.getValue());
-			panelWithBudgetsName.add(jButtons[i]);
-			generateYearButtonsAfterClickingBudgetNamesButtons(jButtons[i], budgetCurrentId, panelWithYears,
+			JButton jButtonBudgetName = new JButton(entry.getValue());
+			panelWithBudgetsName.add(jButtonBudgetName);
+			generateYearButtonsAfterClickingBudgetNamesButtons(jButtonBudgetName, budgetCurrentId, panelWithYears,
 					panelWithMonths, panelUser, panelIncome, panelBudget, panelBudgetEmpty, panelOtherIncomeView,
 					comboBoxUsers, comboBoxOtherIncome, comboBoxExpenditureCategory, comboBoxSavings,
 					panelExpenditureView, panelSavingsView, lblInform, lblExpenditureSum, labelSavingsSum,
 					labelOtherIncomeSum, labelIncomeSum);
-			i++;
-			if (i >= budgetsQuantity)
-				return;
 		}
 		panelWithBudgetsName.revalidate();
 		panelWithBudgetsName.repaint();
@@ -103,13 +97,12 @@ public class GenerateComponents {
 				for (Entry<Integer, ArrayList<Integer>> entry : mapOfYearsInConcreteBudgetId.entrySet()) {
 					Integer idBudget = entry.getKey();
 					int sizeOfListOfYears = entry.getValue().size();
-					JButton jButtons[] = new JButton[sizeOfListOfYears];
 					if (idBudget == budgetId) {
 						for (int i = 0; i < sizeOfListOfYears; i++) {
 							int year = entry.getValue().get(i);
-							jButtons[i] = new JButton(year + "");
-							panelWithYears.add(jButtons[i]);
-							generateMonthsButtonsForConcreteYearAfterClickingYearButton(jButtons[i], idBudget,
+							JButton jButtonWithYear = new JButton(year + "");
+							panelWithYears.add(jButtonWithYear);
+							generateMonthsButtonsForConcreteYearAfterClickingYearButton(jButtonWithYear, idBudget,
 									panelWithMonths, year, panelUser, panelIncome, panelBudget, panelBudgetEmpty,
 									panelOtherIncomeView, panelExpenditureView, panelSavingsView, lblInform,
 									lblExpenditureSum, labelSavingsSum, labelOtherIncomeSum, labelIncomeSum);
@@ -124,7 +117,6 @@ public class GenerateComponents {
 					comboBoxAction.writeSavingsCategoryToComboBox(comboBoxSavings, budgetId);
 
 				} catch (DatabaseNotInitialized e1) {
-					// TODO handle exceptions in proper place
 					e1.printStackTrace();
 				}
 				
@@ -151,19 +143,18 @@ public class GenerateComponents {
 				
 				DataFormatter dataFormatter = new DataFormatter();
 				ArrayList<Integer> listOfMonths = sort.sortMonthsForConcreteYearAndBudgetId(usersIncomeObjectList, budgetId, year);
-				JButton[] jButtons = new JButton[listOfMonths.size()];
 				for (int i = 0; i < listOfMonths.size(); i++) {
 					int month = listOfMonths.get(i);
 					String monthName = dataFormatter.changeMonhNumberFromMonthName(month);
-					jButtons[i] = new JButton(monthName + "");
-					panelWithMonths.add(jButtons[i]);
-					generateIncomeAfterClickingMonthButton(jButtons[i], panelUser, panelIncome, panelBudget,
+					JButton jButtonWithMonthName = new JButton(monthName + "");
+					panelWithMonths.add(jButtonWithMonthName);
+					generateIncomeAfterClickingMonthButton(jButtonWithMonthName, panelUser, panelIncome, panelBudget,
 							panelBudgetEmpty, budgetId, year, month, lblInform, labelIncomeSum);
-					generateOtherIncomeAfterClickingMonthButton(jButtons[i], panelOtherIncomeView, budgetId, year,
+					generateOtherIncomeAfterClickingMonthButton(jButtonWithMonthName, panelOtherIncomeView, budgetId, year,
 							month, labelOtherIncomeSum);
-					generateExpenditureAfterClickingMonthButton(jButtons[i], panelExpenditureView, budgetId, year,
+					generateExpenditureAfterClickingMonthButton(jButtonWithMonthName, panelExpenditureView, budgetId, year,
 							month, lblExpenditureSum);
-					generateSavingsAfterClickingMonthButton(jButtons[i], panelSavingsView, budgetId, year, month,
+					generateSavingsAfterClickingMonthButton(jButtonWithMonthName, panelSavingsView, budgetId, year, month,
 							labelSavingsSum);
 				}
 				components.stream().forEach(c -> {c.revalidate(); c.repaint();});
