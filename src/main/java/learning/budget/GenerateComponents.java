@@ -3,19 +3,13 @@ package learning.budget;
 import static learning.budget.Constants.INCOME_TYPE_SALARY;
 import static learning.budget.DataFormatter.setAmountFormat;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -24,25 +18,16 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import learning.budget.views.CreateBudgetOptions;
-import learning.budget.views.UserIncomeInputFiledListener;
 
 public class GenerateComponents {
 	protected IDatabaseReader databaseReader;
 	protected IDatabaseWriter databaseWriter;
-	private DataFormatter dataFormatter;
 	private HashMap<Integer, String> budgetIdNameMap;
 	private ArrayList<UsersIncomeObject> usersIncomeObjectList;
 	private HashMap<Integer, String> usersNameHashMap;
 	private HashMap<Integer, String> incomeCategoryMap;
 	private HashMap<Integer, String> expenditureCategoryMap;
 	private HashMap<Integer, String> savingsCategoryMap;
-	private LayoutOptions layoutOptions = new LayoutOptions();
-	private CreateBudgetOptions cbo;
-	private TextFieldValidator textFieldValidator = new TextFieldValidator();
-	private int num;
-	private int userNumber = 0;
 	private static String yearAndMonth;
 	private ComboBoxAction comboBoxAction;
 	private Sort sort;
@@ -52,9 +37,6 @@ public class GenerateComponents {
 	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWriter;
-		
-		cbo = new CreateBudgetOptions(databaseReader, databaseWriter);
-		num = cbo.getMaxNumberOfUsers();
 		budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
 		usersIncomeObjectList = databaseReader.readIncomefromDatabase();
 		usersNameHashMap = databaseReader.readUsersFromDatabasetoHashMap();
@@ -63,7 +45,6 @@ public class GenerateComponents {
 		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
 		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDataBase();
 		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDataBase();
-		dataFormatter = new DataFormatter();
 		comboBoxAction = new ComboBoxAction(databaseReader);
 		sort = new Sort();
 	}
@@ -108,7 +89,8 @@ public class GenerateComponents {
 			JLabel labelSavingsSum, JLabel labelOtherIncomeSum, JLabel labelIncomeSum) {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setPanelBudgetInvisible(panelBudget, panelBudgetEmpty);
+				panelBudget.setVisible(false);
+				panelBudgetEmpty.setVisible(true);
 
 				List<Container> components = Arrays.asList(lblInform, panelWithYears, panelWithMonths, panelUser,
 						panelIncome, panelOtherIncomeView, panelExpenditureView, panelSavingsView, comboBoxUsers,
@@ -159,15 +141,15 @@ public class GenerateComponents {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setPanelBudgetInvisible(panelBudget, panelBudgetEmpty);
-				lblInform.setText("");
+				panelBudget.setVisible(false);
+				panelBudgetEmpty.setVisible(true);
+				
+				List<Container> components = Arrays.asList(lblInform, panelWithMonths, panelUser, panelIncome, panelOtherIncomeView,
+						panelExpenditureView, panelSavingsView);
+				
+				components.stream().forEach(c -> {c.removeAll();});
+				
 				DataFormatter dataFormatter = new DataFormatter();
-				panelWithMonths.removeAll();
-				panelUser.removeAll();
-				panelIncome.removeAll();
-				panelOtherIncomeView.removeAll();
-				panelExpenditureView.removeAll();
-				panelSavingsView.removeAll();
 				ArrayList<Integer> listOfMonths = sort.sortMonthsForConcreteYearAndBudgetId(usersIncomeObjectList, budgetId, year);
 				JButton[] jButtons = new JButton[listOfMonths.size()];
 				for (int i = 0; i < listOfMonths.size(); i++) {
@@ -184,29 +166,9 @@ public class GenerateComponents {
 					generateSavingsAfterClickingMonthButton(jButtons[i], panelSavingsView, budgetId, year, month,
 							labelSavingsSum);
 				}
-				panelWithMonths.revalidate();
-				panelWithMonths.repaint();
-				panelUser.revalidate();
-				panelUser.repaint();
-				panelIncome.revalidate();
-				panelIncome.repaint();
-				panelOtherIncomeView.revalidate();
-				panelOtherIncomeView.repaint();
-				panelExpenditureView.revalidate();
-				panelExpenditureView.repaint();
-				panelSavingsView.revalidate();
-				panelSavingsView.repaint();
+				components.stream().forEach(c -> {c.revalidate(); c.repaint();});
 			}
 		});
-	}
-
-	public void setPanelBudgetVisible(JPanel panelBudget, JPanel panelBudgetEmpty) {
-		panelBudget.setVisible(true);
-		panelBudgetEmpty.setVisible(false);
-	}
-
-	public void setPanelBudgetInvisible(JPanel panelBudget, JPanel panelBudgetEmpty) {
-		
 	}
 
 	//FIXME that will be to delete if i pass LocalDate to function instead of year and month, or i can pass month name
