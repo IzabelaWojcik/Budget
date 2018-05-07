@@ -180,10 +180,10 @@ public class ButtonAction extends GenerateComponents {
 		layoutOptions.setGridy(0);
 		for (ExpenditureObject eo : expenditureObjectSortedList) {
 			idBudget = eo.getBudgetId();
-			date = eo.getExpenditureDate();
+			date = eo.getDate();
 			dateYear = date.getYear();
 			dateMonth = date.getMonthValue();
-			idExpenditureCategory = eo.getExpenditureCategoryId();
+			idExpenditureCategory = eo.getCategoryId();
 
 			if (idBudget == budgetId) {
 				if (dateYear == yearChoosenWithButtonClicked && dateMonth == monthChoosenWithButtonClicked) {
@@ -230,10 +230,10 @@ public class ButtonAction extends GenerateComponents {
 		layoutOptions.setGridy(0);
 		for (SavingsObject so : savingsObjectSortedList) {
 			idBudget = so.getBudgetId();
-			date = so.getSavingsDate();
+			date = so.getDate();
 			dateYear = date.getYear();
 			dateMonth = date.getMonthValue();
-			idSavingsCategory = so.getSavingsCategoryId();
+			idSavingsCategory = so.getCategoryId();
 			if (idBudget == budgetId) {
 				if (dateYear == yearChoosenWithButtonClicked && dateMonth == monthChoosenWithButtonClicked) {
 					amount = so.getAmount();
@@ -276,10 +276,10 @@ public class ButtonAction extends GenerateComponents {
 		layoutOptions.setGridy(0);
 		for (UsersIncomeObject uio : userIncomeObjectList) {
 			idBudget = uio.getBudgetId();
-			date = uio.getIncomeDate();
+			date = uio.getDate();
 			dateYear = date.getYear();
 			dateMonth = date.getMonthValue();
-			idIncomeCategory = uio.getIncomeCategoryId();
+			idIncomeCategory = uio.getCategoryId();
 			if (idBudget == budgetId) {
 				if (dateYear == yearChoosenWithButtonClicked && dateMonth == monthChoosenWithButtonClicked) {
 					amount = uio.getAmount();
@@ -314,7 +314,7 @@ public class ButtonAction extends GenerateComponents {
 		int idBudget = 0;
 		int idUser = getUserIdFromUserMap(cbUser);
 		for (UsersIncomeObject uio : userIncomeObjectList) {
-			if (idUser == uio.getUserId()) {
+			if (idUser == uio.getTransactionId()) {
 				idBudget = uio.getBudgetId();
 			}
 		}

@@ -2,7 +2,7 @@ package learning.budget;
 
 import java.time.LocalDate;
 
-public class SavingsObject {
+public class SavingsObject extends Transaction{
 	private int idSavingsCategory;
 	private double amount;
 	private int idBudget;
@@ -24,11 +24,11 @@ public class SavingsObject {
 		idBudget = idOfBudget;
 	}
 	
-	public int getSavingsCategoryId(){
+	public int getCategoryId(){
 		return idSavingsCategory;
 	}
 	
-	public LocalDate getSavingsDate(){
+	public LocalDate getDate(){
 		return dateOfSavings;
 	}
 	
@@ -36,7 +36,7 @@ public class SavingsObject {
 		return idBudget;
 	}
 	
-	public int getSavingsId(){
+	public int getTransactionId(){
 		return idSavings;
 	}
 	

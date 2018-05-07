@@ -21,7 +21,7 @@ public class ComboBoxAction {
 		int idPayment = 1;
 		for (UsersIncomeObject uio : userIncomeList) {
 			int idBudget = uio.getBudgetId();
-			int idIncomeCategory = uio.getIncomeCategoryId();
+			int idIncomeCategory = uio.getCategoryId();
 			
 			if (budgetId == idBudget) {
 				for (Entry<Integer, String> entry : otherIncomeCategoryMap.entrySet()) {
@@ -47,7 +47,7 @@ public class ComboBoxAction {
 		ArrayList<String> expenditureUniqueItemList = new ArrayList<String>();
 		for (ExpenditureObject eo : expenditureList) {
 			int idBudget = eo.getBudgetId();
-			int idExpenditureCategory = eo.getExpenditureCategoryId();
+			int idExpenditureCategory = eo.getCategoryId();
 			if (budgetId == idBudget) {
 				for (Entry<Integer, String> entry : expenditureCategoryMap.entrySet()) {
 					if (entry.getKey() == idExpenditureCategory) {
@@ -69,7 +69,7 @@ public class ComboBoxAction {
 		ArrayList<String> savingUniqueItemList = new ArrayList<String>();
 		for (SavingsObject so : savingsList) {
 			int idBudget = so.getBudgetId();
-			int idSavingsCategory = so.getSavingsCategoryId();
+			int idSavingsCategory = so.getCategoryId();
 			if (budgetId == idBudget) {
 				for (Entry<Integer, String> entry : savingsCategoryMap.entrySet()) {
 					if (entry.getKey() == idSavingsCategory) {

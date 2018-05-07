@@ -2,7 +2,7 @@ package learning.budget;
 
 import java.time.LocalDate;
 
-public class ExpenditureObject {
+public class ExpenditureObject extends Transaction{
 	private int idExpenditureCategory;
 	private double amount;
 	private int idBudget;
@@ -24,15 +24,15 @@ public class ExpenditureObject {
 		idBudget = idOfBudget;
 	}
 	
-	public int getExpenditureCategoryId(){
+	public int getCategoryId(){
 		return idExpenditureCategory;
 	}
 	
-	public int getExpenditureId(){
+	public int getTransactionId(){
 		return idExpenditure;
 	}
 	
-	public LocalDate getExpenditureDate(){
+	public LocalDate getDate(){
 		return dateOfExpenditure;
 	}
 	

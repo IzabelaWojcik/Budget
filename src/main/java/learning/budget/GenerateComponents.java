@@ -146,13 +146,13 @@ public class GenerateComponents {
 				ArrayList<Integer> listOfMonths = sort.sortMonthsForConcreteYearAndBudgetId(usersIncomeObjectList, budgetId, year);
 				
 				List<UsersIncomeObject> usersConstrained = usersIncomeObjectList.stream()
-						.filter(uio -> uio.getBudgetId() == budgetId && uio.getIncomeDate().getYear() == year
-						&& uio.getIncomeCategoryId() == INCOME_TYPE_SALARY)
+						.filter(uio -> uio.getBudgetId() == budgetId && uio.getDate().getYear() == year
+						&& uio.getCategoryId() == INCOME_TYPE_SALARY)
 						.collect(Collectors.toList());
 				
 				List<UsersIncomeObject> userOtherIncomeConstrained = usersIncomeObjectList.stream()
-						.filter(uio -> uio.getBudgetId() == budgetId && uio.getIncomeDate().getYear() == year
-								&& uio.getIncomeCategoryId() != INCOME_TYPE_SALARY)
+						.filter(uio -> uio.getBudgetId() == budgetId && uio.getDate().getYear() == year
+								&& uio.getCategoryId() != INCOME_TYPE_SALARY)
 						.collect(Collectors.toList());
 				
 				for (int i = 0; i < listOfMonths.size(); i++) {
@@ -161,26 +161,26 @@ public class GenerateComponents {
 					JButton jButtonWithMonthName = new JButton(monthName + "");
 					panelWithMonths.add(jButtonWithMonthName);
 
-					List<UsersIncomeObject> users = usersConstrained.stream().filter(uio -> uio.getIncomeDate().getMonthValue() == month).collect(Collectors.toList());
+					List<UsersIncomeObject> users = usersConstrained.stream().filter(uio -> uio.getDate().getMonthValue() == month).collect(Collectors.toList());
 					List<Pair<String, Double>> usersPairs = new ArrayList<Pair<String, Double>>();
 					for (UsersIncomeObject uio : users) {
-						usersPairs.add(new Pair<String, Double>(usersNameHashMap.get(uio.getUserId()), uio.getAmount()));
+						usersPairs.add(new Pair<String, Double>(usersNameHashMap.get(uio.getTransactionId()), uio.getAmount()));
 					}
 					
 					List<UsersIncomeObject> usersOtherIncome = userOtherIncomeConstrained.stream()
-							.filter(uio -> uio.getIncomeDate().getMonthValue() == month)
+							.filter(uio -> uio.getDate().getMonthValue() == month)
 							.collect(Collectors.toList());
 					
 					ArrayList<SavingsObject> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, year, month, budgetId);
 					List<SavingsObject> savingsConstrained = savingsObjectSortedList.stream()
-							.filter(so -> so.getBudgetId() == budgetId && so.getSavingsDate().getYear() == year && so.getSavingsDate().getMonthValue() == month)
+							.filter(so -> so.getBudgetId() == budgetId && so.getDate().getYear() == year && so.getDate().getMonthValue() == month)
 							.collect(Collectors.toList());
 					
 					ArrayList<ExpenditureObject> expenditureObjectSortedList = sort.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, year, month,
 							budgetId);
 					List<ExpenditureObject> expenditureConstrained = expenditureObjectSortedList.stream()
-							.filter(eo -> eo.getBudgetId() == budgetId && eo.getExpenditureDate().getYear() == year 
-							&& eo.getExpenditureDate().getMonthValue() == month)
+							.filter(eo -> eo.getBudgetId() == budgetId && eo.getDate().getYear() == year 
+							&& eo.getDate().getMonthValue() == month)
 							.collect(Collectors.toList());
 					
 					jButtonWithMonthName.addActionListener(new ActionListener() {
@@ -252,8 +252,8 @@ public class GenerateComponents {
 				panelOtherIncomeView.removeAll();
 
 				for (UsersIncomeObject uio : usersOtherIncome) {
-					JLabel jLabelsUsers = new JLabel(usersNameHashMap.get(uio.getUserId()));
-					JLabel jLabelsIncomeCategory = new JLabel(incomeCategoryMap.get(uio.getIncomeCategoryId()));
+					JLabel jLabelsUsers = new JLabel(usersNameHashMap.get(uio.getTransactionId()));
+					JLabel jLabelsIncomeCategory = new JLabel(incomeCategoryMap.get(uio.getCategoryId()));
 					JLabel jLabelsIncomeAmount = new JLabel(String.valueOf(uio.getAmount()));
 					
 					layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelOtherIncomeView, jLabelsUsers,
@@ -277,9 +277,9 @@ public class GenerateComponents {
 				panelExpenditureView.removeAll();
 				
 				for (ExpenditureObject eo : expenditureConstrained) {
-					JLabel jLabelDate = new JLabel(eo.getExpenditureDate().toString());
+					JLabel jLabelDate = new JLabel(eo.getDate().toString());
 					JLabel jLabelsExpenditureAmount = new JLabel(String.valueOf(eo.getAmount()));	
-					JLabel jLabelsExpenditureCategory = new JLabel(expenditureCategoryMap.get(eo.getExpenditureCategoryId()));
+					JLabel jLabelsExpenditureCategory = new JLabel(expenditureCategoryMap.get(eo.getCategoryId()));
 					
 					layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelExpenditureView,
 							jLabelDate, jLabelsExpenditureCategory, jLabelsExpenditureAmount);
@@ -301,9 +301,9 @@ public class GenerateComponents {
 				panelSavingsView.removeAll();
 				
 				for (SavingsObject so : savingsConstrained) {
-					JLabel jLabelDate = new JLabel(so.getSavingsDate().toString());
+					JLabel jLabelDate = new JLabel(so.getDate().toString());
 					JLabel jLabelsSavingsAmount = new JLabel(String.valueOf(so.getAmount()));
-					JLabel jLabelSavingsCategory = new JLabel(savingsCategoryMap.get(so.getSavingsCategoryId()));
+					JLabel jLabelSavingsCategory = new JLabel(savingsCategoryMap.get(so.getCategoryId()));
 							
 					layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelSavingsView, jLabelDate,
 							jLabelSavingsCategory, jLabelsSavingsAmount);

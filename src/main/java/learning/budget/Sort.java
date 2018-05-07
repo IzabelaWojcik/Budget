@@ -11,7 +11,7 @@ public class Sort {
 		HashMap<Integer, ArrayList<Integer>> mapOfBudgetIdAndYears = new HashMap<Integer, ArrayList<Integer>>();
 		for(UsersIncomeObject uio: usersIncomeObjectList) {
 			int idBudget = uio.getBudgetId();
-			LocalDate date = uio.getIncomeDate();
+			LocalDate date = uio.getDate();
 			int year = date.getYear();
 			if (!mapOfBudgetIdAndYears.containsKey(idBudget)) {
 				ArrayList<Integer> listOfYears = new ArrayList<Integer>();
@@ -32,9 +32,9 @@ public class Sort {
 	public ArrayList<Integer> sortMonthsForConcreteYearAndBudgetId(ArrayList<UsersIncomeObject> usersIncomeObjectList, int budgetId, int year) {
 		ArrayList<Integer> listOfMonths = new ArrayList<Integer>();
 		for (UsersIncomeObject uio : usersIncomeObjectList) {
-			LocalDate date = uio.getIncomeDate();
+			LocalDate date = uio.getDate();
 			if (uio.getBudgetId() == budgetId) {
-				if (uio.getIncomeDate().getYear() == year) {
+				if (uio.getDate().getYear() == year) {
 					int month = date.getMonthValue();
 					if (!listOfMonths.contains(month)) {
 						listOfMonths.add(month);
@@ -50,7 +50,7 @@ public class Sort {
 		ArrayList<Integer> listOfDays = new ArrayList<Integer>();
 		ArrayList<ExpenditureObject> expenditureListToSort = new ArrayList<ExpenditureObject>();
 		for (ExpenditureObject eo : expenditureObjectListWithExpenditureId) {
-			LocalDate date = eo.getExpenditureDate();
+			LocalDate date = eo.getDate();
 			int year = date.getYear();
 			int month = date.getMonthValue();
 			int day = date.getDayOfMonth();
@@ -66,7 +66,7 @@ public class Sort {
 		for (int dayInList : listOfDays) {
 			if (!expenditureListToSort.isEmpty()) {
 				for (ExpenditureObject eo : expenditureListToSort) {
-					LocalDate date = eo.getExpenditureDate();
+					LocalDate date = eo.getDate();
 					int day = date.getDayOfMonth();
 					if (day == dayInList) {
 						if (!expenditureSortedList.contains(eo)) {
@@ -84,7 +84,7 @@ public class Sort {
 		ArrayList<SavingsObject> savingsSortedList = new ArrayList<SavingsObject>();
 		ArrayList<SavingsObject> savingsListToSort = new ArrayList<SavingsObject>();
 		for (SavingsObject so : savingsObjectsListWithSavingsId) {
-			LocalDate date = so.getSavingsDate();
+			LocalDate date = so.getDate();
 			int year = date.getYear();
 			int month = date.getMonthValue();
 			int day = date.getDayOfMonth();
@@ -100,7 +100,7 @@ public class Sort {
 		for (int dayInList : listOfDays) {
 			if (!savingsListToSort.isEmpty()) {
 				for (SavingsObject so : savingsListToSort) {
-					LocalDate date = so.getSavingsDate();
+					LocalDate date = so.getDate();
 					int day = date.getDayOfMonth();
 					if (day == dayInList) {
 						if (!savingsSortedList.contains(so)) {
