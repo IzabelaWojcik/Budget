@@ -87,10 +87,10 @@ public class DatabaseReader implements IDatabaseReader{
 		return usersFromDatabaseMap;
 	}
 	
-	public ArrayList<UsersIncomeObject> readIncomefromDatabase() throws DatabaseNotInitialized {
+	public ArrayList<Transaction> readIncomefromDatabase() throws DatabaseNotInitialized {
 		String tablename = "Income";
-		ArrayList<UsersIncomeObject> usersIncomeList= new ArrayList<UsersIncomeObject>();
-		UsersIncomeObject usersIncomeObject = null;
+		ArrayList<Transaction> usersIncomeList= new ArrayList<Transaction>();
+		Transaction usersIncomeObject = null;
 		try {
 			ResultSet rs = getDataFromTable(tablename);
 			while (rs.next()) {
@@ -102,7 +102,7 @@ public class DatabaseReader implements IDatabaseReader{
 				
 				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 				
-				usersIncomeObject = new UsersIncomeObject(idUser, idIncome, amount, localDate, idBudget);
+				usersIncomeObject = new Transaction(idUser, idIncome, amount, localDate, idBudget);
 				if(!usersIncomeList.contains(usersIncomeObject)) usersIncomeList.add(usersIncomeObject);
 			}
 		} catch (SQLException e) {
@@ -142,10 +142,10 @@ public class DatabaseReader implements IDatabaseReader{
 		return budgetInNameMap;
 	}
 
-	public ArrayList<ExpenditureObject> readExpenditureFromDataBase() throws DatabaseNotInitialized{
+	public ArrayList<Transaction> readExpenditureFromDataBase() throws DatabaseNotInitialized{
 		String tablename = "Expenditure";
-		ArrayList<ExpenditureObject> expenditureObjectList = new ArrayList<ExpenditureObject>();
-		ExpenditureObject expenditureObject = null;
+		ArrayList<Transaction> expenditureObjectList = new ArrayList<Transaction>();
+		Transaction expenditureObject = null;
 		try{
 			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
@@ -156,7 +156,7 @@ public class DatabaseReader implements IDatabaseReader{
 				
 				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 				
-				expenditureObject  = new ExpenditureObject(expenditureCategoryId, amount, localDate, budgetId);
+				expenditureObject  = new Transaction(expenditureCategoryId, amount, localDate, budgetId);
 				expenditureObjectList.add(expenditureObject);
 			}
 		}catch (SQLException e) {
@@ -165,10 +165,10 @@ public class DatabaseReader implements IDatabaseReader{
 		return expenditureObjectList;
 	}
 
-	public ArrayList<ExpenditureObject> readExpenditureWithItsIdFromDataBase() throws DatabaseNotInitialized{
+	public ArrayList<Transaction> readExpenditureWithItsIdFromDataBase() throws DatabaseNotInitialized{
 		String tablename = "Expenditure";
-		ArrayList<ExpenditureObject> expenditureObjectList = new ArrayList<ExpenditureObject>();
-		ExpenditureObject expenditureObject = null;
+		ArrayList<Transaction> expenditureObjectList = new ArrayList<Transaction>();
+		Transaction expenditureObject = null;
 		try{
 			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
@@ -180,7 +180,7 @@ public class DatabaseReader implements IDatabaseReader{
 				
 				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 				
-				expenditureObject  = new ExpenditureObject(idExpenditure, expenditureCategoryId, amount, localDate, budgetId);
+				expenditureObject  = new Transaction(idExpenditure, expenditureCategoryId, amount, localDate, budgetId);
 				expenditureObjectList.add(expenditureObject);
 			}
 		}catch (SQLException e) {
@@ -189,10 +189,10 @@ public class DatabaseReader implements IDatabaseReader{
 		return expenditureObjectList;
 	}
 	
-	public ArrayList<SavingsObject> readSavingsFromDataBase() throws DatabaseNotInitialized{
+	public ArrayList<Transaction> readSavingsFromDataBase() throws DatabaseNotInitialized{
 		String tablename = "Savings";
-		ArrayList<SavingsObject> savingsObjectList = new ArrayList<SavingsObject>();
-		SavingsObject savingsObject = null;
+		ArrayList<Transaction> savingsObjectList = new ArrayList<Transaction>();
+		Transaction savingsObject = null;
 		try{
 			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
@@ -203,7 +203,7 @@ public class DatabaseReader implements IDatabaseReader{
 				
 				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 				
-				savingsObject  = new SavingsObject(savingsCategoryId, amount, localDate, budgetId);
+				savingsObject  = new Transaction(savingsCategoryId, amount, localDate, budgetId);
 				savingsObjectList.add(savingsObject);
 			}
 		}catch (SQLException e) {
@@ -212,10 +212,10 @@ public class DatabaseReader implements IDatabaseReader{
 		return savingsObjectList;
 	}
 	
-	public ArrayList<SavingsObject> readSavingsWithItsIdFromDataBase() throws DatabaseNotInitialized{
+	public ArrayList<Transaction> readSavingsWithItsIdFromDataBase() throws DatabaseNotInitialized{
 		String tablename = "Savings";
-		ArrayList<SavingsObject> savingsObjectList = new ArrayList<SavingsObject>();
-		SavingsObject savingsObject = null;
+		ArrayList<Transaction> savingsObjectList = new ArrayList<Transaction>();
+		Transaction savingsObject = null;
 		try{
 			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
@@ -226,7 +226,7 @@ public class DatabaseReader implements IDatabaseReader{
 				
 				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 				
-				savingsObject  = new SavingsObject(savingsCategoryId, amount, localDate, budgetId);
+				savingsObject  = new Transaction(savingsCategoryId, amount, localDate, budgetId);
 				savingsObjectList.add(savingsObject);
 			}
 		}catch (SQLException e) {

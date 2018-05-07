@@ -7,9 +7,9 @@ import java.time.LocalDate;
 
 public class Sort {
 	
-	public HashMap<Integer, ArrayList<Integer>> sortYearsInConcredeBudgetId(ArrayList<UsersIncomeObject> usersIncomeObjectList){
+	public HashMap<Integer, ArrayList<Integer>> sortYearsInConcredeBudgetId(ArrayList<Transaction> usersIncomeObjectList){
 		HashMap<Integer, ArrayList<Integer>> mapOfBudgetIdAndYears = new HashMap<Integer, ArrayList<Integer>>();
-		for(UsersIncomeObject uio: usersIncomeObjectList) {
+		for(Transaction uio: usersIncomeObjectList) {
 			int idBudget = uio.getBudgetId();
 			LocalDate date = uio.getDate();
 			int year = date.getYear();
@@ -29,9 +29,9 @@ public class Sort {
 		return mapOfBudgetIdAndYears;
 	}
 	
-	public ArrayList<Integer> sortMonthsForConcreteYearAndBudgetId(ArrayList<UsersIncomeObject> usersIncomeObjectList, int budgetId, int year) {
+	public ArrayList<Integer> sortMonthsForConcreteYearAndBudgetId(ArrayList<Transaction> usersIncomeObjectList, int budgetId, int year) {
 		ArrayList<Integer> listOfMonths = new ArrayList<Integer>();
-		for (UsersIncomeObject uio : usersIncomeObjectList) {
+		for (Transaction uio : usersIncomeObjectList) {
 			LocalDate date = uio.getDate();
 			if (uio.getBudgetId() == budgetId) {
 				if (uio.getDate().getYear() == year) {
@@ -46,10 +46,10 @@ public class Sort {
 		return listOfMonths;
 	}
 	
-	public ArrayList<ExpenditureObject> sortExpenditureAfterItsDay(ArrayList<ExpenditureObject> expenditureObjectListWithExpenditureId, int yearClicked, int monthChoosenWithButtonClicked, int budgetId) {
+	public ArrayList<Transaction> sortExpenditureAfterItsDay(ArrayList<Transaction> expenditureObjectListWithExpenditureId, int yearClicked, int monthChoosenWithButtonClicked, int budgetId) {
 		ArrayList<Integer> listOfDays = new ArrayList<Integer>();
-		ArrayList<ExpenditureObject> expenditureListToSort = new ArrayList<ExpenditureObject>();
-		for (ExpenditureObject eo : expenditureObjectListWithExpenditureId) {
+		ArrayList<Transaction> expenditureListToSort = new ArrayList<Transaction>();
+		for (Transaction eo : expenditureObjectListWithExpenditureId) {
 			LocalDate date = eo.getDate();
 			int year = date.getYear();
 			int month = date.getMonthValue();
@@ -61,11 +61,11 @@ public class Sort {
 			}
 		}
 		
-		ArrayList<ExpenditureObject> expenditureSortedList = new ArrayList<ExpenditureObject>();
+		ArrayList<Transaction> expenditureSortedList = new ArrayList<Transaction>();
 		Collections.sort(listOfDays);
 		for (int dayInList : listOfDays) {
 			if (!expenditureListToSort.isEmpty()) {
-				for (ExpenditureObject eo : expenditureListToSort) {
+				for (Transaction eo : expenditureListToSort) {
 					LocalDate date = eo.getDate();
 					int day = date.getDayOfMonth();
 					if (day == dayInList) {
@@ -79,11 +79,11 @@ public class Sort {
 		return expenditureSortedList;
 	}
 
-	public ArrayList<SavingsObject> sortSavingsAfterItsDay(ArrayList<SavingsObject> savingsObjectsListWithSavingsId, int yearClicked, int monthClicked, int budgetId) {
+	public ArrayList<Transaction> sortSavingsAfterItsDay(ArrayList<Transaction> savingsObjectsListWithSavingsId, int yearClicked, int monthClicked, int budgetId) {
 		ArrayList<Integer> listOfDays = new ArrayList<Integer>();
-		ArrayList<SavingsObject> savingsSortedList = new ArrayList<SavingsObject>();
-		ArrayList<SavingsObject> savingsListToSort = new ArrayList<SavingsObject>();
-		for (SavingsObject so : savingsObjectsListWithSavingsId) {
+		ArrayList<Transaction> savingsSortedList = new ArrayList<Transaction>();
+		ArrayList<Transaction> savingsListToSort = new ArrayList<Transaction>();
+		for (Transaction so : savingsObjectsListWithSavingsId) {
 			LocalDate date = so.getDate();
 			int year = date.getYear();
 			int month = date.getMonthValue();
@@ -99,7 +99,7 @@ public class Sort {
 		Collections.sort(listOfDays);
 		for (int dayInList : listOfDays) {
 			if (!savingsListToSort.isEmpty()) {
-				for (SavingsObject so : savingsListToSort) {
+				for (Transaction so : savingsListToSort) {
 					LocalDate date = so.getDate();
 					int day = date.getDayOfMonth();
 					if (day == dayInList) {

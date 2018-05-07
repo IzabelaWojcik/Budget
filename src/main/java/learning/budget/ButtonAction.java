@@ -20,17 +20,17 @@ public class ButtonAction extends GenerateComponents {
 	
 	private IDatabaseWriter databaseWriter;
 	private HashMap<Integer, String> incomeCategoryMap;
-	private ArrayList<UsersIncomeObject> userIncomeObjectList;
+	private ArrayList<Transaction> userIncomeObjectList;
 	private HashMap<Integer, String> usersNameIdMap;
 	private TextFieldValidator textFieldValidator = new TextFieldValidator();
 	private DataFormatter dataFormatter = new DataFormatter();
-	ArrayList<ExpenditureObject> expenditureObjectList;
-	ArrayList<SavingsObject> savingsObjectList;
+	ArrayList<Transaction> expenditureObjectList;
+	ArrayList<Transaction> savingsObjectList;
 	private HashMap<Integer, String> expenditureCategoryMap;
 	private HashMap<Integer, String> savingsCategoryMap;
 	private Sort sort = new Sort();
-	private ArrayList<ExpenditureObject> expenditureObjectListWithItsId;
-	private ArrayList<SavingsObject> savingsObjectListWithItsId;
+	private ArrayList<Transaction> expenditureObjectListWithItsId;
+	private ArrayList<Transaction> savingsObjectListWithItsId;
 
 
 	public ButtonAction(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
@@ -163,7 +163,7 @@ public class ButtonAction extends GenerateComponents {
 			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked, JLabel lblExpenditureSum) throws DatabaseNotInitialized {
 		panelExpenditureView.removeAll();
 		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
-		ArrayList<ExpenditureObject> expenditureObjectSortedList = sort
+		ArrayList<Transaction> expenditureObjectSortedList = sort
 				.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, yearChoosenWithButtonClicked, monthChoosenWithButtonClicked, budgetId);
 		LayoutOptions layoutOptions = new LayoutOptions();
 		int dateYear = 0, dateMonth = 0, idExpenditureCategory;
@@ -178,7 +178,7 @@ public class ButtonAction extends GenerateComponents {
 		JLabel jLabelsExpenditureCategory[] = new JLabel[sizeOfExpenditureObjectList];
 		JLabel jLabelsExpenditureAmount[] = new JLabel[sizeOfExpenditureObjectList];
 		layoutOptions.setGridy(0);
-		for (ExpenditureObject eo : expenditureObjectSortedList) {
+		for (Transaction eo : expenditureObjectSortedList) {
 			idBudget = eo.getBudgetId();
 			date = eo.getDate();
 			dateYear = date.getYear();
@@ -212,7 +212,7 @@ public class ButtonAction extends GenerateComponents {
 			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked) throws DatabaseNotInitialized {
 		panelSavingsView.removeAll();
 		savingsObjectList = databaseReader.readSavingsFromDataBase();
-		ArrayList<SavingsObject> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, yearChoosenWithButtonClicked,
+		ArrayList<Transaction> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, yearChoosenWithButtonClicked,
 				monthChoosenWithButtonClicked, budgetId);
 		LayoutOptions layoutOptions = new LayoutOptions();
 		int dateYear = 0, dateMonth = 0, idSavingsCategory;
@@ -228,7 +228,7 @@ public class ButtonAction extends GenerateComponents {
 		JLabel jLabelsSavingsAmount[] = new JLabel[sizeOfSavingsObjectList];
 
 		layoutOptions.setGridy(0);
-		for (SavingsObject so : savingsObjectSortedList) {
+		for (Transaction so : savingsObjectSortedList) {
 			idBudget = so.getBudgetId();
 			date = so.getDate();
 			dateYear = date.getYear();
@@ -274,7 +274,7 @@ public class ButtonAction extends GenerateComponents {
 		JLabel jLabelsIncomeAmount[] = new JLabel[sizeOfIncomeObjectList];
 
 		layoutOptions.setGridy(0);
-		for (UsersIncomeObject uio : userIncomeObjectList) {
+		for (Transaction uio : userIncomeObjectList) {
 			idBudget = uio.getBudgetId();
 			date = uio.getDate();
 			dateYear = date.getYear();
@@ -313,7 +313,7 @@ public class ButtonAction extends GenerateComponents {
 	public int getBudgetIdFromUserMapAndIUserIncomeMap(JComboBox<String> cbUser) {
 		int idBudget = 0;
 		int idUser = getUserIdFromUserMap(cbUser);
-		for (UsersIncomeObject uio : userIncomeObjectList) {
+		for (Transaction uio : userIncomeObjectList) {
 			if (idUser == uio.getTransactionId()) {
 				idBudget = uio.getBudgetId();
 			}

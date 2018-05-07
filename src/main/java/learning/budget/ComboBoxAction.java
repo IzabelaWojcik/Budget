@@ -14,12 +14,12 @@ public class ComboBoxAction {
 	
 
 	public void writeOtherIncomeCategoryToComboBox(JComboBox<String> cbBox, int budgetId) throws DatabaseNotInitialized {
-		ArrayList<UsersIncomeObject> userIncomeList = databaseReader.readIncomefromDatabase();
+		ArrayList<Transaction> userIncomeList = databaseReader.readIncomefromDatabase();
 		HashMap<Integer, String> otherIncomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
 		ArrayList<String> otherIncomeUniqueItemList = new ArrayList<String>();
 		
 		int idPayment = 1;
-		for (UsersIncomeObject uio : userIncomeList) {
+		for (Transaction uio : userIncomeList) {
 			int idBudget = uio.getBudgetId();
 			int idIncomeCategory = uio.getCategoryId();
 			
@@ -41,11 +41,11 @@ public class ComboBoxAction {
 	}
 
 	public void writeExpenditureCategoryToComboBox(JComboBox<String> cbBox, int budgetId) throws DatabaseNotInitialized {
-		ArrayList<ExpenditureObject> expenditureList = databaseReader.readExpenditureFromDataBase();
+		ArrayList<Transaction> expenditureList = databaseReader.readExpenditureFromDataBase();
 		HashMap<Integer, String> expenditureCategoryMap = databaseReader
 				.readCategoryFromDatabase("Expenditure_category");
 		ArrayList<String> expenditureUniqueItemList = new ArrayList<String>();
-		for (ExpenditureObject eo : expenditureList) {
+		for (Transaction eo : expenditureList) {
 			int idBudget = eo.getBudgetId();
 			int idExpenditureCategory = eo.getCategoryId();
 			if (budgetId == idBudget) {
@@ -64,10 +64,10 @@ public class ComboBoxAction {
 	}
 
 	public void writeSavingsCategoryToComboBox(JComboBox<String> cbBox, int budgetId) throws DatabaseNotInitialized {
-		ArrayList<SavingsObject> savingsList = databaseReader.readSavingsFromDataBase();
+		ArrayList<Transaction> savingsList = databaseReader.readSavingsFromDataBase();
 		HashMap<Integer, String> savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
 		ArrayList<String> savingUniqueItemList = new ArrayList<String>();
-		for (SavingsObject so : savingsList) {
+		for (Transaction so : savingsList) {
 			int idBudget = so.getBudgetId();
 			int idSavingsCategory = so.getCategoryId();
 			if (budgetId == idBudget) {
