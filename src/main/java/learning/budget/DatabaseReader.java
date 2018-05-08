@@ -40,7 +40,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return rs;
 	}
 	
-	public int readDateOfBegginingNewBudgerMonthFromDatabase(int budgetId) throws DatabaseNotInitialized{
+	public int readDateOfBegginingNewBudgetMonthFromDatabase(int budgetId) throws DatabaseNotInitialized{
 		String tablename = "Budget_options";
 		int date = 0;
 		try{

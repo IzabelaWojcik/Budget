@@ -8,6 +8,7 @@ public class Transaction {
 	private int idOfBudget;
 	private LocalDate dateOfTransaction;
 	private int idOfTransaction;
+	private String nameOfTransactionCategory;
 	
 	public Transaction(int idCategory, double amount, LocalDate date, int idBudget){
 		idOfTransactionCategory = idCategory;
@@ -22,6 +23,15 @@ public class Transaction {
 		transactionAmount = amount;
 		dateOfTransaction = date;
 		idOfBudget = idBudget;
+	}
+	
+	public Transaction(int idTransaction, int idCategory, double amount, LocalDate date, int idBudget, String categoryName){
+		idOfTransaction = idTransaction;
+		idOfTransactionCategory = idCategory;
+		transactionAmount = amount;
+		dateOfTransaction = date;
+		idOfBudget = idBudget;
+		nameOfTransactionCategory = categoryName;
 	}
 	
 	public int getCategoryId(){
@@ -42,5 +52,9 @@ public class Transaction {
 	
 	public double getAmount(){
 		return transactionAmount;
+	}
+	
+	public String getCategoryName() {
+		return nameOfTransactionCategory;
 	}
 }
