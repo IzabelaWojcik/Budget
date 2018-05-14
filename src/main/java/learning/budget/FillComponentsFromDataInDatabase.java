@@ -12,19 +12,19 @@ public class FillComponentsFromDataInDatabase {
 		databaseReader = _databaseReader;
 	}
 	
-	public List<Transaction> fillSavingsListWithCategoryName(int budgetId, int year, int month) throws DatabaseNotInitialized{
-		List<Transaction> savingsListWithCategoryName = new ArrayList<>();
-		List<Transaction> savingsList = databaseReader.readSavingsWithItsIdFromDataBase();
+	public List<Transaction> fillTransactionList(int budgetId, int year, int month) throws DatabaseNotInitialized{
+		List<Transaction> transactionList = new ArrayList<>();
+		List<Transaction> listWithDataFromDatabase = databaseReader.readSavingsWithItsIdFromDataBase();
 		HashMap<Integer, String> categoryIdAndNameList = databaseReader.readCategoryFromDatabase("Savings_category");
 		
-		List<Transaction> savingsConstrained = savingsList.stream()
+		List<Transaction> listConstrained = listWithDataFromDatabase.stream()
 					.filter(so -> so.getBudgetId() == budgetId && so.getDate().getYear() == year && so.getDate().getMonthValue() == month)
 					.collect(Collectors.toList());
 		
-		for(Transaction t: savingsConstrained) {
+		for(Transaction t: listConstrained) {
 				Transaction transaction = new Transaction(t.getTransactionId(), t.getCategoryId(), t.getAmount(), t.getDate(), t.getBudgetId(), categoryIdAndNameList.get(t.getCategoryId()));
-				if(!savingsListWithCategoryName.contains(transaction)) savingsListWithCategoryName.add(transaction);
+				if(!transactionList.contains(transaction)) transactionList.add(transaction);
 		}
-		return savingsListWithCategoryName;
+		return transactionList;
 	}
 }

@@ -32,6 +32,8 @@ public class GenerateComponents {
 	private Sort sort;
 	private ArrayList<Transaction> expenditureObjectListWithItsId;
 	private ArrayList<Transaction> savingsObjectListWithItsId;
+	private FillComponentsFromDataInDatabase fillcomponentsWithDataFromDatabase;
+	private GenerateTransactionAfterClickingMonthButton generateTransactionAfterClickingMonthButton;
 
 	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
 		databaseReader = _databaseReader;
@@ -45,6 +47,7 @@ public class GenerateComponents {
 		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDataBase();
 		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDataBase();
 		comboBoxAction = new ComboBoxAction(databaseReader);
+		fillcomponentsWithDataFromDatabase = new FillComponentsFromDataInDatabase(_databaseReader);
 		sort = new Sort();
 	}
 	
@@ -155,8 +158,12 @@ public class GenerateComponents {
 								&& uio.getCategoryId() != INCOME_TYPE_SALARY)
 						.collect(Collectors.toList());
 				
+				List<Transaction> savingsList;
+				
 				for (int i = 0; i < listOfMonths.size(); i++) {
 					int month = listOfMonths.get(i);
+					
+					
 					String monthName = dataFormatter.changeMonhNumberFromMonthName(month);
 					JButton jButtonWithMonthName = new JButton(monthName + "");
 					panelWithMonths.add(jButtonWithMonthName);
@@ -172,9 +179,6 @@ public class GenerateComponents {
 							.collect(Collectors.toList());
 					
 					ArrayList<Transaction> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, year, month, budgetId);
-					List<Transaction> savingsConstrained = savingsObjectSortedList.stream()
-							.filter(so -> so.getBudgetId() == budgetId && so.getDate().getYear() == year && so.getDate().getMonthValue() == month)
-							.collect(Collectors.toList());
 					
 					ArrayList<Transaction> expenditureObjectSortedList = sort.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, year, month,
 							budgetId);
@@ -189,7 +193,14 @@ public class GenerateComponents {
 							generateMonthNameAndYearInfoAfterClickingMonthButton(lblInform, year, month);
 						}
 					});
-					
+					try {
+						savingsList = fillcomponentsWithDataFromDatabase.fillTransactionList(budgetId, year, month);
+						
+						generateTransactionAfterClickingMonthButton = new GenerateTransactionAfterClickingMonthButton(panelSavingsView, labelSavingsSum, savingsList, layoutOptions);
+					jButtonWithMonthName.addActionListener(generateTransactionAfterClickingMonthButton);
+					} catch (DatabaseNotInitialized e1) {
+						e1.printStackTrace();
+					}
 					generateIncomeAfterClickingMonthButton(usersPairs, jButtonWithMonthName, 
 							panelUser, panelIncome, 
 							panelBudget, panelBudgetEmpty, labelIncomeSum);
@@ -198,8 +209,11 @@ public class GenerateComponents {
 							month, labelOtherIncomeSum, layoutOptions);
 					generateExpenditureAfterClickingMonthButton(expenditureConstrained, jButtonWithMonthName, panelExpenditureView, budgetId, year,
 							month, lblExpenditureSum, layoutOptions);
-					generateSavingsAfterClickingMonthButton(savingsConstrained, jButtonWithMonthName, panelSavingsView, budgetId, year, month,
-							labelSavingsSum, layoutOptions);
+					//generateSavingsAfterClickingMonthButton(savingsConstrained, jButtonWithMonthName, panelSavingsView, budgetId, year, month,
+					//		labelSavingsSum, layoutOptions);
+					
+					
+					
 				}
 				components.stream().forEach(c -> {c.revalidate(); c.repaint();});
 			}
