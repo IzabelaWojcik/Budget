@@ -29,7 +29,7 @@ public class GenerateTransactionAfterClickingMonthButton implements ActionListen
 			JLabel jLabelDate = new JLabel(t.getDate().toString());
 			JLabel jLabelAmount = new JLabel(String.valueOf(t.getAmount()));
 			JLabel jLabelCategory = new JLabel(t.getCategoryName());
-			
+
 			layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panel, jLabelDate, jLabelCategory,
 					jLabelAmount);
 			

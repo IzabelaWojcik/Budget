@@ -3,6 +3,7 @@ package learning.budget;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.time.LocalDate;
 
 public class Sort {
@@ -111,5 +112,28 @@ public class Sort {
 			}
 		}
 		return savingsSortedList;
+	}
+	
+	public List<Transaction> sortTransactionAfterItsDay(List<Transaction> listToSort, int yearClicked, int monthClicked, int budgetId) {
+		ArrayList<Integer> listOfDays = new ArrayList<Integer>();
+		List<Transaction> sortedList = new ArrayList<>();
+		
+		for (Transaction t : listToSort) {
+				listOfDays.add(t.getDate().getDayOfMonth());
+		}
+		
+		Collections.sort(listOfDays);
+		for (int dayInList : listOfDays) {
+			if (!listToSort.isEmpty()) {
+				for (Transaction t : listToSort) {
+					if (t.getDate().getDayOfMonth() == dayInList) {
+						if (!sortedList.contains(t)) {
+							sortedList.add(t);
+						}
+					}
+				}
+			}
+		}
+		return sortedList;
 	}
 }

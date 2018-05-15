@@ -34,6 +34,7 @@ public class GenerateComponents {
 	private ArrayList<Transaction> savingsObjectListWithItsId;
 	private FillComponentsFromDataInDatabase fillcomponentsWithDataFromDatabase;
 	private GenerateTransactionAfterClickingMonthButton generateTransactionAfterClickingMonthButton;
+	private ListFilter listFilter;
 
 	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
 		databaseReader = _databaseReader;
@@ -47,7 +48,8 @@ public class GenerateComponents {
 		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDataBase();
 		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDataBase();
 		comboBoxAction = new ComboBoxAction(databaseReader);
-		fillcomponentsWithDataFromDatabase = new FillComponentsFromDataInDatabase(_databaseReader);
+		listFilter = new ListFilter();
+		fillcomponentsWithDataFromDatabase = new FillComponentsFromDataInDatabase();
 		sort = new Sort();
 	}
 	
@@ -126,7 +128,7 @@ public class GenerateComponents {
 			}
 		});
 	}
-
+	
 	private void generateMonthsButtonsForConcreteYearAfterClickingYearButton(JButton button, int budgetId,
 			JPanel panelWithMonths, int year, JPanel panelUser, JPanel panelIncome, JPanel panelBudget,
 			JPanel panelBudgetEmpty, JPanel panelOtherIncomeView, JPanel panelExpenditureView, JPanel panelSavingsView,
@@ -158,8 +160,6 @@ public class GenerateComponents {
 								&& uio.getCategoryId() != INCOME_TYPE_SALARY)
 						.collect(Collectors.toList());
 				
-				List<Transaction> savingsList;
-				
 				for (int i = 0; i < listOfMonths.size(); i++) {
 					int month = listOfMonths.get(i);
 					
@@ -178,8 +178,6 @@ public class GenerateComponents {
 							.filter(uio -> uio.getDate().getMonthValue() == month)
 							.collect(Collectors.toList());
 					
-					ArrayList<Transaction> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, year, month, budgetId);
-					
 					ArrayList<Transaction> expenditureObjectSortedList = sort.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, year, month,
 							budgetId);
 					List<Transaction> expenditureConstrained = expenditureObjectSortedList.stream()
@@ -193,14 +191,14 @@ public class GenerateComponents {
 							generateMonthNameAndYearInfoAfterClickingMonthButton(lblInform, year, month);
 						}
 					});
-					try {
-						savingsList = fillcomponentsWithDataFromDatabase.fillTransactionList(budgetId, year, month);
-						
-						generateTransactionAfterClickingMonthButton = new GenerateTransactionAfterClickingMonthButton(panelSavingsView, labelSavingsSum, savingsList, layoutOptions);
+					
+					List<Transaction> savingsConstrained = listFilter.filterByBudgetIdYearMonth(savingsObjectListWithItsId, budgetId, year, month);
+					List<Transaction> savingsSorted = sort.sortTransactionAfterItsDay(savingsConstrained, year, month, budgetId);
+					List<Transaction> savingsListWithCategoryName = fillcomponentsWithDataFromDatabase.fillTransactionList(savingsSorted, savingsCategoryMap);
+					generateTransactionAfterClickingMonthButton = new GenerateTransactionAfterClickingMonthButton(panelSavingsView, labelSavingsSum, savingsListWithCategoryName, layoutOptions);
 					jButtonWithMonthName.addActionListener(generateTransactionAfterClickingMonthButton);
-					} catch (DatabaseNotInitialized e1) {
-						e1.printStackTrace();
-					}
+					
+					
 					generateIncomeAfterClickingMonthButton(usersPairs, jButtonWithMonthName, 
 							panelUser, panelIncome, 
 							panelBudget, panelBudgetEmpty, labelIncomeSum);
