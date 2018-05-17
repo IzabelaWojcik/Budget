@@ -94,15 +94,16 @@ public class DatabaseReader implements IDatabaseReader{
 		try {
 			ResultSet rs = getDataFromTable(tablename);
 			while (rs.next()) {
+				int idTransaction = rs.getInt(1);
 				double amount = rs.getDouble(2);
 				java.sql.Date sqlDate = rs.getDate(3);
 				int idUser = rs.getInt(4);
-				int idIncome = rs.getInt(5);
+				int idIncomeCategory = rs.getInt(5);
 				int idBudget = rs.getInt(6);
 				
 				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 				
-				usersIncomeObject = new Transaction(idUser, idIncome, amount, localDate, idBudget);
+				usersIncomeObject = new Transaction(idTransaction, idUser, idIncomeCategory, amount, localDate, idBudget);
 				if(!usersIncomeList.contains(usersIncomeObject)) usersIncomeList.add(usersIncomeObject);
 			}
 		} catch (SQLException e) {
@@ -219,6 +220,7 @@ public class DatabaseReader implements IDatabaseReader{
 		try{
 			ResultSet rs = getDataFromTable(tablename);
 			while(rs.next()){
+				int savingsId = rs.getInt(1);
 				int savingsCategoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
 				double amount = rs.getDouble(2);
@@ -226,7 +228,7 @@ public class DatabaseReader implements IDatabaseReader{
 				
 				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 				
-				savingsObject  = new Transaction(savingsCategoryId, amount, localDate, budgetId);
+				savingsObject  = new Transaction(savingsId, savingsCategoryId, amount, localDate, budgetId);
 				savingsObjectList.add(savingsObject);
 			}
 		}catch (SQLException e) {

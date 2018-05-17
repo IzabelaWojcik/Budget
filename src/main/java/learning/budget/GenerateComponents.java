@@ -34,6 +34,7 @@ public class GenerateComponents {
 	private ArrayList<Transaction> savingsObjectListWithItsId;
 	private FillComponentsFromDataInDatabase fillcomponentsWithDataFromDatabase;
 	private GenerateTransactionAfterClickingMonthButton generateTransactionAfterClickingMonthButton;
+	private GenerateOtherIncomeAfterClickingMonthButton generateOtherIncomeAfterClickingMonthButton;
 	private ListFilter listFilter;
 
 	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
@@ -156,7 +157,7 @@ public class GenerateComponents {
 						.collect(Collectors.toList());
 				
 				List<Transaction> userOtherIncomeConstrained = usersIncomeObjectList.stream()
-						.filter(uio -> uio.getBudgetId() == budgetId && uio.getDate().getYear() == year
+						.filter(uio -> uio.getBudgetId() == budgetId && uio.getDate().getYear() == year 
 								&& uio.getCategoryId() != INCOME_TYPE_SALARY)
 						.collect(Collectors.toList());
 				
@@ -174,16 +175,23 @@ public class GenerateComponents {
 						usersPairs.add(new Pair<String, Double>(usersNameHashMap.get(uio.getTransactionId()), uio.getAmount()));
 					}
 					
-					List<Transaction> usersOtherIncome = userOtherIncomeConstrained.stream()
-							.filter(uio -> uio.getDate().getMonthValue() == month)
-							.collect(Collectors.toList());
+					List<Transaction> expenditureConstrained = listFilter.filterByBudgetIdYearMonth(expenditureObjectListWithItsId, budgetId, year, month);
+					List<Transaction> expenditureSorted = sort.sortTransactionAfterItsDay(expenditureConstrained, year, month, budgetId);
+					List<Transaction> expenditureListWithCategoryName = fillcomponentsWithDataFromDatabase.fillTransactionList(expenditureSorted, expenditureCategoryMap);
+					generateTransactionAfterClickingMonthButton = new GenerateTransactionAfterClickingMonthButton(panelExpenditureView, lblExpenditureSum, expenditureListWithCategoryName, layoutOptions);
+					jButtonWithMonthName.addActionListener(generateTransactionAfterClickingMonthButton);
 					
-					ArrayList<Transaction> expenditureObjectSortedList = sort.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, year, month,
-							budgetId);
-					List<Transaction> expenditureConstrained = expenditureObjectSortedList.stream()
-							.filter(eo -> eo.getBudgetId() == budgetId && eo.getDate().getYear() == year 
-							&& eo.getDate().getMonthValue() == month)
-							.collect(Collectors.toList());
+					List<Transaction> savingsConstrained = listFilter.filterByBudgetIdYearMonth(savingsObjectListWithItsId, budgetId, year, month);
+					List<Transaction> savingsSorted = sort.sortTransactionAfterItsDay(savingsConstrained, year, month, budgetId);
+					List<Transaction> savingsListWithCategoryName = fillcomponentsWithDataFromDatabase.fillTransactionList(savingsSorted, savingsCategoryMap);
+					generateTransactionAfterClickingMonthButton = new GenerateTransactionAfterClickingMonthButton(panelSavingsView, labelSavingsSum, savingsListWithCategoryName, layoutOptions);
+					jButtonWithMonthName.addActionListener(generateTransactionAfterClickingMonthButton);
+					
+					List<Transaction> otherIncomeConstrained = listFilter.filterIncomeByBudgetIdYearMonthCategoryId(usersIncomeObjectList, budgetId, year, month, false);
+					List<Transaction> otherIncomeSorted = sort.sortTransactionAfterItsDay(otherIncomeConstrained, year, month, budgetId);
+					List<Transaction> otherIncomeListWithUserName = fillcomponentsWithDataFromDatabase.fillTransactionIncomeList(otherIncomeSorted, incomeCategoryMap, usersNameHashMap);
+					generateOtherIncomeAfterClickingMonthButton = new GenerateOtherIncomeAfterClickingMonthButton(panelOtherIncomeView, labelOtherIncomeSum, otherIncomeListWithUserName, layoutOptions);
+					jButtonWithMonthName.addActionListener(generateOtherIncomeAfterClickingMonthButton);
 					
 					jButtonWithMonthName.addActionListener(new ActionListener() {
 						
@@ -192,26 +200,15 @@ public class GenerateComponents {
 						}
 					});
 					
-					List<Transaction> savingsConstrained = listFilter.filterByBudgetIdYearMonth(savingsObjectListWithItsId, budgetId, year, month);
-					List<Transaction> savingsSorted = sort.sortTransactionAfterItsDay(savingsConstrained, year, month, budgetId);
-					List<Transaction> savingsListWithCategoryName = fillcomponentsWithDataFromDatabase.fillTransactionList(savingsSorted, savingsCategoryMap);
-					generateTransactionAfterClickingMonthButton = new GenerateTransactionAfterClickingMonthButton(panelSavingsView, labelSavingsSum, savingsListWithCategoryName, layoutOptions);
-					jButtonWithMonthName.addActionListener(generateTransactionAfterClickingMonthButton);
+					
 					
 					
 					generateIncomeAfterClickingMonthButton(usersPairs, jButtonWithMonthName, 
 							panelUser, panelIncome, 
 							panelBudget, panelBudgetEmpty, labelIncomeSum);
 					
-					generateOtherIncomeAfterClickingMonthButton(usersOtherIncome, jButtonWithMonthName, panelOtherIncomeView, budgetId, year,
-							month, labelOtherIncomeSum, layoutOptions);
-					generateExpenditureAfterClickingMonthButton(expenditureConstrained, jButtonWithMonthName, panelExpenditureView, budgetId, year,
-							month, lblExpenditureSum, layoutOptions);
-					//generateSavingsAfterClickingMonthButton(savingsConstrained, jButtonWithMonthName, panelSavingsView, budgetId, year, month,
-					//		labelSavingsSum, layoutOptions);
-					
-					
-					
+					//generateOtherIncomeAfterClickingMonthButton(userOtherIncomeConstrained, jButtonWithMonthName, panelOtherIncomeView, budgetId, year,
+						//	month, labelOtherIncomeSum, layoutOptions);
 				}
 				components.stream().forEach(c -> {c.revalidate(); c.repaint();});
 			}
@@ -256,79 +253,7 @@ public class GenerateComponents {
 		});
 	}
 
-	protected void generateOtherIncomeAfterClickingMonthButton(List<Transaction> usersOtherIncome, JButton button, JPanel panelOtherIncomeView,
-			int budgetId, int year, int month, JLabel labelOtherIncomeSum, LayoutOptions layoutOptions) {
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				double sum = 0;
-				panelOtherIncomeView.removeAll();
-
-				for (Transaction uio : usersOtherIncome) {
-					JLabel jLabelsUsers = new JLabel(usersNameHashMap.get(uio.getTransactionId()));
-					JLabel jLabelsIncomeCategory = new JLabel(incomeCategoryMap.get(uio.getCategoryId()));
-					JLabel jLabelsIncomeAmount = new JLabel(String.valueOf(uio.getAmount()));
-					
-					layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelOtherIncomeView, jLabelsUsers,
-							jLabelsIncomeCategory, jLabelsIncomeAmount);
-
-					sum += uio.getAmount();
-
-				}
-				labelOtherIncomeSum.setText(setAmountFormat(sum));
-				panelOtherIncomeView.revalidate();
-				panelOtherIncomeView.repaint();
-			}
-		});
-	}
-
-	protected void generateExpenditureAfterClickingMonthButton(List<Transaction> expenditureConstrained, JButton button, JPanel panelExpenditureView,
-			int budgetId, int year, int month, JLabel labelExpenditureSum, LayoutOptions layoutOptions) {
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				double sum = 0;
-				panelExpenditureView.removeAll();
-				
-				for (Transaction eo : expenditureConstrained) {
-					JLabel jLabelDate = new JLabel(eo.getDate().toString());
-					JLabel jLabelsExpenditureAmount = new JLabel(String.valueOf(eo.getAmount()));	
-					JLabel jLabelsExpenditureCategory = new JLabel(expenditureCategoryMap.get(eo.getCategoryId()));
-					
-					layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelExpenditureView,
-							jLabelDate, jLabelsExpenditureCategory, jLabelsExpenditureAmount);
-
-					sum += eo.getAmount();
-				}
-				labelExpenditureSum.setText(setAmountFormat(sum));
-				panelExpenditureView.revalidate();
-				panelExpenditureView.repaint();
-			}
-		});
-	}
-
-	protected void generateSavingsAfterClickingMonthButton(List<Transaction> savingsConstrained, JButton button, JPanel panelSavingsView, int budgetId,
-			int year, int month, JLabel labelSavingsSum, LayoutOptions layoutOptions) {
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				double sum = 0;
-				panelSavingsView.removeAll();
-				
-				for (Transaction so : savingsConstrained) {
-					JLabel jLabelDate = new JLabel(so.getDate().toString());
-					JLabel jLabelsSavingsAmount = new JLabel(String.valueOf(so.getAmount()));
-					JLabel jLabelSavingsCategory = new JLabel(savingsCategoryMap.get(so.getCategoryId()));
-							
-					layoutOptions.gridBagLayoutOptionsForPanelsWithThreeLabels(panelSavingsView, jLabelDate,
-							jLabelSavingsCategory, jLabelsSavingsAmount);
-
-					sum += so.getAmount();
-				}
-				labelSavingsSum.setText(setAmountFormat(sum));
-				panelSavingsView.revalidate();
-				panelSavingsView.repaint();
-			}
-		});
-	}
-
+	
 	public List<String> getUserNames() throws DatabaseNotInitialized {
 		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
 		
