@@ -1,8 +1,6 @@
 package learning.budget;
 
 import static learning.budget.Constants.INCOME_TYPE_SALARY;
-import static learning.budget.DataFormatter.setAmountFormat;
-
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +33,7 @@ public class GenerateComponents {
 	private FillComponentsFromDataInDatabase fillcomponentsWithDataFromDatabase;
 	private GenerateTransactionAfterClickingMonthButton generateTransactionAfterClickingMonthButton;
 	private GenerateOtherIncomeAfterClickingMonthButton generateOtherIncomeAfterClickingMonthButton;
+	private GenerateIncomeAfterClickingMonthButton generateIncomeAfterClickingMonthButton;
 	private ListFilter listFilter;
 
 	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
@@ -156,11 +155,6 @@ public class GenerateComponents {
 						&& uio.getCategoryId() == INCOME_TYPE_SALARY)
 						.collect(Collectors.toList());
 				
-				List<Transaction> userOtherIncomeConstrained = usersIncomeObjectList.stream()
-						.filter(uio -> uio.getBudgetId() == budgetId && uio.getDate().getYear() == year 
-								&& uio.getCategoryId() != INCOME_TYPE_SALARY)
-						.collect(Collectors.toList());
-				
 				for (int i = 0; i < listOfMonths.size(); i++) {
 					int month = listOfMonths.get(i);
 					
@@ -170,9 +164,9 @@ public class GenerateComponents {
 					panelWithMonths.add(jButtonWithMonthName);
 
 					List<Transaction> users = usersConstrained.stream().filter(uio -> uio.getDate().getMonthValue() == month).collect(Collectors.toList());
-					List<Pair<String, Double>> usersPairs = new ArrayList<Pair<String, Double>>();
+					List<Pair<String, Double>> usersPairs1 = new ArrayList<Pair<String, Double>>();
 					for (Transaction uio : users) {
-						usersPairs.add(new Pair<String, Double>(usersNameHashMap.get(uio.getTransactionId()), uio.getAmount()));
+						usersPairs1.add(new Pair<String, Double>(usersNameHashMap.get(uio.getTransactionId()), uio.getAmount()));
 					}
 					
 					List<Transaction> expenditureConstrained = listFilter.filterByBudgetIdYearMonth(expenditureObjectListWithItsId, budgetId, year, month);
@@ -193,22 +187,18 @@ public class GenerateComponents {
 					generateOtherIncomeAfterClickingMonthButton = new GenerateOtherIncomeAfterClickingMonthButton(panelOtherIncomeView, labelOtherIncomeSum, otherIncomeListWithUserName, layoutOptions);
 					jButtonWithMonthName.addActionListener(generateOtherIncomeAfterClickingMonthButton);
 					
+					List<Transaction> incomeConstrained = listFilter.filterIncomeByBudgetIdYearMonthCategoryId(usersIncomeObjectList, budgetId, year, month, true);
+					List<Pair<String, Double>> usersPairs = fillcomponentsWithDataFromDatabase.fillTransactionIncomePairList(incomeConstrained, usersNameHashMap);
+					generateIncomeAfterClickingMonthButton = new GenerateIncomeAfterClickingMonthButton(panelIncome, panelUser, labelIncomeSum, usersPairs);
+					jButtonWithMonthName.addActionListener(generateIncomeAfterClickingMonthButton);
+					
 					jButtonWithMonthName.addActionListener(new ActionListener() {
-						
 						public void actionPerformed(ActionEvent e) {
 							generateMonthNameAndYearInfoAfterClickingMonthButton(lblInform, year, month);
+							panelBudget.setVisible(true);
+							panelBudgetEmpty.setVisible(false);
 						}
 					});
-					
-					
-					
-					
-					generateIncomeAfterClickingMonthButton(usersPairs, jButtonWithMonthName, 
-							panelUser, panelIncome, 
-							panelBudget, panelBudgetEmpty, labelIncomeSum);
-					
-					//generateOtherIncomeAfterClickingMonthButton(userOtherIncomeConstrained, jButtonWithMonthName, panelOtherIncomeView, budgetId, year,
-						//	month, labelOtherIncomeSum, layoutOptions);
 				}
 				components.stream().forEach(c -> {c.revalidate(); c.repaint();});
 			}
@@ -223,36 +213,6 @@ public class GenerateComponents {
 		String monthName = dataFormatter.changeMonhNumberFromMonthName(month);
 		lblInform.setText(year + " " + monthName.toUpperCase());
 	}
-	
-	protected void generateIncomeAfterClickingMonthButton(List<Pair<String, Double>> pairs, JButton button, 
-			JPanel panelUser, JPanel panelIncome,
-			JPanel panelBudget, JPanel panelBudgetEmpty, JLabel labelIncomeSum) {
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				double sum = 0;
-				
-				List<Container> components = Arrays.asList(panelIncome, panelUser);
-				components.stream().forEach(c -> {c.removeAll();});
-				
-				panelBudget.setVisible(true);
-				panelBudgetEmpty.setVisible(false);
-				
-				for (Pair<String, Double> pair : pairs) {
-					JLabel jLabelUsers = new JLabel(pair.getKey());
-					JLabel jLabelIncomaAmount = new JLabel(String.valueOf(pair.getValue()));
-					
-					panelUser.add(jLabelUsers);
-					panelIncome.add(jLabelIncomaAmount);
-					
-					sum += pair.getValue();
-							
-				}
-				labelIncomeSum.setText(setAmountFormat(sum));
-				components.stream().forEach(c -> {c.revalidate(); c.repaint();});
-			}
-		});
-	}
-
 	
 	public List<String> getUserNames() throws DatabaseNotInitialized {
 		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
