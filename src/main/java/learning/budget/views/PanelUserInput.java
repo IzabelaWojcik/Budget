@@ -5,19 +5,16 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 
-import javax.swing.GroupLayout;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class UserInputPanel extends JPanel {
+public class PanelUserInput extends JPanel {
 	JLabel userName;
 	JFormattedTextField input;
 	ErrorLabel errorLabel;
 
-	public UserInputPanel(String _userName) {
+	public PanelUserInput(String _userName) {
 		userName = new JLabel(_userName, JLabel.RIGHT);
 		userName.setPreferredSize(new Dimension(90, 20));
 

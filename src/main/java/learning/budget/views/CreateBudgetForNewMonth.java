@@ -59,7 +59,7 @@ public class CreateBudgetForNewMonth extends JDialog {
 		List<String> userNames = new ArrayList<>(databaseReader.readUsersFromDatabasetoHashMap().values());
 
 		for(String name : userNames){
-			UserInputPanel inputPanel = new UserInputPanel(name);
+			PanelUserInput inputPanel = new PanelUserInput(name);
 			inputPanel.addPropertyChangeListener(listener);
 			panelIncom.add(inputPanel);
 		}
