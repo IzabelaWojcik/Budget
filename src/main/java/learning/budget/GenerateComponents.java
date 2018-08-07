@@ -15,6 +15,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javafx.util.Pair;
+import learning.budget.views.FillPanelTransactionWithTwoLabelsListener;
+import learning.budget.views.PanelTransactionViewWithThreeLabels;
+import learning.budget.views.PanelTransactionViewWithTwoLabels;
 
 public class GenerateComponents {
 	protected IDatabaseReader databaseReader;
@@ -58,7 +61,7 @@ public class GenerateComponents {
 	}
 
 	protected void generateButtonsWithBudgetsNames(JPanel panelWithBudgetsName, JPanel panelWithYears,
-			JPanel panelWithMonths, JPanel panelUser, JPanel panelIncome, JPanel panelBudget, JPanel panelBudgetEmpty,
+			JPanel panelWithMonths, JPanel panelUsersIncome, JPanel panelBudget, JPanel panelBudgetEmpty,
 			JPanel panelOtherIncomeView, JComboBox<String> comboBoxUsers, JComboBox<String> comboBoxOtherIncome,
 			JComboBox<String> comboBoxExpenditureCategory, JComboBox<String> comboBoxSavings, JPanel panelExpenditureView,
 			JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum, JLabel labelSavingsSum,
@@ -70,7 +73,7 @@ public class GenerateComponents {
 			JButton jButtonBudgetName = new JButton(entry.getValue());
 			panelWithBudgetsName.add(jButtonBudgetName);
 			generateYearButtonsAfterClickingBudgetNamesButtons(jButtonBudgetName, budgetCurrentId, panelWithYears,
-					panelWithMonths, panelUser, panelIncome, panelBudget, panelBudgetEmpty, panelOtherIncomeView,
+					panelWithMonths, panelUsersIncome, panelBudget, panelBudgetEmpty, panelOtherIncomeView,
 					comboBoxUsers, comboBoxOtherIncome, comboBoxExpenditureCategory, comboBoxSavings,
 					panelExpenditureView, panelSavingsView, lblInform, lblExpenditureSum, labelSavingsSum,
 					labelOtherIncomeSum, labelIncomeSum);
@@ -80,7 +83,7 @@ public class GenerateComponents {
 	}
 	
 	private void generateYearButtonsAfterClickingBudgetNamesButtons(JButton button, int budgetId, JPanel panelWithYears,
-			JPanel panelWithMonths, JPanel panelUser, JPanel panelIncome, JPanel panelBudget, JPanel panelBudgetEmpty,
+			JPanel panelWithMonths, JPanel panelUsersIncome, JPanel panelBudget, JPanel panelBudgetEmpty,
 			JPanel panelOtherIncomeView, JComboBox<String> comboBoxUsers, JComboBox<String> comboBoxOtherIncome,
 			JComboBox<String> comboBoxExpenditureCategory, JComboBox<String> comboBoxSavings,
 			JPanel panelExpenditureView, JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum,
@@ -90,8 +93,7 @@ public class GenerateComponents {
 				panelBudget.setVisible(false);
 				panelBudgetEmpty.setVisible(true);
 
-				List<Container> components = Arrays.asList(lblInform, panelWithYears, panelWithMonths, panelUser,
-						panelIncome, panelOtherIncomeView, panelExpenditureView, panelSavingsView, comboBoxUsers,
+				List<Container> components = Arrays.asList(lblInform, panelWithYears, panelWithMonths, panelUsersIncome, panelOtherIncomeView, panelExpenditureView, panelSavingsView, comboBoxUsers,
 						comboBoxOtherIncome, comboBoxExpenditureCategory, comboBoxSavings);
 
 				components.stream().forEach(c -> {c.removeAll();});
@@ -107,7 +109,7 @@ public class GenerateComponents {
 							JButton jButtonWithYear = new JButton(year + "");
 							panelWithYears.add(jButtonWithYear);
 							generateMonthsButtonsForConcreteYearAfterClickingYearButton(jButtonWithYear, idBudget,
-									panelWithMonths, year, panelUser, panelIncome, panelBudget, panelBudgetEmpty,
+									panelWithMonths, year, panelUsersIncome, panelBudget, panelBudgetEmpty,
 									panelOtherIncomeView, panelExpenditureView, panelSavingsView, lblInform,
 									lblExpenditureSum, labelSavingsSum, labelOtherIncomeSum, labelIncomeSum);
 						}
@@ -130,7 +132,7 @@ public class GenerateComponents {
 	}
 	
 	private void generateMonthsButtonsForConcreteYearAfterClickingYearButton(JButton button, int budgetId,
-			JPanel panelWithMonths, int year, JPanel panelUser, JPanel panelIncome, JPanel panelBudget,
+			JPanel panelWithMonths, int year, JPanel panelUsersIncome, JPanel panelBudget,
 			JPanel panelBudgetEmpty, JPanel panelOtherIncomeView, JPanel panelExpenditureView, JPanel panelSavingsView,
 			JLabel lblInform, JLabel lblExpenditureSum, JLabel labelSavingsSum, JLabel labelOtherIncomeSum,
 			JLabel labelIncomeSum) {
@@ -142,7 +144,7 @@ public class GenerateComponents {
 				
 				LayoutOptions layoutOptions = new LayoutOptions();
 				
-				List<Container> components = Arrays.asList(lblInform, panelWithMonths, panelUser, panelIncome, panelOtherIncomeView,
+				List<Container> components = Arrays.asList(lblInform, panelWithMonths, panelUsersIncome, panelOtherIncomeView,
 						panelExpenditureView, panelSavingsView);
 				
 				components.stream().forEach(c -> {c.removeAll();});
@@ -189,8 +191,15 @@ public class GenerateComponents {
 					
 					List<Transaction> incomeConstrained = listFilter.filterIncomeByBudgetIdYearMonthCategoryId(usersIncomeObjectList, budgetId, year, month, true);
 					List<Pair<String, Double>> usersPairs = fillcomponentsWithDataFromDatabase.fillTransactionIncomePairList(incomeConstrained, usersNameHashMap);
-					generateIncomeAfterClickingMonthButton = new GenerateIncomeAfterClickingMonthButton(panelIncome, panelUser, labelIncomeSum, usersPairs);
-					jButtonWithMonthName.addActionListener(generateIncomeAfterClickingMonthButton);
+					//generateIncomeAfterClickingMonthButton = new GenerateIncomeAfterClickingMonthButton(panelIncome, panelUser, labelIncomeSum, usersPairs);
+					//jButtonWithMonthName.addActionListener(generateIncomeAfterClickingMonthButton);
+					
+					PanelTransactionViewWithTwoLabels p = new PanelTransactionViewWithTwoLabels();
+					FillPanelTransactionWithTwoLabelsListener f = new FillPanelTransactionWithTwoLabelsListener(p, usersPairs, panelUsersIncome);
+					//panelUser.add(p);
+					jButtonWithMonthName.addActionListener(f);
+					
+					
 					
 					jButtonWithMonthName.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
