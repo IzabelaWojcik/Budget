@@ -193,10 +193,9 @@ public class GenerateComponents {
 					List<Pair<String, Double>> usersPairs = fillcomponentsWithDataFromDatabase.fillTransactionIncomePairList(incomeConstrained, usersNameHashMap);
 					//generateIncomeAfterClickingMonthButton = new GenerateIncomeAfterClickingMonthButton(panelIncome, panelUser, labelIncomeSum, usersPairs);
 					//jButtonWithMonthName.addActionListener(generateIncomeAfterClickingMonthButton);
-					
 					PanelTransactionViewWithTwoLabels p = new PanelTransactionViewWithTwoLabels();
 					FillPanelTransactionWithTwoLabelsListener f = new FillPanelTransactionWithTwoLabelsListener(p, usersPairs, panelUsersIncome);
-					//panelUser.add(p);
+					panelUsersIncome.add(p);
 					jButtonWithMonthName.addActionListener(f);
 					
 					

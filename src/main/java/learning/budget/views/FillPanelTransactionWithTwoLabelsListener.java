@@ -1,42 +1,28 @@
 package learning.budget.views;
-
-import static learning.budget.DataFormatter.setAmountFormat;
-
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 import java.util.List;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import javafx.util.Pair;
-import learning.budget.LayoutOptions;
 
-public class FillPanelTransactionWithTwoLabelsListener implements ActionListener{
+public class FillPanelTransactionWithTwoLabelsListener implements ActionListener {
 	private PanelTransactionViewWithTwoLabels panelTransactionViewWithTwoLabels;
 	private List<Pair<String, Double>> listOfPairs;
-	private JPanel panelToDisplay;
-	
-	
-	public FillPanelTransactionWithTwoLabelsListener(PanelTransactionViewWithTwoLabels panelTransactionView, List<Pair<String, Double>> pairs, JPanel panelToView) {
+	private JPanel panelToView;
+
+	public FillPanelTransactionWithTwoLabelsListener(PanelTransactionViewWithTwoLabels panelTransactionView,
+			List<Pair<String, Double>> incomePairs, JPanel panelToDisplay) {
 		panelTransactionViewWithTwoLabels = panelTransactionView;
-		listOfPairs = pairs;
-		panelToDisplay = panelToView;
+		listOfPairs = incomePairs;
+		panelToView = panelToDisplay;
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		panelTransactionViewWithTwoLabels.removeAll();
-		panelToDisplay.removeAll();
+		panelToView.removeAll();
 		panelTransactionViewWithTwoLabels.fillPanel(listOfPairs);
-		//	JLabel jLabelUsers = new JLabel("WHY");
-
-			
-panelToDisplay.add(panelTransactionViewWithTwoLabels);
-		//	panelView.add(jLabelUsers);
-		panelToDisplay.repaint();
-		panelToDisplay.revalidate();
+		panelToView.add(panelTransactionViewWithTwoLabels);
+		panelToView.repaint();
+		panelToView.revalidate();
 	}
 }
