@@ -15,6 +15,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javafx.util.Pair;
+import learning.budget.views.FillPanelTransactionWithThreeLabelsListener;
 import learning.budget.views.FillPanelTransactionWithTwoLabelsListener;
 import learning.budget.views.PanelTransactionViewWithThreeLabels;
 import learning.budget.views.PanelTransactionViewWithTwoLabels;
@@ -34,9 +35,7 @@ public class GenerateComponents {
 	private ArrayList<Transaction> expenditureObjectListWithItsId;
 	private ArrayList<Transaction> savingsObjectListWithItsId;
 	private FillComponentsFromDataInDatabase fillcomponentsWithDataFromDatabase;
-	private GenerateTransactionAfterClickingMonthButton generateTransactionAfterClickingMonthButton;
 	private GenerateOtherIncomeAfterClickingMonthButton generateOtherIncomeAfterClickingMonthButton;
-	private GenerateIncomeAfterClickingMonthButton generateIncomeAfterClickingMonthButton;
 	private ListFilter listFilter;
 
 	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
@@ -174,14 +173,16 @@ public class GenerateComponents {
 					List<Transaction> expenditureConstrained = listFilter.filterByBudgetIdYearMonth(expenditureObjectListWithItsId, budgetId, year, month);
 					List<Transaction> expenditureSorted = sort.sortTransactionAfterItsDay(expenditureConstrained, year, month, budgetId);
 					List<Transaction> expenditureListWithCategoryName = fillcomponentsWithDataFromDatabase.fillTransactionList(expenditureSorted, expenditureCategoryMap);
-					generateTransactionAfterClickingMonthButton = new GenerateTransactionAfterClickingMonthButton(panelExpenditureView, lblExpenditureSum, expenditureListWithCategoryName, layoutOptions);
-					jButtonWithMonthName.addActionListener(generateTransactionAfterClickingMonthButton);
+					PanelTransactionViewWithThreeLabels panelTransactionViewWithThreeLabelsExpenditure = new PanelTransactionViewWithThreeLabels();
+					FillPanelTransactionWithThreeLabelsListener fillPanellTransactionWithThreeLabelsListenerExpenditure = new FillPanelTransactionWithThreeLabelsListener(panelTransactionViewWithThreeLabelsExpenditure, expenditureListWithCategoryName, panelExpenditureView);
+					jButtonWithMonthName.addActionListener(fillPanellTransactionWithThreeLabelsListenerExpenditure);
 					
 					List<Transaction> savingsConstrained = listFilter.filterByBudgetIdYearMonth(savingsObjectListWithItsId, budgetId, year, month);
 					List<Transaction> savingsSorted = sort.sortTransactionAfterItsDay(savingsConstrained, year, month, budgetId);
 					List<Transaction> savingsListWithCategoryName = fillcomponentsWithDataFromDatabase.fillTransactionList(savingsSorted, savingsCategoryMap);
-					generateTransactionAfterClickingMonthButton = new GenerateTransactionAfterClickingMonthButton(panelSavingsView, labelSavingsSum, savingsListWithCategoryName, layoutOptions);
-					jButtonWithMonthName.addActionListener(generateTransactionAfterClickingMonthButton);
+					PanelTransactionViewWithThreeLabels panelTransactionViewWithThreeLabelsSavings = new PanelTransactionViewWithThreeLabels();
+					FillPanelTransactionWithThreeLabelsListener fillPanellTransactionWithThreeLabelsListenerSavings = new FillPanelTransactionWithThreeLabelsListener(panelTransactionViewWithThreeLabelsSavings, savingsListWithCategoryName, panelSavingsView);
+					jButtonWithMonthName.addActionListener(fillPanellTransactionWithThreeLabelsListenerSavings);
 					
 					List<Transaction> otherIncomeConstrained = listFilter.filterIncomeByBudgetIdYearMonthCategoryId(usersIncomeObjectList, budgetId, year, month, false);
 					List<Transaction> otherIncomeSorted = sort.sortTransactionAfterItsDay(otherIncomeConstrained, year, month, budgetId);
@@ -191,12 +192,9 @@ public class GenerateComponents {
 					
 					List<Transaction> incomeConstrained = listFilter.filterIncomeByBudgetIdYearMonthCategoryId(usersIncomeObjectList, budgetId, year, month, true);
 					List<Pair<String, Double>> usersPairs = fillcomponentsWithDataFromDatabase.fillTransactionIncomePairList(incomeConstrained, usersNameHashMap);
-					//generateIncomeAfterClickingMonthButton = new GenerateIncomeAfterClickingMonthButton(panelIncome, panelUser, labelIncomeSum, usersPairs);
-					//jButtonWithMonthName.addActionListener(generateIncomeAfterClickingMonthButton);
-					PanelTransactionViewWithTwoLabels p = new PanelTransactionViewWithTwoLabels();
-					FillPanelTransactionWithTwoLabelsListener f = new FillPanelTransactionWithTwoLabelsListener(p, usersPairs, panelUsersIncome);
-					panelUsersIncome.add(p);
-					jButtonWithMonthName.addActionListener(f);
+					PanelTransactionViewWithTwoLabels panelTransactionViewWithTwoLabels = new PanelTransactionViewWithTwoLabels();
+					FillPanelTransactionWithTwoLabelsListener fillPanelTransactionViewWithTwoLabelsListener = new FillPanelTransactionWithTwoLabelsListener(panelTransactionViewWithTwoLabels, usersPairs, panelUsersIncome);
+					jButtonWithMonthName.addActionListener(fillPanelTransactionViewWithTwoLabelsListener);
 					
 					
 					

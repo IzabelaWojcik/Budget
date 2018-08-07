@@ -6,13 +6,13 @@ import javax.swing.JPanel;
 import javafx.util.Pair;
 
 public class FillPanelTransactionWithTwoLabelsListener implements ActionListener {
-	private PanelTransactionViewWithTwoLabels panelTransactionViewWithTwoLabels;
+	private PanelTransactionViewWithTwoLabels panelTransactionView;
 	private List<Pair<String, Double>> listOfPairs;
 	private JPanel panelToView;
 
-	public FillPanelTransactionWithTwoLabelsListener(PanelTransactionViewWithTwoLabels panelTransactionView,
+	public FillPanelTransactionWithTwoLabelsListener(PanelTransactionViewWithTwoLabels panelTransactionViewWithTwoLabels,
 			List<Pair<String, Double>> incomePairs, JPanel panelToDisplay) {
-		panelTransactionViewWithTwoLabels = panelTransactionView;
+		panelTransactionView = panelTransactionViewWithTwoLabels;
 		listOfPairs = incomePairs;
 		panelToView = panelToDisplay;
 	}
@@ -20,8 +20,8 @@ public class FillPanelTransactionWithTwoLabelsListener implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		panelToView.removeAll();
-		panelTransactionViewWithTwoLabels.fillPanel(listOfPairs);
-		panelToView.add(panelTransactionViewWithTwoLabels);
+		panelTransactionView.fillPanel(listOfPairs);
+		panelToView.add(panelTransactionView);
 		panelToView.repaint();
 		panelToView.revalidate();
 	}
