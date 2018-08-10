@@ -1,6 +1,4 @@
 package learning.budget;
-
-import java.text.DecimalFormat;
 import java.util.List;
 
 public final class SumAmount {

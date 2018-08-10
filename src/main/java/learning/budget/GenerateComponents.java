@@ -144,8 +144,6 @@ public class GenerateComponents {
 				panelBudget.setVisible(false);
 				panelBudgetEmpty.setVisible(true);
 				
-				LayoutOptions layoutOptions = new LayoutOptions();
-				
 				List<Container> components = Arrays.asList(lblInform, panelWithMonths, panelUsersIncome, panelOtherIncomeView,
 						panelExpenditureView, panelSavingsView);
 				

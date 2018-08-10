@@ -1,11 +1,8 @@
 package learning.budget.views;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
 import javax.swing.JLabel;
-
 import learning.budget.SumAmount;
 import learning.budget.Transaction;
 
@@ -23,5 +20,4 @@ public class SumOfTransactionAmountListener implements ActionListener{
 		sumLabel.removeAll();
 		sumLabel.setText(SumAmount.sumAmount(list));
 	}
-
 }
