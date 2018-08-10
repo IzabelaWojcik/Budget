@@ -57,6 +57,13 @@
 			<artifactId>mssql-jdbc</artifactId>
 			<version>6.4.0.jre8</version>
 		</dependency>
+		
+		<!--https://www.baeldung.com/java-tuples-->
+		<dependency>
+             <groupId>org.javatuples</groupId>
+             <artifactId>javatuples</artifactId>
+             <version>1.2</version>
+        </dependency>
 
 	</dependencies>
 </project>

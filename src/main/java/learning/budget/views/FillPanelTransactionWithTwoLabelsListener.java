@@ -21,6 +21,7 @@ public class FillPanelTransactionWithTwoLabelsListener implements ActionListener
 	public void actionPerformed(ActionEvent arg0) {
 		panelView.removeAll();
 		panelView.setLayout(new BoxLayout(panelView, BoxLayout.Y_AXIS));
+		
 		for(Pair<String, Double> p: listOfPairs) {
 			PanelTransactionViewWithTwoLabels panelTransactionView = new PanelTransactionViewWithTwoLabels(p.getKey(), p.getValue());
 			panelView.add(panelTransactionView);
