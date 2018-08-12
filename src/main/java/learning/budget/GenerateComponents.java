@@ -40,6 +40,7 @@ public class GenerateComponents {
 	private ArrayList<Transaction> savingsObjectListWithItsId;
 	private FillComponentsFromDataInDatabase fillcomponentsWithDataFromDatabase;
 	private ListFilter listFilter;
+	private JButton jButtonWithMonthName;
 
 	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
 		databaseReader = _databaseReader;
@@ -162,7 +163,7 @@ public class GenerateComponents {
 					
 					
 					String monthName = dataFormatter.changeMonhNumberFromMonthName(month);
-					JButton jButtonWithMonthName = new JButton(monthName + "");
+					jButtonWithMonthName = new JButton(monthName + "");
 					panelWithMonths.add(jButtonWithMonthName);
 
 					List<Transaction> users = usersConstrained.stream().filter(uio -> uio.getDate().getMonthValue() == month).collect(Collectors.toList());
@@ -171,39 +172,16 @@ public class GenerateComponents {
 						usersPairs1.add(new Pair<String, Double>(usersNameHashMap.get(uio.getTransactionId()), uio.getAmount()));
 					}
 					
-					List<Transaction> expenditureConstrained = listFilter.filterByBudgetIdYearMonth(expenditureObjectListWithItsId, budgetId, year, month);
-					List<Transaction> expenditureSorted = sort.sortTransactionAfterItsDay(expenditureConstrained, year, month, budgetId);
-					List<Transaction> expenditureListPlusCategoryName = fillcomponentsWithDataFromDatabase.fillTransactionList(expenditureSorted, expenditureCategoryMap);
-					List<Triplet<String, String, String>> expenditureListOnlyWithDateCategoryNameAndAmount = makeListWithDateCategoryAmount(expenditureListPlusCategoryName);
-					FillPanelTransactionWithThreeLabelsListener fillPanellTransactionWithThreeLabelsListenerExpenditure = new FillPanelTransactionWithThreeLabelsListener(expenditureListOnlyWithDateCategoryNameAndAmount, panelExpenditureView);
-					jButtonWithMonthName.addActionListener(fillPanellTransactionWithThreeLabelsListenerExpenditure);
-					SumOfTransactionAmountListener sumOfExpenditureListener = new SumOfTransactionAmountListener(expenditureSorted, lblExpenditureSum);
-					jButtonWithMonthName.addActionListener(sumOfExpenditureListener);
+					List<Transaction> expenditureListPlusCategoryName=  makeTransactionListWithCategoryNameFromListAndHashMap(expenditureObjectListWithItsId, expenditureCategoryMap, budgetId, year, month);
+					fillPanelTransactionWithDataCategoryAndAmount(expenditureListPlusCategoryName, panelExpenditureView, lblExpenditureSum);
 					
-					List<Transaction> savingsConstrained = listFilter.filterByBudgetIdYearMonth(savingsObjectListWithItsId, budgetId, year, month);
-					List<Transaction> savingsSorted = sort.sortTransactionAfterItsDay(savingsConstrained, year, month, budgetId);
-					List<Transaction> savingsListPlusCategoryName = fillcomponentsWithDataFromDatabase.fillTransactionList(savingsSorted, savingsCategoryMap);
-					List<Triplet<String, String, String>> savingsListOnlyWithDateCategoryNameAndAmount = makeListWithDateCategoryAmount(savingsListPlusCategoryName);
-					FillPanelTransactionWithThreeLabelsListener fillPanellTransactionWithThreeLabelsListenerSavings = new FillPanelTransactionWithThreeLabelsListener(savingsListOnlyWithDateCategoryNameAndAmount, panelSavingsView);
-					jButtonWithMonthName.addActionListener(fillPanellTransactionWithThreeLabelsListenerSavings);
-					SumOfTransactionAmountListener sumOfSavingsListener = new SumOfTransactionAmountListener(savingsSorted, labelSavingsSum);
-					jButtonWithMonthName.addActionListener(sumOfSavingsListener);
+					List<Transaction> savingsListPlusCategoryName = makeTransactionListWithCategoryNameFromListAndHashMap(savingsObjectListWithItsId, savingsCategoryMap, budgetId, year, month);
+					fillPanelTransactionWithDataCategoryAndAmount(savingsListPlusCategoryName, panelSavingsView, labelSavingsSum);
 					
-					List<Transaction> otherIncomeConstrained = listFilter.filterIncomeByBudgetIdYearMonthCategoryId(usersIncomeObjectList, budgetId, year, month, false);
-					List<Transaction> otherIncomeSorted = sort.sortTransactionAfterItsDay(otherIncomeConstrained, year, month, budgetId);
-					List<Transaction> otherIncomeListPlusUserName = fillcomponentsWithDataFromDatabase.fillTransactionIncomeList(otherIncomeSorted, incomeCategoryMap, usersNameHashMap);
-					List<Triplet<String, String, String>> otherIncomeListOnlyWithUserNameCategoryNameAndAmount = makeListWithUserNameCategoryAmount(otherIncomeListPlusUserName);
-					FillPanelTransactionWithThreeLabelsListener fillPanellTransactionWithThreeLabelsListenerOtherIncome = new FillPanelTransactionWithThreeLabelsListener(otherIncomeListOnlyWithUserNameCategoryNameAndAmount, panelOtherIncomeView);
-					jButtonWithMonthName.addActionListener(fillPanellTransactionWithThreeLabelsListenerOtherIncome);
-					SumOfTransactionAmountListener sumOfOtherIncomeListener = new SumOfTransactionAmountListener(otherIncomeSorted, labelOtherIncomeSum);
-					jButtonWithMonthName.addActionListener(sumOfOtherIncomeListener);
+					List<Transaction> otherIncomeListWithUserName = makeTransactionListWithCategoryNameFromListAndHashMap(usersIncomeObjectList, usersNameHashMap, budgetId, year, month);
+					fillPanelTransactionWithUserNameCategoryAndAmount(otherIncomeListWithUserName, panelOtherIncomeView, labelOtherIncomeSum);
 					
-					List<Transaction> incomeConstrained = listFilter.filterIncomeByBudgetIdYearMonthCategoryId(usersIncomeObjectList, budgetId, year, month, true);
-					List<Pair<String, Double>> usersPairs = fillcomponentsWithDataFromDatabase.fillTransactionIncomePairList(incomeConstrained, usersNameHashMap);
-					FillPanelTransactionWithTwoLabelsListener fillPanelTransactionViewWithTwoLabelsListener = new FillPanelTransactionWithTwoLabelsListener(usersPairs, panelUsersIncome);
-					jButtonWithMonthName.addActionListener(fillPanelTransactionViewWithTwoLabelsListener);
-					SumOfTransactionAmountListener sumOfIncomeListener = new SumOfTransactionAmountListener(incomeConstrained, labelIncomeSum);
-					jButtonWithMonthName.addActionListener(sumOfIncomeListener);
+					fillPanelIncome(usersIncomeObjectList, budgetId, year, month, true, panelUsersIncome, labelIncomeSum);
 					
 					
 					jButtonWithMonthName.addActionListener(new ActionListener() {
@@ -219,8 +197,7 @@ public class GenerateComponents {
 		});
 	}
 
-	//FIXME that will be to delete if i pass LocalDate to function instead of year and month, or i can pass month name
-	public void generateMonthNameAndYearInfoAfterClickingMonthButton(JLabel lblInform, int year, int month) {
+	private void generateMonthNameAndYearInfoAfterClickingMonthButton(JLabel lblInform, int year, int month) {
 		String date = month + " " + year;
 		yearAndMonth = date;
 		DataFormatter dataFormatter = new DataFormatter();
@@ -228,13 +205,7 @@ public class GenerateComponents {
 		lblInform.setText(year + " " + monthName.toUpperCase());
 	}
 	
-	public List<String> getUserNames() throws DatabaseNotInitialized {
-		HashMap<Integer, String> usersFromDatabaseMap = databaseReader.readUsersFromDatabasetoHashMap();
-		
-		return new ArrayList<String>(usersFromDatabaseMap.values());
-	}
-	
-	public List<Triplet<String, String, String>> makeListWithDateCategoryAmount(List<Transaction> listTransactionInConcreteBudgetIdYearAndMonth) {
+	private List<Triplet<String, String, String>> makeListWithDateCategoryAmount(List<Transaction> listTransactionInConcreteBudgetIdYearAndMonth) {
 		List<Triplet<String, String, String>> list = new ArrayList<>();
 		for(Transaction t: listTransactionInConcreteBudgetIdYearAndMonth) {
 			Triplet<String, String, String> triplet = new Triplet<String, String, String>(t.getDate().toString(), t.getCategoryName(), String.valueOf(t.getAmount()));
@@ -243,12 +214,47 @@ public class GenerateComponents {
 		return list;
 	}
 	
-	public List<Triplet<String, String, String>> makeListWithUserNameCategoryAmount(List<Transaction> listTransactionInConcreteBudgetIdYearAndMonth) {
+	private List<Triplet<String, String, String>> makeTripletListWithUserNameCategoryAmount(List<Transaction> listTransactionInConcreteBudgetIdYearAndMonth) {
 		List<Triplet<String, String, String>> list = new ArrayList<>();
 		for(Transaction t: listTransactionInConcreteBudgetIdYearAndMonth) {
 			Triplet<String, String, String> triplet = new Triplet<String, String, String>(t.getUserName(), t.getCategoryName(), String.valueOf(t.getAmount()));
 			list.add(triplet);
 		}
 		return list;
+	}
+	
+	private List<Transaction> makeTransactionListWithCategoryNameFromListAndHashMap(List<Transaction> transactionObjectListWithItsId, HashMap<Integer, String> transactionHashMap, int budgetId, int year, int month) {
+		List<Transaction> transactionConstrained = listFilter.filterIncomeByBudgetIdYearMonthCategoryId(usersIncomeObjectList, budgetId, year, month, false);
+		List<Transaction> transactionSorted = sort.sortTransactionAfterItsDay(transactionConstrained, year, month, budgetId);
+		List<Transaction> transactionListPlusCategoryName = fillcomponentsWithDataFromDatabase.fillTransactionIncomeList(transactionSorted, incomeCategoryMap, usersNameHashMap);
+		return transactionListPlusCategoryName;
+	}
+	
+	private void fillPanelTransactionWithDataCategoryAndAmount(List<Transaction> transactionListPlusCategoryName, JPanel panelToDisplay, JLabel lblSum) {
+		List<Triplet<String, String, String>> transactionTripletListOnlyWithDateCategoryNameAndAmount = makeListWithDateCategoryAmount(transactionListPlusCategoryName);
+		SumOfTransactionAmountListener sumOfTransactionAmountListener = new SumOfTransactionAmountListener(transactionListPlusCategoryName, lblSum);
+		FillPanelTransactionWithThreeLabelsListener fillPanellTransactionWithThreeLabelsListener = new FillPanelTransactionWithThreeLabelsListener(transactionTripletListOnlyWithDateCategoryNameAndAmount, panelToDisplay);
+		jButtonWithMonthName.addActionListener(sumOfTransactionAmountListener);
+		jButtonWithMonthName.addActionListener(fillPanellTransactionWithThreeLabelsListener);
+	}
+	
+	private void fillPanelTransactionWithUserNameCategoryAndAmount(List<Transaction> transactionListPlusCategoryName, JPanel panelToDisplay, JLabel lblSum) {
+		List<Triplet<String, String, String>> transactionTripletListOnlyWithUserNameCategoryNameAndAmount = makeTripletListWithUserNameCategoryAmount(transactionListPlusCategoryName);
+		SumOfTransactionAmountListener sumOfTransactionAmountListener = new SumOfTransactionAmountListener(transactionListPlusCategoryName, lblSum);
+		FillPanelTransactionWithThreeLabelsListener fillPanellTransactionWithThreeLabelsListener = new FillPanelTransactionWithThreeLabelsListener(transactionTripletListOnlyWithUserNameCategoryNameAndAmount, panelToDisplay);
+		jButtonWithMonthName.addActionListener(sumOfTransactionAmountListener);
+		jButtonWithMonthName.addActionListener(fillPanellTransactionWithThreeLabelsListener);
+	}
+	
+
+
+	
+	private void fillPanelIncome(List<Transaction> usersIncomeObjectList, int budgetId, int year, int month, boolean salary, JPanel panelUsersIncome, JLabel labelIncomeSum) {
+		List<Transaction> incomeConstrained = listFilter.filterIncomeByBudgetIdYearMonthCategoryId(usersIncomeObjectList, budgetId, year, month, true);
+		List<Pair<String, Double>> usersPairs = fillcomponentsWithDataFromDatabase.fillTransactionIncomePairList(incomeConstrained, usersNameHashMap);
+		FillPanelTransactionWithTwoLabelsListener fillPanelTransactionViewWithTwoLabelsListener = new FillPanelTransactionWithTwoLabelsListener(usersPairs, panelUsersIncome);
+		jButtonWithMonthName.addActionListener(fillPanelTransactionViewWithTwoLabelsListener);
+		SumOfTransactionAmountListener sumOfIncomeListener = new SumOfTransactionAmountListener(incomeConstrained, labelIncomeSum);
+		jButtonWithMonthName.addActionListener(sumOfIncomeListener);
 	}
 }
