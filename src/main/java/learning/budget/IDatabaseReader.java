@@ -2,6 +2,9 @@ package learning.budget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import javafx.util.Pair;
 
 public interface IDatabaseReader {
 
@@ -24,5 +27,7 @@ public interface IDatabaseReader {
 	public ArrayList<Transaction> readSavingsFromDataBase() throws DatabaseNotInitialized;
 
 	public ArrayList<Transaction> readSavingsWithItsIdFromDataBase() throws DatabaseNotInitialized;
+	
+	public List<Pair<Integer, String>> readCategoryNameWithBudgetIdFromDatabase(String tablename) throws DatabaseNotInitialized;
 
 }

@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import javafx.util.Pair;
 
 public class DatabaseReader implements IDatabaseReader{
 	private static IDatabaseReader databaseReader; 
@@ -125,6 +128,21 @@ public class DatabaseReader implements IDatabaseReader{
 			e.printStackTrace();
 		}
 		return categoryMap;
+	}
+	public List<Pair<Integer, String>> readCategoryNameWithBudgetIdFromDatabase(String tablename) throws DatabaseNotInitialized{
+		List<Pair<Integer, String>>  categoryBudgetIdPair = new ArrayList<>();
+		try{
+			ResultSet rs = getDataFromTable(tablename);
+			while(rs.next()){
+				int idBudget = rs.getInt(3);
+				String categoryName = rs.getString(2);
+				Pair<Integer, String> pair= new Pair<>(idBudget, categoryName);
+				categoryBudgetIdPair.add(pair);	
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return categoryBudgetIdPair;
 	}
 	
 	public HashMap<Integer, String> readBudgetIdNameFromDatabase() throws DatabaseNotInitialized{

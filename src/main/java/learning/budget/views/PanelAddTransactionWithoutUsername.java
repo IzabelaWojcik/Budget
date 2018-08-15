@@ -1,72 +1,62 @@
 package learning.budget.views;
-
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-
 import java.awt.Color;
 import java.awt.Dimension;
-import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.util.List;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class PanelAddTransactionWithoutUsername extends JPanel{
-	private JFormattedTextField textFieldAmount;
-	private JLabel lblDate, lblCategory, lblAmount;
-	private ErrorLabel errorLabel;
-	private JDateChooser dateChooser;
-	private JComboBox<String> comboBoxCategory;
-	private JButton btnAdd;
-	
 	
 	public PanelAddTransactionWithoutUsername(List<String> categoryList) {
 			
-		lblDate = new JLabel("Data:");
-		lblCategory = new JLabel("Kategoria:");
-		lblAmount = new JLabel("Kwota:");
-		dateChooser = new JDateChooser();
-		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
+		JLabel lblDate = new JLabel("Data:");
+		JLabel lblCategory = new JLabel("Kategoria:");
+		JLabel lblAmount = new JLabel("Kwota:");
+		JDateChooser dateChooser = new JDateChooser();
+		JFormattedTextField  textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
 		textFieldAmount.setColumns(10);
-		comboBoxCategory = new JComboBox();
-		for(String cat: categoryList) comboBoxCategory.addItem(cat);
-		errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
-		textFieldAmount.addPropertyChangeListener(errorLabel);
+		JComboBox<String> comboBoxCategory = new JComboBox<String>();
+		JLabel errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+		//FIXME
+		//textFieldAmount.addPropertyChangeListener(errorLabel);
 		
-		btnAdd = new JButton("Dodaj");
+		JButton btnAdd = new JButton("Dodaj");
 		
-
+		for (String s : categoryList) {
+			comboBoxCategory.addItem(s);
+		}
+		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(25)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(lblDate)
 							.addGap(5))
-						.addComponent(lblAmount, Alignment.TRAILING)
-						.addComponent(lblCategory, Alignment.TRAILING))
+						.addComponent(lblAmount)
+						.addComponent(lblCategory))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(textFieldAmount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(comboBoxCategory, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(comboBoxCategory, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(dateChooser, GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
+							.addGap(18)
 							.addComponent(errorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+							.addComponent(btnAdd)
+							.addComponent(textFieldAmount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 					.addGap(20))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(217, Short.MAX_VALUE)
-					.addComponent(btnAdd)
-					.addGap(83))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -88,20 +78,17 @@ public class PanelAddTransactionWithoutUsername extends JPanel{
 							.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(lblDate)))
 					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(43)
-							.addComponent(btnAdd))
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblAmount)
-							.addComponent(textFieldAmount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addGap(26))
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblAmount)
+						.addComponent(textFieldAmount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(btnAdd)
+					.addGap(29))
 		);
 		setLayout(groupLayout);
-
 	}
 	
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		textFieldAmount.addPropertyChangeListener(listener);
-	}
+	//public void addPropertyChangeListener(PropertyChangeListener listener) {
+	//	textFieldAmount.addPropertyChangeListener(listener);
+	//}
 }
