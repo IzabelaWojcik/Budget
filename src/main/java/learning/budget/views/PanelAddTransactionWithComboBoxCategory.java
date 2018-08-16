@@ -13,10 +13,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class PanelAddTransactionWithoutUsername extends JPanel{
+public class PanelAddTransactionWithComboBoxCategory extends JPanel{
 	
-	public PanelAddTransactionWithoutUsername(List<String> categoryList) {
-			
+	public PanelAddTransactionWithComboBoxCategory(List<String> categoryList) {
 		JLabel lblDate = new JLabel("Data:");
 		JLabel lblCategory = new JLabel("Kategoria:");
 		JLabel lblAmount = new JLabel("Kwota:");
@@ -25,13 +24,13 @@ public class PanelAddTransactionWithoutUsername extends JPanel{
 		textFieldAmount.setColumns(10);
 		JComboBox<String> comboBoxCategory = new JComboBox<String>();
 		JLabel errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+		JButton btnAdd = new JButton("Dodaj");
+		
 		//FIXME
 		//textFieldAmount.addPropertyChangeListener(errorLabel);
 		
-		JButton btnAdd = new JButton("Dodaj");
-		
-		for (String s : categoryList) {
-			comboBoxCategory.addItem(s);
+		for (String category : categoryList) {
+			comboBoxCategory.addItem(category);
 		}
 		
 		GroupLayout groupLayout = new GroupLayout(this);

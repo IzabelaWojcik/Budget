@@ -18,7 +18,7 @@ public class AddPanelToAddTransactionListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		panelView.removeAll();
-		PanelAddTransactionWithoutUsername panelAddTransaction = new PanelAddTransactionWithoutUsername(listCategory);
+		PanelAddTransactionWithComboBoxCategory panelAddTransaction = new PanelAddTransactionWithComboBoxCategory(listCategory);
 		panelView.add(panelAddTransaction);
 	}
 }

@@ -18,27 +18,24 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class PanelAddTransactionWithUsername extends JPanel{
-	private JFormattedTextField textFieldAmount;
-	private JLabel lblDate, lblCategory, lblAmount;
+public class PanelAddTransactionWithComboBoxCategoryAndUsername extends JPanel{
+	private  JFormattedTextField textFieldAmount;
 	private ErrorLabel errorLabel;
-	private JDateChooser dateChooser;
 	private JComboBox<String> comboBoxCategory;
 	private JButton btnAdd;
 	private JLabel lblUser;
 	private JComboBox comboBoxUser;
 	
 	
-	public PanelAddTransactionWithUsername(List<String> categoryList, List<String> usersList) {
+	public PanelAddTransactionWithComboBoxCategoryAndUsername(List<String> categoryList, List<String> usersList) {
 			
-		lblDate = new JLabel("Data:");
-		lblCategory = new JLabel("Kategoria:");
-		lblAmount = new JLabel("Kwota:");
-		dateChooser = new JDateChooser();
+		JLabel lblDate = new JLabel("Data:");
+		JLabel lblCategory = new JLabel("Kategoria:");
+		JLabel lblAmount = new JLabel("Kwota:");
+		JDateChooser dateChooser = new JDateChooser();
 		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
 		textFieldAmount.setColumns(10);
 		comboBoxCategory = new JComboBox();
-		for(String cat: categoryList) comboBoxCategory.addItem(cat);
 		errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
 		textFieldAmount.addPropertyChangeListener(errorLabel);
 		
