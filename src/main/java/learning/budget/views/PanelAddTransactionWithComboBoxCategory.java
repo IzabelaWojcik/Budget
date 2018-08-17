@@ -3,6 +3,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.util.List;
 import javax.swing.GroupLayout;
@@ -14,20 +15,20 @@ import javax.swing.JFormattedTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class PanelAddTransactionWithComboBoxCategory extends JPanel{
+	private JFormattedTextField  textFieldAmount;
 	
 	public PanelAddTransactionWithComboBoxCategory(List<String> categoryList) {
 		JLabel lblDate = new JLabel("Data:");
 		JLabel lblCategory = new JLabel("Kategoria:");
 		JLabel lblAmount = new JLabel("Kwota:");
 		JDateChooser dateChooser = new JDateChooser();
-		JFormattedTextField  textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
+		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
 		textFieldAmount.setColumns(10);
 		JComboBox<String> comboBoxCategory = new JComboBox<String>();
-		JLabel errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+		ErrorLabel errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
 		JButton btnAdd = new JButton("Dodaj");
 		
-		//FIXME
-		//textFieldAmount.addPropertyChangeListener(errorLabel);
+		textFieldAmount.addPropertyChangeListener(errorLabel);
 		
 		for (String category : categoryList) {
 			comboBoxCategory.addItem(category);
@@ -87,7 +88,7 @@ public class PanelAddTransactionWithComboBoxCategory extends JPanel{
 		setLayout(groupLayout);
 	}
 	
-	//public void addPropertyChangeListener(PropertyChangeListener listener) {
-	//	textFieldAmount.addPropertyChangeListener(listener);
-	//}
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		textFieldAmount.addPropertyChangeListener(listener);
+	}
 }

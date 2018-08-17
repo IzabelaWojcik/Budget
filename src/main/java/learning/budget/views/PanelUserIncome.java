@@ -9,23 +9,23 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class PanelUserInput extends JPanel {
+public class PanelUserIncome extends JPanel {
 	JLabel userName;
-	JFormattedTextField input;
+	JFormattedTextField salary;
 	ErrorLabel errorLabel;
 
-	public PanelUserInput(String _userName) {
+	public PanelUserIncome(String _userName) {
 		userName = new JLabel(_userName, JLabel.RIGHT);
 		userName.setPreferredSize(new Dimension(90, 20));
 
-		input = new JFormattedTextField(NumberFormat.getInstance());
-		input.setColumns(10);
+		salary = new JFormattedTextField(NumberFormat.getInstance());
+		salary.setColumns(10);
 
 		add(userName);
-		add(input);
+		add(salary);
 
 		errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
-		input.addPropertyChangeListener(errorLabel);
+		salary.addPropertyChangeListener(errorLabel);
 		add(errorLabel);
 
 		validate();
@@ -33,6 +33,6 @@ public class PanelUserInput extends JPanel {
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		input.addPropertyChangeListener(listener);
+		salary.addPropertyChangeListener(listener);
 	}
 }
