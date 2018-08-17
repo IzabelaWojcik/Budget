@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.javatuples.Triplet;
+
 import javafx.util.Pair;
 
 public class DatabaseReader implements IDatabaseReader{
@@ -129,6 +131,7 @@ public class DatabaseReader implements IDatabaseReader{
 		}
 		return categoryMap;
 	}
+	
 	public List<Pair<Integer, String>> readCategoryNameWithBudgetIdFromDatabase(String tablename) throws DatabaseNotInitialized{
 		List<Pair<Integer, String>>  categoryBudgetIdPair = new ArrayList<>();
 		try{
@@ -160,7 +163,7 @@ public class DatabaseReader implements IDatabaseReader{
 		}
 		return budgetInNameMap;
 	}
-
+//FIXME Amend names from expenditure or saving(it is under this) to transaction
 	public ArrayList<Transaction> readExpenditureFromDataBase() throws DatabaseNotInitialized{
 		String tablename = "Expenditure";
 		ArrayList<Transaction> expenditureObjectList = new ArrayList<Transaction>();

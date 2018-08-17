@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.javatuples.Triplet;
+
 import javafx.util.Pair;
 
 public interface IDatabaseReader {
@@ -29,5 +31,5 @@ public interface IDatabaseReader {
 	public ArrayList<Transaction> readSavingsWithItsIdFromDataBase() throws DatabaseNotInitialized;
 	
 	public List<Pair<Integer, String>> readCategoryNameWithBudgetIdFromDatabase(String tablename) throws DatabaseNotInitialized;
-
+	
 }
