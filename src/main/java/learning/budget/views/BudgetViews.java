@@ -63,8 +63,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private JPanel panelBudgetName;
 	private JButton btnBudgetForNewMonth;
 	private JPanel panelExpenditure;
-	private JDateChooser dateChooserExpenditureDate;
-	private JTextField textFieldExpenditureAmount;
 	private JLabel lblexpenditureSum;
 	private JLabel lblIncomeSum;
 	private JLabel lblOtherIncomeSum;
@@ -80,10 +78,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 	private JPanel panelSavingsView;
 	private JLabel lblInform;
 	private JLabel lblSumaPozostaychPrzychodw;
-	private JComboBox<String> comboBoxOtherIncome;
-	private JComboBox<String> comboBoxUsers;
-	private JComboBox<String> comboBoxSavingsCategory;
-	private JComboBox<String> comboBoxExpenditureCategory;
 	private JScrollPane scrollPaneTest;
 	private JPanel panelAddExpenditure;
 	private JPanel panelAddOtherIncome;
@@ -217,21 +211,11 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		
 		panelAddOtherIncomes = new JPanel();
 		
-		JLabel lblChooseIncome = new JLabel("Rodzaj przychodu:");
-		
-		JLabel lblChooseUser = new JLabel("U\u017Cytkownik:");
-		
-		JLabel lblValueOfAmount = new JLabel("Kwota:");
-		
 		btnAddOtherIncome = new JButton("Dodaj");
 		btnAddOtherIncome.setEnabled(false);
 		
-		comboBoxOtherIncome = new JComboBox<String>();
-		
 		textFieldOtherIncome = new JTextField();
 		textFieldOtherIncome.setColumns(10);
-		
-		comboBoxUsers = new JComboBox<String>();
 		
 		lblIncomeOtherError = new JLabel("");
 		lblIncomeOtherError.setForeground(Color.RED);
@@ -244,26 +228,15 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 					.addGroup(gl_panelAddOtherIncomes.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panelAddOtherIncomes.createSequentialGroup()
 							.addGap(86)
-							.addComponent(lblIncomeOtherError, GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE))
+							.addComponent(lblIncomeOtherError, GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
 						.addGroup(gl_panelAddOtherIncomes.createSequentialGroup()
-							.addGap(11)
-							.addComponent(lblChooseIncome)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(comboBoxOtherIncome, 0, 175, Short.MAX_VALUE))
-						.addGroup(gl_panelAddOtherIncomes.createSequentialGroup()
-							.addGap(43)
-							.addGroup(gl_panelAddOtherIncomes.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblChooseUser)
-								.addComponent(lblValueOfAmount))
-							.addGap(18)
-							.addGroup(gl_panelAddOtherIncomes.createParallelGroup(Alignment.LEADING)
-								.addComponent(comboBoxUsers, 0, 188, Short.MAX_VALUE)
-								.addComponent(textFieldOtherIncome, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)))
+							.addGap(129)
+							.addComponent(textFieldOtherIncome, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
 						.addGroup(gl_panelAddOtherIncomes.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_panelAddOtherIncomes.createSequentialGroup()
-							.addContainerGap(239, Short.MAX_VALUE)
+							.addContainerGap(252, Short.MAX_VALUE)
 							.addComponent(btnAddOtherIncome)))
 					.addContainerGap())
 		);
@@ -272,18 +245,8 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 				.addGroup(gl_panelAddOtherIncomes.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelAddOtherIncomes.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBoxOtherIncome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblChooseIncome))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelAddOtherIncomes.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblChooseUser)
-						.addComponent(comboBoxUsers, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(19)
-					.addGroup(gl_panelAddOtherIncomes.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblValueOfAmount)
-						.addComponent(textFieldOtherIncome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(65)
+					.addComponent(textFieldOtherIncome, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnAddOtherIncome)
 					.addGap(36)
@@ -475,15 +438,7 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		);
 		panelSum.setLayout(gl_panelSum);
 		
-		JLabel lblData_1 = new JLabel("Data:");
-		
-		JLabel lblRodzajOszczdnoci = new JLabel("Rodzaj oszcz\u0119dno\u015Bci:");
-		
-		JLabel lblKwota_1 = new JLabel("Kwota:");
-		
 		dateChooserSavingsDate = new JDateChooser();
-		
-		comboBoxSavingsCategory = new JComboBox<String>();
 		
 		textFieldSavingsAmount = new JTextField();
 		textFieldSavingsAmount.setColumns(10);
@@ -496,22 +451,15 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		gl_panelSavings.setHorizontalGroup(
 			gl_panelSavings.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelSavings.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panelSavings.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_panelSavings.createSequentialGroup()
-							.addGroup(gl_panelSavings.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblKwota_1)
-								.addComponent(lblData_1)
-								.addComponent(lblRodzajOszczdnoci))
-							.addPreferredGap(ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-							.addGroup(gl_panelSavings.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(textFieldSavingsAmount)
-								.addComponent(comboBoxSavingsCategory, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(dateChooserSavingsDate, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)))
-						.addGroup(Alignment.TRAILING, gl_panelSavings.createSequentialGroup()
+					.addContainerGap(161, Short.MAX_VALUE)
+					.addGroup(gl_panelSavings.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panelSavings.createParallelGroup(Alignment.LEADING, false)
+							.addComponent(textFieldSavingsAmount)
+							.addComponent(dateChooserSavingsDate, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
+						.addGroup(gl_panelSavings.createSequentialGroup()
 							.addComponent(lblErrorAddSavings)
 							.addGap(134))
-						.addComponent(btnSavingsAdd, Alignment.TRAILING))
+						.addComponent(btnSavingsAdd))
 					.addContainerGap())
 		);
 		gl_panelSavings.setVerticalGroup(
@@ -519,18 +467,10 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 				.addGroup(gl_panelSavings.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panelSavings.createParallelGroup(Alignment.LEADING)
+						.addComponent(dateChooserSavingsDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_panelSavings.createSequentialGroup()
-							.addComponent(dateChooserSavingsDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(comboBoxSavingsCategory, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panelSavings.createSequentialGroup()
-							.addComponent(lblData_1)
-							.addGap(18)
-							.addComponent(lblRodzajOszczdnoci)
-							.addGap(18)
-							.addGroup(gl_panelSavings.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblKwota_1)
-								.addComponent(textFieldSavingsAmount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+							.addGap(68)
+							.addComponent(textFieldSavingsAmount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panelSavings.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblErrorAddSavings)
@@ -538,19 +478,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 					.addGap(25))
 		);
 		panelSavings.setLayout(gl_panelSavings);
-		
-		dateChooserExpenditureDate = new JDateChooser();
-		
-		JLabel lblRodzajwydatku = new JLabel("Rodzaj Wydatku:");
-		
-		JLabel lblKwota = new JLabel("Kwota:");
-		
-		JLabel lblData = new JLabel("Data:");
-		
-		comboBoxExpenditureCategory = new JComboBox<String>();
-		
-		textFieldExpenditureAmount = new JTextField();
-		textFieldExpenditureAmount.setColumns(10);
 		
 		JButton btnExpenditureAdd = new JButton("Dodaj");
 		
@@ -561,46 +488,20 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 			gl_panelExpenditure.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelExpenditure.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panelExpenditure.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panelExpenditure.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panelExpenditure.createSequentialGroup()
-							.addGroup(gl_panelExpenditure.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblData)
-								.addComponent(lblRodzajwydatku)
-								.addGroup(gl_panelExpenditure.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblErrorAddExpenditure)
-									.addComponent(lblKwota)))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panelExpenditure.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panelExpenditure.createSequentialGroup()
-									.addComponent(textFieldExpenditureAmount, 169, 169, 169)
-									.addContainerGap())
-								.addGroup(Alignment.TRAILING, gl_panelExpenditure.createSequentialGroup()
-									.addGroup(gl_panelExpenditure.createParallelGroup(Alignment.TRAILING)
-										.addComponent(dateChooserExpenditureDate, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
-										.addComponent(comboBoxExpenditureCategory, 0, 169, Short.MAX_VALUE))
-									.addContainerGap())))
-						.addGroup(Alignment.TRAILING, gl_panelExpenditure.createSequentialGroup()
-							.addComponent(btnExpenditureAdd)
-							.addContainerGap())))
+							.addGap(57)
+							.addComponent(lblErrorAddExpenditure)
+							.addGap(214))
+						.addComponent(btnExpenditureAdd))
+					.addContainerGap())
 		);
 		gl_panelExpenditure.setVerticalGroup(
 			gl_panelExpenditure.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelExpenditure.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panelExpenditure.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblData)
-						.addComponent(dateChooserExpenditureDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelExpenditure.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBoxExpenditureCategory, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblRodzajwydatku))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelExpenditure.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textFieldExpenditureAmount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblKwota))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(106)
 					.addComponent(lblErrorAddExpenditure)
-					.addPreferredGap(ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
 					.addComponent(btnExpenditureAdd)
 					.addContainerGap())
 		);
@@ -610,15 +511,10 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		panelMain.setLayout(gl_panelMain);
 		
 		ButtonAction buttonAction = new ButtonAction(databaseReader, databaseWriter);
-		buttonAction.addOtherIncomeToDatabaseAfterClickingButton(btnAddOtherIncome, comboBoxUsers, comboBoxOtherIncome, textFieldOtherIncome, lblIncomeOtherError, dateChooser, panelOtherIncomeView, lblOtherIncomeSum);
-		
-		buttonAction.addExpenditureOrSavingsToDatabaseAfterClickingButton(btnExpenditureAdd, comboBoxExpenditureCategory, comboBoxUsers, textFieldExpenditureAmount, lblErrorAddExpenditure, dateChooserExpenditureDate, expenditureCategoryMap, "Expenditure", panelExpenditureView, panelSavingsView, lblexpenditureSum, lblSavingsSum);
-		buttonAction.addExpenditureOrSavingsToDatabaseAfterClickingButton(btnSavingsAdd, comboBoxSavingsCategory, comboBoxUsers, textFieldSavingsAmount, lblErrorAddSavings, dateChooserSavingsDate, savingsCategoryMap, "Savings", panelExpenditureView, panelSavingsView, lblexpenditureSum, lblSavingsSum);
 		generateButtonsWithBudgetsNames(panelAddOtherIncome, panelAddExpenditure, panelBudgetName, panelMainBudgetsFromAllYears, panelMainWithMonthsInYear, panelTest, panelMonthlyBudget, panelMonthlyBudgetEmpty, panelOtherIncomeView, panelExpenditureView, panelSavingsView, lblInform, lblexpenditureSum, lblSavingsSum, lblOtherIncomeSum, lblIncomeSum);
 		panelUsersIncome.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		textFieldValidator.valueIsANumberForOneTextField(textFieldOtherIncome, lblIncomeOtherError, btnAddOtherIncome);
-		textFieldValidator.valueIsANumberForOneTextField(textFieldExpenditureAmount, lblErrorAddExpenditure, btnExpenditureAdd);
 		textFieldValidator.valueIsANumberForOneTextField(textFieldSavingsAmount, lblErrorAddSavings, btnSavingsAdd);
 	}
 	
