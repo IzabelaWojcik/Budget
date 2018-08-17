@@ -125,8 +125,6 @@ public class GenerateComponents {
 				try {
 					comboBoxAction.writeUsersToComboBox(comboBoxUsers, budgetId);
 					comboBoxAction.writeOtherIncomeCategoryToComboBox(comboBoxOtherIncome, budgetId);
-					comboBoxAction.writeExpenditureCategoryToComboBox(comboBoxExpenditureCategory, budgetId);
-					comboBoxAction.writeSavingsCategoryToComboBox(comboBoxSavings, budgetId);
 
 				} catch (DatabaseNotInitialized e1) {
 					e1.printStackTrace();

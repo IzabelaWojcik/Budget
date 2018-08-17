@@ -40,51 +40,6 @@ public class ComboBoxAction {
 		}
 	}
 
-	public void writeExpenditureCategoryToComboBox(JComboBox<String> cbBox, int budgetId) throws DatabaseNotInitialized {
-		ArrayList<Transaction> expenditureList = databaseReader.readExpenditureFromDataBase();
-		HashMap<Integer, String> expenditureCategoryMap = databaseReader
-				.readCategoryFromDatabase("Expenditure_category");
-		ArrayList<String> expenditureUniqueItemList = new ArrayList<String>();
-		for (Transaction eo : expenditureList) {
-			int idBudget = eo.getBudgetId();
-			int idExpenditureCategory = eo.getCategoryId();
-			if (budgetId == idBudget) {
-				for (Entry<Integer, String> entry : expenditureCategoryMap.entrySet()) {
-					if (entry.getKey() == idExpenditureCategory) {
-						if (!expenditureUniqueItemList.contains(entry.getValue())) {
-							expenditureUniqueItemList.add(entry.getValue());
-						}
-					}
-				}
-			}
-		}
-		for (String s : expenditureUniqueItemList) {
-			cbBox.addItem(s);
-		}
-	}
-
-	public void writeSavingsCategoryToComboBox(JComboBox<String> cbBox, int budgetId) throws DatabaseNotInitialized {
-		ArrayList<Transaction> savingsList = databaseReader.readSavingsFromDataBase();
-		HashMap<Integer, String> savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
-		ArrayList<String> savingUniqueItemList = new ArrayList<String>();
-		for (Transaction so : savingsList) {
-			int idBudget = so.getBudgetId();
-			int idSavingsCategory = so.getCategoryId();
-			if (budgetId == idBudget) {
-				for (Entry<Integer, String> entry : savingsCategoryMap.entrySet()) {
-					if (entry.getKey() == idSavingsCategory) {
-						if (!savingUniqueItemList.contains(entry.getValue())) {
-							savingUniqueItemList.add(entry.getValue());
-						}
-					}
-				}
-			}
-		}
-		for (String s : savingUniqueItemList) {
-			cbBox.addItem(s);
-		}
-	}
-
 	public void writeUsersToComboBox(JComboBox<String> cbBox, int budgetId) throws DatabaseNotInitialized {
 		ArrayList<UsersObject> usersList = databaseReader.readUsersFromDatabase();
 		for (UsersObject uo : usersList) {
