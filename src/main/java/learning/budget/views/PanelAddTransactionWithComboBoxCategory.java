@@ -22,12 +22,13 @@ public class PanelAddTransactionWithComboBoxCategory extends JPanel{
 		JLabel lblCategory = new JLabel("Kategoria:");
 		JLabel lblAmount = new JLabel("Kwota:");
 		JDateChooser dateChooser = new JDateChooser();
-		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
-		textFieldAmount.setColumns(10);
 		JComboBox<String> comboBoxCategory = new JComboBox<String>();
-		ErrorLabel errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
 		JButton btnAdd = new JButton("Dodaj");
 		
+		ErrorLabel errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+	
+		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
+		textFieldAmount.setColumns(10);
 		textFieldAmount.addPropertyChangeListener(errorLabel);
 		
 		for (String category : categoryList) {

@@ -6,11 +6,11 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-public class AddPanelToAddTransactionListener implements ActionListener{
+public class AddPanelToAddTransactionWithComboBoxCategoryListener implements ActionListener{
 	private List<String> listCategory;
 	private JPanel panelView;
 	
-	public AddPanelToAddTransactionListener(List<String> categoryList, JPanel panelToDisplay) {
+	public AddPanelToAddTransactionWithComboBoxCategoryListener(List<String> categoryList, JPanel panelToDisplay) {
 		listCategory = categoryList;
 		panelView = panelToDisplay;
 	}

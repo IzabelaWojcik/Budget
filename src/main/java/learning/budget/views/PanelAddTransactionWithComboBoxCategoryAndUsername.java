@@ -21,34 +21,36 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 public class PanelAddTransactionWithComboBoxCategoryAndUsername extends JPanel{
 	private  JFormattedTextField textFieldAmount;
 	private ErrorLabel errorLabel;
-	private JComboBox<String> comboBoxCategory;
-	private JButton btnAdd;
-	private JLabel lblUser;
-	private JComboBox comboBoxUser;
-	
+	private JComboBox<String> comboBoxUser;
 	
 	public PanelAddTransactionWithComboBoxCategoryAndUsername(List<String> categoryList, List<String> usersList) {
-			
 		JLabel lblDate = new JLabel("Data:");
 		JLabel lblCategory = new JLabel("Kategoria:");
 		JLabel lblAmount = new JLabel("Kwota:");
+		JLabel lblUser = new JLabel("Użytkownik:");
 		JDateChooser dateChooser = new JDateChooser();
+		JComboBox<String> comboBoxCategory = new JComboBox<String>();
+		JButton btnAdd = new JButton("Dodaj");
+		comboBoxUser = new JComboBox<String>();
+		
+		errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+		
 		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
 		textFieldAmount.setColumns(10);
-		comboBoxCategory = new JComboBox();
-		errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
 		textFieldAmount.addPropertyChangeListener(errorLabel);
 		
-		btnAdd = new JButton("Dodaj");
 		
-		lblUser = new JLabel("Użytkownik:");
+		for (String category : categoryList) {
+			comboBoxCategory.addItem(category);
+		}
 		
-		for(String user: usersList) comboBoxUser.addItem(user);
-		comboBoxUser = new JComboBox();
-
+		for(String user: usersList) {
+			comboBoxUser.addItem(user);
+		}
+		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(25)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -63,21 +65,20 @@ public class PanelAddTransactionWithComboBoxCategoryAndUsername extends JPanel{
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
 								.addComponent(comboBoxUser, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(comboBoxCategory, Alignment.LEADING, 0, 108, Short.MAX_VALUE))
-							.addPreferredGap(ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(errorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 					.addGap(20))
-				.addGroup(groupLayout.createSequentialGroup()
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblUser)
-						.addComponent(lblAmount))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(textFieldAmount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(242, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap(296, Short.MAX_VALUE)
-					.addComponent(btnAdd)
-					.addGap(69))
+						.addComponent(btnAdd)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblUser)
+								.addComponent(lblAmount))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(textFieldAmount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(151, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -105,9 +106,9 @@ public class PanelAddTransactionWithComboBoxCategoryAndUsername extends JPanel{
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblAmount)
 						.addComponent(textFieldAmount, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(29)
+					.addGap(18)
 					.addComponent(btnAdd)
-					.addGap(27))
+					.addGap(38))
 		);
 		setLayout(groupLayout);
 

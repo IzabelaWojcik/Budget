@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import org.javatuples.Triplet;
 
 import javafx.util.Pair;
-import learning.budget.views.AddPanelToAddTransactionListener;
+import learning.budget.views.AddPanelToAddTransactionWithComboBoxCategoryListener;
 import learning.budget.views.FillPanelTransactionWithThreeLabelsListener;
 import learning.budget.views.FillPanelTransactionWithTwoLabelsListener;
 import learning.budget.views.SumOfTransactionAmountListener;
@@ -160,7 +160,7 @@ public class GenerateComponents {
 						.collect(Collectors.toList());
 				
 				List<String> expenditureCategoryNameList = listFilter.filterCategoryByBudgetId(expenditureCategoryNameIdBudgetPairList, budgetId);
-				AddPanelToAddTransactionListener addPanelToAddTransactionListener = new AddPanelToAddTransactionListener(expenditureCategoryNameList, panelAddExpenditure);
+				AddPanelToAddTransactionWithComboBoxCategoryListener addPanelToAddTransactionListener = new AddPanelToAddTransactionWithComboBoxCategoryListener(expenditureCategoryNameList, panelAddExpenditure);
 				
 				for (int i = 0; i < listOfMonths.size(); i++) {
 					int month = listOfMonths.get(i);
