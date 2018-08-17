@@ -36,7 +36,6 @@ public class GenerateComponents {
 	private HashMap<Integer, String> expenditureCategoryMap;
 	private HashMap<Integer, String> savingsCategoryMap;
 	private static String yearAndMonth;
-	private ComboBoxAction comboBoxAction;
 	private Sort sort;
 	private ArrayList<Transaction> expenditureObjectListWithItsId;
 	private ArrayList<Transaction> savingsObjectListWithItsId;
@@ -57,7 +56,6 @@ public class GenerateComponents {
 		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
 		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDataBase();
 		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDataBase();
-		comboBoxAction = new ComboBoxAction(databaseReader);
 		listFilter = new ListFilter();
 		fillcomponentsWithDataFromDatabase = new FillComponentsFromDataInDatabase();
 		expenditureCategoryNameIdBudgetPairList = databaseReader.readCategoryNameWithBudgetIdFromDatabase("Expenditure_category");
@@ -70,10 +68,7 @@ public class GenerateComponents {
 	}
 
 	protected void generateButtonsWithBudgetsNames(JPanel panelAddOtherIncome, JPanel panelAddExpenditure, JPanel panelWithBudgetsName, JPanel panelWithYears,
-			JPanel panelWithMonths, JPanel panelUsersIncome, JPanel panelBudget, JPanel panelBudgetEmpty,
-			JPanel panelOtherIncomeView, JComboBox<String> comboBoxUsers, JComboBox<String> comboBoxOtherIncome,
-			JComboBox<String> comboBoxExpenditureCategory, JComboBox<String> comboBoxSavings, JPanel panelExpenditureView,
-			JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum, JLabel labelSavingsSum,
+			JPanel panelWithMonths, JPanel panelUsersIncome, JPanel panelBudget, JPanel panelBudgetEmpty,JPanel panelOtherIncomeView, JPanel panelExpenditureView, JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum, JLabel labelSavingsSum,
 			JLabel labelOtherIncomeSum, JLabel labelIncomeSum) {
 
 		int budgetCurrentId;
@@ -83,7 +78,6 @@ public class GenerateComponents {
 			panelWithBudgetsName.add(jButtonBudgetName);
 			generateYearButtonsAfterClickingBudgetNamesButtons(panelAddOtherIncome, panelAddExpenditure, jButtonBudgetName, budgetCurrentId, panelWithYears,
 					panelWithMonths, panelUsersIncome, panelBudget, panelBudgetEmpty, panelOtherIncomeView,
-					comboBoxUsers, comboBoxOtherIncome, comboBoxExpenditureCategory, comboBoxSavings,
 					panelExpenditureView, panelSavingsView, lblInform, lblExpenditureSum, labelSavingsSum,
 					labelOtherIncomeSum, labelIncomeSum);
 		}
@@ -93,17 +87,14 @@ public class GenerateComponents {
 	
 	private void generateYearButtonsAfterClickingBudgetNamesButtons(JPanel panelAddOtherIncome, JPanel panelAddExpenditure, JButton button, int budgetId, JPanel panelWithYears,
 			JPanel panelWithMonths, JPanel panelUsersIncome, JPanel panelBudget, JPanel panelBudgetEmpty,
-			JPanel panelOtherIncomeView, JComboBox<String> comboBoxUsers, JComboBox<String> comboBoxOtherIncome,
-			JComboBox<String> comboBoxExpenditureCategory, JComboBox<String> comboBoxSavings,
-			JPanel panelExpenditureView, JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum,
+			JPanel panelOtherIncomeView,JPanel panelExpenditureView, JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum,
 			JLabel labelSavingsSum, JLabel labelOtherIncomeSum, JLabel labelIncomeSum) {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelBudget.setVisible(false);
 				panelBudgetEmpty.setVisible(true);
 
-				List<Container> components = Arrays.asList(lblInform, panelWithYears, panelWithMonths, panelUsersIncome, panelOtherIncomeView, panelExpenditureView, panelSavingsView, comboBoxUsers,
-						comboBoxOtherIncome, comboBoxExpenditureCategory, comboBoxSavings);
+				List<Container> components = Arrays.asList(lblInform, panelWithYears, panelWithMonths, panelUsersIncome, panelOtherIncomeView, panelExpenditureView, panelSavingsView);
 
 				components.stream().forEach(c -> {c.removeAll();});
 				
@@ -125,14 +116,6 @@ public class GenerateComponents {
 					}
 
 				}
-				try {
-					comboBoxAction.writeUsersToComboBox(comboBoxUsers, budgetId);
-					comboBoxAction.writeOtherIncomeCategoryToComboBox(comboBoxOtherIncome, budgetId);
-
-				} catch (DatabaseNotInitialized e1) {
-					e1.printStackTrace();
-				}
-				
 				components.stream().forEach(c -> {c.revalidate(); c.repaint();});
 			}
 		});
