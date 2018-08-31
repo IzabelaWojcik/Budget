@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 public class PanelUserIncome extends JPanel {
 	JLabel userName;
 	JFormattedTextField salary;
-	ErrorLabel errorLabel;
+	ErrorLabelPropertyChangeListener errorLabel;
 
 	public PanelUserIncome(String _userName) {
 		userName = new JLabel(_userName, JLabel.RIGHT);
@@ -24,7 +24,7 @@ public class PanelUserIncome extends JPanel {
 		add(userName);
 		add(salary);
 
-		errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+		errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(130, 20), JLabel.LEFT);
 		salary.addPropertyChangeListener(errorLabel);
 		add(errorLabel);
 

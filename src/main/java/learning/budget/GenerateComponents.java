@@ -22,8 +22,10 @@ import org.javatuples.Triplet;
 import javafx.util.Pair;
 import learning.budget.views.AddPanelToAddTransactionWithComboBoxCategoryAndUserListener;
 import learning.budget.views.AddPanelToAddTransactionWithComboBoxCategoryListener;
+import learning.budget.views.AddTransactionToDatabaseListener;
 import learning.budget.views.FillPanelTransactionWithThreeLabelsListener;
 import learning.budget.views.FillPanelTransactionWithTwoLabelsListener;
+import learning.budget.views.PanelAddTransactionWithComboBoxCategory;
 import learning.budget.views.SumOfTransactionAmountListener;
 
 public class GenerateComponents {
@@ -44,6 +46,9 @@ public class GenerateComponents {
 	private JButton jButtonWithMonthName;
 	private List<Pair<Integer, String>> expenditureCategoryNameIdBudgetPairList;
 	private List<UsersObject> usersObjectList;
+	//FIXME do i use it and that name is bad
+	public static int id;
+	private List<Triplet<Integer, Integer, String>> categoryNameBudgetIdTripletList;
 
 	public GenerateComponents(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
 		databaseReader = _databaseReader;
@@ -60,21 +65,29 @@ public class GenerateComponents {
 		fillcomponentsWithDataFromDatabase = new FillComponentsFromDataInDatabase();
 		expenditureCategoryNameIdBudgetPairList = databaseReader.readCategoryNameWithBudgetIdFromDatabase("Expenditure_category");
 		usersObjectList = databaseReader.readUsersFromDatabase();
+		categoryNameBudgetIdTripletList = databaseReader.readCategoryNameCategoryIdAndBudgetIdFromDatabase("Expenditure_category");
 		sort = new Sort();
 	}
 	
 	public String getYearAndMonth() {
 		return yearAndMonth;
 	}
-
-	protected void generateButtonsWithBudgetsNames(JPanel panelAddOtherIncome, JPanel panelAddExpenditure, JPanel panelWithBudgetsName, JPanel panelWithYears,
+//FIXME DO i use it?
+	public int  getId() {
+		return id;
+	}
+	
+		protected void generateButtonsWithBudgetsNames(JPanel panelAddOtherIncome, JPanel panelAddExpenditure, JPanel panelWithBudgetsName, JPanel panelWithYears,
 			JPanel panelWithMonths, JPanel panelUsersIncome, JPanel panelBudget, JPanel panelBudgetEmpty,JPanel panelOtherIncomeView, JPanel panelExpenditureView, JPanel panelSavingsView, JLabel lblInform, JLabel lblExpenditureSum, JLabel labelSavingsSum,
 			JLabel labelOtherIncomeSum, JLabel labelIncomeSum) {
 
-		int budgetCurrentId;
+		int budgetCurrentId = 0;
+		
 		for (Entry<Integer, String> entry : budgetIdNameMap.entrySet()) {
 			budgetCurrentId = entry.getKey();
 			JButton jButtonBudgetName = new JButton(entry.getValue());
+			
+		
 			panelWithBudgetsName.add(jButtonBudgetName);
 			generateYearButtonsAfterClickingBudgetNamesButtons(panelAddOtherIncome, panelAddExpenditure, jButtonBudgetName, budgetCurrentId, panelWithYears,
 					panelWithMonths, panelUsersIncome, panelBudget, panelBudgetEmpty, panelOtherIncomeView,
@@ -93,7 +106,9 @@ public class GenerateComponents {
 			public void actionPerformed(ActionEvent e) {
 				panelBudget.setVisible(false);
 				panelBudgetEmpty.setVisible(true);
-
+				//FIXME DO i use it?
+				id = budgetId;
+				
 				List<Container> components = Arrays.asList(lblInform, panelWithYears, panelWithMonths, panelUsersIncome, panelOtherIncomeView, panelExpenditureView, panelSavingsView);
 
 				components.stream().forEach(c -> {c.removeAll();});
@@ -145,17 +160,23 @@ public class GenerateComponents {
 						&& uio.getCategoryId() == INCOME_TYPE_SALARY)
 						.collect(Collectors.toList());
 				
-				List<String> expenditureCategoryNameList = listFilter.filterCategoryByBudgetId(expenditureCategoryNameIdBudgetPairList, budgetId);
-				AddPanelToAddTransactionWithComboBoxCategoryListener addPanelToAddTransactionWithComboBoxCategoryListener = new AddPanelToAddTransactionWithComboBoxCategoryListener(expenditureCategoryNameList, panelAddExpenditure);
-				List<String> otherIncomeCategoryNameList = listFilter.filterIncomeCategoryByIncomeType(incomeCategoryMap, budgetId);
+				//List<String> expenditureCategoryNameList = listFilter.filterCategoryByBudgetId(expenditureCategoryNameIdBudgetPairList, budgetId);
+				//AddPanelToAddTransactionWithComboBoxCategoryListener addPanelToAddTransactionWithComboBoxCategoryListener = new AddPanelToAddTransactionWithComboBoxCategoryListener(expenditureCategoryNameList, panelAddExpenditure);
+				//
+				HashMap<Integer, String> expenditureCategoryHashMap = listFilter.filterCategoryByBudgetId(categoryNameBudgetIdTripletList, budgetId);
+				//PanelAddTransactionWithComboBoxCategory panelAddTransaction = new PanelAddTransactionWithComboBoxCategory(expenditureCategoryHashMap);
+				AddPanelToAddTransactionWithComboBoxCategoryListener addPanelToAddTransactionWithComboBoxCategoryListener = new AddPanelToAddTransactionWithComboBoxCategoryListener(expenditureCategoryHashMap, panelAddExpenditure, databaseWriter, budgetId, "Expenditure");
+				//
+				
+				List<String> otherIncomeCategoryNameList = listFilter.filterIncomeCategoryByIncomeType(incomeCategoryMap);
 				List<String> usersNameList = listFilter.filterUsersByBudgetId(usersObjectList, budgetId);
 				AddPanelToAddTransactionWithComboBoxCategoryAndUserListener addPanelToAddTransactionWithComboBoxCategoryAndUserNameListener = new AddPanelToAddTransactionWithComboBoxCategoryAndUserListener(otherIncomeCategoryNameList, usersNameList, panelAddOtherIncome);
-				
+						
 				for (int i = 0; i < listOfMonths.size(); i++) {
 					int month = listOfMonths.get(i);
 					//FIXME only what need to be in loop stays in the loop 
 					
-					String monthName = dataFormatter.changeMonhNumberFromMonthName(month);
+					String monthName = DataFormatter.changeMonhNumberFromMonthName(month);
 					jButtonWithMonthName = new JButton(monthName + "");
 					panelWithMonths.add(jButtonWithMonthName);
 
@@ -189,6 +210,7 @@ public class GenerateComponents {
 					});
 				}
 				components.stream().forEach(c -> {c.revalidate(); c.repaint();});
+				getId();
 			}
 		});
 	}

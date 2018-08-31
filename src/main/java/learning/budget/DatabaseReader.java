@@ -148,6 +148,23 @@ public class DatabaseReader implements IDatabaseReader{
 		return categoryBudgetIdPair;
 	}
 	
+	public List<Triplet<Integer, Integer, String>> readCategoryNameCategoryIdAndBudgetIdFromDatabase(String tablename) throws DatabaseNotInitialized{
+		List<Triplet<Integer, Integer, String>>  categoryNameIdBudgetIdTripletList = new ArrayList<>();
+		try{
+			ResultSet rs = getDataFromTable(tablename);
+			while(rs.next()){
+				int idCategory = rs.getInt(1);
+				int idBudget = rs.getInt(3);
+				String categoryName = rs.getString(2);
+				Triplet<Integer, Integer, String> triplet = new Triplet<>(idBudget, idCategory, categoryName);
+				categoryNameIdBudgetIdTripletList.add(triplet);	
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return categoryNameIdBudgetIdTripletList;
+	}
+	
 	public HashMap<Integer, String> readBudgetIdNameFromDatabase() throws DatabaseNotInitialized{
 		String tablename = "Budget_name";
 		HashMap<Integer, String> budgetInNameMap = new HashMap<Integer, String>();

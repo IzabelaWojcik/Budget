@@ -5,36 +5,43 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import com.toedter.calendar.JDateChooser;
+import learning.budget.IDatabaseWriter;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import org.javatuples.Quintet;
 
 public class PanelAddTransactionWithComboBoxCategory extends JPanel{
 	private JFormattedTextField  textFieldAmount;
 	
-	public PanelAddTransactionWithComboBoxCategory(List<String> categoryList) {
+	public PanelAddTransactionWithComboBoxCategory(HashMap<Integer, String> categoryHashMap, IDatabaseWriter databaseWriter, int clickedBudgetId, String tablename) {
 		JLabel lblDate = new JLabel("Data:");
 		JLabel lblCategory = new JLabel("Kategoria:");
 		JLabel lblAmount = new JLabel("Kwota:");
 		JDateChooser dateChooser = new JDateChooser();
 		JComboBox<String> comboBoxCategory = new JComboBox<String>();
 		JButton btnAdd = new JButton("Dodaj");
-		
-		ErrorLabel errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(130, 20), JLabel.LEFT);
 	
+		//FIXME Format for decimal .00 or cash
 		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
 		textFieldAmount.setColumns(10);
 		textFieldAmount.addPropertyChangeListener(errorLabel);
 		
-		for (String category : categoryList) {
-			comboBoxCategory.addItem(category);
-		}
+		for(Entry<Integer, String> e: categoryHashMap.entrySet()) {
+			comboBoxCategory.addItem(e.getValue());
+	    }
 		
+		Quintet<JFormattedTextField, JDateChooser, JComboBox<String>, Integer, String> quintet = new Quintet<JFormattedTextField, JDateChooser, JComboBox<String>, Integer, String>(textFieldAmount, dateChooser, comboBoxCategory, clickedBudgetId, tablename);
+		AddTransactionToDatabaseListener addTransactionToDatabaseListener = new AddTransactionToDatabaseListener(databaseWriter, categoryHashMap, comboBoxCategory, quintet);
+		btnAdd.addActionListener(addTransactionToDatabaseListener);
+			
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)

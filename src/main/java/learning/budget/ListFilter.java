@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+
+import org.javatuples.Triplet;
+
 import javafx.util.Pair;
 
 public class ListFilter {
@@ -32,19 +35,29 @@ public class ListFilter {
 		return transactions;
 	}
 
-	public List<String> filterCategoryByBudgetId(List<Pair<Integer, String>> categoryNameBudgetIdList, int budgetIdClicked) {
-		ArrayList<String> categoryList = new ArrayList<String>();
-		for (Pair<Integer, String> entry : categoryNameBudgetIdList) {
-			if (entry.getKey() == budgetIdClicked) {
-				if (!categoryList.contains(entry.getValue())) {
-					categoryList.add(entry.getValue());
-				}
+//	public List<String> filterCategoryByBudgetId(List<Pair<Integer, String>> categoryNameBudgetIdList, int budgetIdClicked) {
+//		ArrayList<String> categoryList = new ArrayList<String>();
+//		for (Pair<Integer, String> entry : categoryNameBudgetIdList) {
+//			if (entry.getKey() == budgetIdClicked) {
+//				if (!categoryList.contains(entry.getValue())) {
+//					categoryList.add(entry.getValue());
+//				}
+//			}
+//		}
+//		return categoryList;
+//	}
+	
+	public HashMap<Integer, String> filterCategoryByBudgetId(List<Triplet<Integer, Integer, String>> categoryNameBudgetIdTripletList, int budgetIdClicked) {
+		HashMap<Integer, String> categoryMap = new HashMap<Integer, String>();
+		for (Triplet<Integer, Integer, String> entry : categoryNameBudgetIdTripletList) {
+			if (entry.getValue0() == budgetIdClicked) {
+					categoryMap.put(entry.getValue1(), entry.getValue2());
 			}
 		}
-		return categoryList;
+		return categoryMap;
 	}
 	
-	public List<String> filterIncomeCategoryByIncomeType(HashMap<Integer, String> categoryNameAndIdHashmap, int budgetIdClicked) {
+	public List<String> filterIncomeCategoryByIncomeType(HashMap<Integer, String> categoryNameAndIdHashmap) {
 		ArrayList<String> categoryList = new ArrayList<String>();
 		for (Entry<Integer, String> entry: categoryNameAndIdHashmap.entrySet()) {
 			if(entry.getKey() != INCOME_TYPE_SALARY) {

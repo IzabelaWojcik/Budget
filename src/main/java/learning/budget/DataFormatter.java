@@ -23,7 +23,7 @@ public class DataFormatter {
 		return formattedAmountWithDotInsteadComa;
 	}
 
-	public String changeMonhNumberFromMonthName(int monthNumber) {
+	public static String changeMonhNumberFromMonthName(int monthNumber) {
 		String month = "";
 		if (monthNumber == 1)
 			month = "Styczeń";
@@ -52,7 +52,7 @@ public class DataFormatter {
 		return month;
 	}
 
-	public java.sql.Date dateSqlFormatterForJDateChooser(JDateChooser dateChooser) throws ParseException {
+	public static java.sql.Date dateSqlFormatterForJDateChooser(JDateChooser dateChooser) throws ParseException {
 		dateChooser.setDateFormatString("dd-MM-yyyy");
 		String dateFromDateChooser = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -62,7 +62,7 @@ public class DataFormatter {
 	}
 
 	//TODO check if I need so many date formating
-	public LocalDate dateLocalFormatterForJDateChooser(JDateChooser dateChooser) throws ParseException {
+	public static LocalDate dateLocalFormatterForJDateChooser(JDateChooser dateChooser) throws ParseException {
 		dateChooser.setDateFormatString("dd-MM-yyyy");
 		String dateFromDateChooser = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");

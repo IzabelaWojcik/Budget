@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class PanelButtonBudgetName extends JPanel{
+public class PanelButtonsBudgetName extends JPanel{
 	//FIXME its only create buttons, they dont do anything, action listener needed
 	// budgetCurrentId isnt use here
 	public void fillPanelWithBudgetsButtons(HashMap<Integer, String> budgetIdNameMap) {

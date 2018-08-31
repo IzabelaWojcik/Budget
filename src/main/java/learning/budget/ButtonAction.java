@@ -342,7 +342,7 @@ public class ButtonAction extends GenerateComponents {
 		}
 		return monthFromClickedButton;
 	}
-
+//FIXME it is static in GetId class
 	public int getUserIdFromUserMap(JComboBox<String> cbUser) {
 		int idUser = 0;
 		String userName = cbUser.getSelectedItem().toString();

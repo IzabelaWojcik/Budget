@@ -8,8 +8,8 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 
-public class ErrorLabel extends JLabel implements PropertyChangeListener {
-	ErrorLabel(Color color, Dimension dimension, int alignment) {
+public class ErrorLabelPropertyChangeListener extends JLabel implements PropertyChangeListener {
+	ErrorLabelPropertyChangeListener(Color color, Dimension dimension, int alignment) {
 		setForeground(color);
 		setPreferredSize(dimension);
 		setHorizontalAlignment(alignment);
@@ -19,7 +19,7 @@ public class ErrorLabel extends JLabel implements PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		JFormattedTextField field = (JFormattedTextField)evt.getSource();
 
-		if((field.isValid() && field.isEditValid())|| field.getText().isEmpty())
+		if((field.isValid() && field.isEditValid()) || field.getText().isEmpty())
 		{
 			setText("");
 		}

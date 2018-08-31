@@ -20,7 +20,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class PanelAddTransactionWithComboBoxCategoryAndUsername extends JPanel{
 	private  JFormattedTextField textFieldAmount;
-	private ErrorLabel errorLabel;
+	private ErrorLabelPropertyChangeListener errorLabel;
 	private JComboBox<String> comboBoxUser;
 	
 	public PanelAddTransactionWithComboBoxCategoryAndUsername(List<String> categoryList, List<String> usersList) {
@@ -33,7 +33,7 @@ public class PanelAddTransactionWithComboBoxCategoryAndUsername extends JPanel{
 		JButton btnAdd = new JButton("Dodaj");
 		comboBoxUser = new JComboBox<String>();
 		
-		errorLabel = new ErrorLabel(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+		errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(130, 20), JLabel.LEFT);
 		
 		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
 		textFieldAmount.setColumns(10);
