@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import javax.swing.GroupLayout;
@@ -28,7 +29,10 @@ public class PanelAddTransactionWithComboBoxCategory extends JPanel{
 		JComboBox<String> comboBoxCategory = new JComboBox<String>();
 		JButton btnAdd = new JButton("Dodaj");
 		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(130, 20), JLabel.LEFT);
-	
+
+		Date date = new Date();
+		dateChooser.setDate(date);
+
 		//FIXME Format for decimal .00 or cash
 		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
 		textFieldAmount.setColumns(10);
