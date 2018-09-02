@@ -46,10 +46,12 @@ public class AddTransactionToDatabaseListener implements ActionListener{
 				throw new NullPointerException("database not init");
 			}
 			
-			_databaseWriter.writeExpenditureOrSavingsToDatabase(Double.parseDouble(quintet.getValue0().getText()), localDate, categoryId, quintet.getValue3(), quintet.getValue4());
+			_databaseWriter.writeExpenditureOrSavingsToDatabase(Double.parseDouble(quintet.getValue0().getText().replace(',', '.')), localDate, categoryId, quintet.getValue3(), quintet.getValue4());
 
 		} catch (ParseException e1) {
-		JOptionPane.showMessageDialog(null, "Wybierz datę");
+			JOptionPane.showMessageDialog(null, "Wybierz datę");
+		}catch (java.lang.NumberFormatException e2) {
+			JOptionPane.showMessageDialog(null, "poprawny format #.##");
 		}
 		
 		quintet.getValue0().setText("");

@@ -3,8 +3,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.beans.PropertyChangeListener;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -28,13 +27,12 @@ public class PanelAddTransactionWithComboBoxCategory extends JPanel{
 		JDateChooser dateChooser = new JDateChooser();
 		JComboBox<String> comboBoxCategory = new JComboBox<String>();
 		JButton btnAdd = new JButton("Dodaj");
-		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(170, 20), JLabel.LEFT);
 
 		Date date = new Date();
 		dateChooser.setDate(date);
 
-		//FIXME Format for decimal .00 or cash
-		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
+		textFieldAmount = new JFormattedTextField(DecimalFormat.getInstance());
 		textFieldAmount.setColumns(10);
 		textFieldAmount.addPropertyChangeListener(errorLabel);
 		
@@ -98,9 +96,5 @@ public class PanelAddTransactionWithComboBoxCategory extends JPanel{
 					.addGap(29))
 		);
 		setLayout(groupLayout);
-	}
-	
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		textFieldAmount.addPropertyChangeListener(listener);
 	}
 }
