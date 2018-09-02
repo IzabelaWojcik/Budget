@@ -43,7 +43,7 @@ public class PanelAddTransactionWithComboBoxCategory extends JPanel{
 	    }
 		
 		Quintet<JFormattedTextField, JDateChooser, JComboBox<String>, Integer, String> quintet = new Quintet<JFormattedTextField, JDateChooser, JComboBox<String>, Integer, String>(textFieldAmount, dateChooser, comboBoxCategory, clickedBudgetId, tablename);
-		AddTransactionToDatabaseListener addTransactionToDatabaseListener = new AddTransactionToDatabaseListener(databaseWriter, categoryHashMap, comboBoxCategory, quintet);
+		AddTransactionToDatabaseListener addTransactionToDatabaseListener = new AddTransactionToDatabaseListener(databaseWriter, categoryHashMap, quintet);
 		btnAdd.addActionListener(addTransactionToDatabaseListener);
 			
 		GroupLayout groupLayout = new GroupLayout(this);

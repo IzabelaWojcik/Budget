@@ -18,13 +18,11 @@ public class AddTransactionToDatabaseListener implements ActionListener{
 	private IDatabaseWriter _databaseWriter;
 	private Quintet<JFormattedTextField, JDateChooser, JComboBox<String>, Integer, String> quintet;
 	private HashMap<Integer, String> categoryMap;
-	private JComboBox<String> categoryComboBox;
 	
-	public AddTransactionToDatabaseListener(IDatabaseWriter databaseWriter, HashMap<Integer, String> categoryHashMap, JComboBox<String> comboBoxCategory, Quintet<JFormattedTextField, JDateChooser, JComboBox<String>, Integer, String> quintetElementsToDatabaseWriter) {
+	public AddTransactionToDatabaseListener(IDatabaseWriter databaseWriter, HashMap<Integer, String> categoryHashMap, Quintet<JFormattedTextField, JDateChooser, JComboBox<String>, Integer, String> quintetElementsToDatabaseWriter) {
 		_databaseWriter = databaseWriter;
 		quintet = quintetElementsToDatabaseWriter;
 		categoryMap = categoryHashMap;
-		categoryComboBox = comboBoxCategory;
 	}
 
 	@Override
@@ -33,7 +31,7 @@ public class AddTransactionToDatabaseListener implements ActionListener{
 		int categoryId = 0;
 		
 		for(Entry<Integer, String> entry: categoryMap.entrySet()) {
-			if(entry.getValue().equals(categoryComboBox.getSelectedItem())) {
+			if(entry.getValue().equals(quintet.getValue2().getSelectedItem())) {
 				categoryId = entry.getKey();
 			}
 		}
@@ -54,7 +52,6 @@ public class AddTransactionToDatabaseListener implements ActionListener{
 		JOptionPane.showMessageDialog(null, "Wybierz datę");
 		}
 		
-		categoryComboBox.setSelectedIndex(0);
 		quintet.getValue0().setText("");
 	}
 }
