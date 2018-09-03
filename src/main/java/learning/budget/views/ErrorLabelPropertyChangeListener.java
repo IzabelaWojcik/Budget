@@ -25,7 +25,7 @@ public class ErrorLabelPropertyChangeListener extends JLabel implements Property
 		}
 		else
 		{
-			setText("Poprawny format #.##");
+			setText("Poprawny format #,##");
 		}
 	}
 
