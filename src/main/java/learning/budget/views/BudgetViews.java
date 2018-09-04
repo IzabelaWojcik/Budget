@@ -514,8 +514,26 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		generateButtonsWithBudgetsNames(panelAddOtherIncome, panelAddExpenditure, panelBudgetName, panelMainBudgetsFromAllYears, panelMainWithMonthsInYear, panelTest, panelMonthlyBudget, panelMonthlyBudgetEmpty, panelOtherIncomeView, panelExpenditureView, panelSavingsView, lblInform, lblexpenditureSum, lblSavingsSum, lblOtherIncomeSum, lblIncomeSum);
 		panelUsersIncome.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		textFieldValidator.valueIsANumberForOneTextField(textFieldOtherIncome, lblIncomeOtherError, btnAddOtherIncome);
-		textFieldValidator.valueIsANumberForOneTextField(textFieldSavingsAmount, lblErrorAddSavings, btnSavingsAdd);
+		handleUserInput(textFieldOtherIncome.getText(), btnAddOtherIncome, lblIncomeOtherError);
+		handleUserInput(textFieldSavingsAmount.getText(), btnSavingsAdd, lblErrorAddSavings);
+	}
+
+	private void handleUserInput(String input, JButton button, JLabel label){
+		if (textFieldValidator.validate(input)) {
+			enableButton(button, label);
+		} else {
+			disableButtonAndDisplayError(button, label);
+		}
+	}
+
+	private void enableButton(JButton button, JLabel label) {
+		label.setText("");
+		button.setEnabled(true);
+	}
+
+	private void disableButtonAndDisplayError(JButton button, JLabel label) {
+		label.setText("Poprawny format #.##");
+		button.setEnabled(false);
 	}
 	
 	public void poprzednieBudzetyPanel(){

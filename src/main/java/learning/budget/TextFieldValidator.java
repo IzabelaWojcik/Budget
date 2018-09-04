@@ -7,6 +7,12 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class TextFieldValidator {
+	private final Pattern doubleNumber = Pattern.compile("^[0-9]{0,9}\\.[0-9]{0,2}$");
+	private final Pattern number = Pattern.compile("^[0-9]{0,9}");
+
+	public boolean validate(String str){
+		return doubleNumber.matcher(str).matches() || number.matcher(str).matches();
+	}
 
 	//FIXME: this method should only validate passed string - it should not fill JLabel and it should not have control on button
 	public boolean valueIsANumberForGeneratedTextFields(String str, JLabel lblError, JButton button) {
@@ -18,24 +24,6 @@ public class TextFieldValidator {
 		Matcher regexMatcher2 = pattern2.matcher(str);
 		if (regexMatcher1.matches() || regexMatcher2.matches()) {
 			lblError.setText("");
-		} else {
-			lblError.setText("Poprawny format #.##");
-			button.setEnabled(false);
-		}
-		return true;
-	}
-
-	public boolean valueIsANumberForOneTextField(JTextField textField, JLabel lblError, JButton button) {
-		String str = textField.getText();
-		String number_pattern1 = "^[0-9]{0,9}\\.[0-9]{0,2}$";
-		String number_pattern2 = "^[0-9]{0,9}";
-		Pattern pattern1 = Pattern.compile(number_pattern1);
-		Pattern pattern2 = Pattern.compile(number_pattern2);
-		Matcher regexMatcher1 = pattern1.matcher(str);
-		Matcher regexMatcher2 = pattern2.matcher(str);
-		if (regexMatcher1.matches() || regexMatcher2.matches()) {
-			lblError.setText("");
-			button.setEnabled(true);
 		} else {
 			lblError.setText("Poprawny format #.##");
 			button.setEnabled(false);
