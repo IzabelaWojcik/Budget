@@ -3,6 +3,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JLabel;
+
+import learning.budget.DataFormatter;
 import learning.budget.SumAmount;
 import learning.budget.Transaction;
 
@@ -18,6 +20,8 @@ public class SumOfTransactionAmountListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		sumLabel.removeAll();
-		sumLabel.setText(SumAmount.sumAmount(list));
+
+		Double sum = list.stream().mapToDouble(Transaction::getAmount).sum();
+		sumLabel.setText(DataFormatter.setAmountFormat(sum));
 	}
 }

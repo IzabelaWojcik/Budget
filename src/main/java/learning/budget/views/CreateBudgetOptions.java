@@ -2100,27 +2100,24 @@ public class CreateBudgetOptions extends JDialog {
 						String value = currentField.getText().toString();
 						boolean currentFieldIsEmptyOrHasOnlySpaces = textFieldValidator.checkIfTextFieldIsEmpty(currentField);
 
-						int userNameIsUnique = 0;
+						boolean userNameIsUnique = false;
 						try {
-							userNameIsUnique = checkIfUserNameIsUniqueName(currentField.getText());
+							userNameIsUnique = databaseReader.readUsersFromDatabasetoHashMap().containsValue(currentField.getText());
 						} catch (DatabaseNotInitialized e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						if(userNameIsUnique != 1){
+						if(userNameIsUnique){
 							JOptionPane.showMessageDialog(null, "Nazwa unytkownika musi byn unikalna");
 						}
 						
-						if(userNameIsUnique == 1 && currentFieldIsEmptyOrHasOnlySpaces == false){
+						if(userNameIsUnique && !currentFieldIsEmptyOrHasOnlySpaces){
 							usersMap.put(key, value);
 						}else{
 							btnDalej1.setEnabled(false);
 						}
-						if (usersMap.size() == userNumber && currentFieldIsEmptyOrHasOnlySpaces == false) {
-							btnDalej1.setEnabled(true);
-						} else {
-							btnDalej1.setEnabled(false);
-						}
+						
+						btnDalej1.setEnabled(usersMap.size() == userNumber && !currentFieldIsEmptyOrHasOnlySpaces);
 					}
 
 				});
@@ -2247,16 +2244,6 @@ public class CreateBudgetOptions extends JDialog {
 			}
 		}
 		return true;
-	}
-	
-	private int checkIfUserNameIsUniqueName(String userName) throws DatabaseNotInitialized{
-		HashMap<Integer, String> userIdNameMap = databaseReader.readUsersFromDatabasetoHashMap();
-		for(Entry<Integer, String> entry: userIdNameMap.entrySet()){
-			if(userName.equals(entry.getValue())){
-				return 0;
-			}
-		}
-		return 1;
 	}
 	
 	private void writeDataToDatabase() throws DatabaseNotInitialized{

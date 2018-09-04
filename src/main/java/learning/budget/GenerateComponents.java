@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
@@ -113,14 +115,11 @@ public class GenerateComponents {
 
 				components.stream().forEach(c -> {c.removeAll();});
 				
-				HashMap<Integer, ArrayList<Integer>> mapOfYearsInConcreteBudgetId = sort
-						.sortYearsInConcredeBudgetId(usersIncomeObjectList);
-				for (Entry<Integer, ArrayList<Integer>> entry : mapOfYearsInConcreteBudgetId.entrySet()) {
+				Map<Integer, TreeSet<Integer>> budgetsToYears = sort.sortYearsInConcredeBudgetId(usersIncomeObjectList);
+				for (Entry<Integer, TreeSet<Integer>> entry : budgetsToYears.entrySet()) {
 					Integer idBudget = entry.getKey();
-					int sizeOfListOfYears = entry.getValue().size();
 					if (idBudget == budgetId) {
-						for (int i = 0; i < sizeOfListOfYears; i++) {
-							int year = entry.getValue().get(i);
+						for(Integer year : entry.getValue()) {
 							JButton jButtonWithYear = new JButton(year + "");
 							panelWithYears.add(jButtonWithYear);
 							generateMonthsButtonsForConcreteYearAfterClickingYearButton(panelAddOtherIncome, panelAddExpenditure, jButtonWithYear, idBudget,

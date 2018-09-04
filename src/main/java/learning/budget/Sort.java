@@ -3,31 +3,29 @@ package learning.budget;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.time.LocalDate;
 
 public class Sort {
 	
-	public HashMap<Integer, ArrayList<Integer>> sortYearsInConcredeBudgetId(ArrayList<Transaction> usersIncomeObjectList){
-		HashMap<Integer, ArrayList<Integer>> mapOfBudgetIdAndYears = new HashMap<Integer, ArrayList<Integer>>();
-		for(Transaction uio: usersIncomeObjectList) {
-			int idBudget = uio.getBudgetId();
-			LocalDate date = uio.getDate();
-			int year = date.getYear();
-			if (!mapOfBudgetIdAndYears.containsKey(idBudget)) {
-				ArrayList<Integer> listOfYears = new ArrayList<Integer>();
-				listOfYears.add(year);
-				mapOfBudgetIdAndYears.put(idBudget, listOfYears);
-			} else {
-				ArrayList<Integer> listOfYears = mapOfBudgetIdAndYears.get(idBudget);
-				if (!listOfYears.contains(year)) {
-					listOfYears.add(year);
-					Collections.sort(listOfYears, Collections.reverseOrder());
-					mapOfBudgetIdAndYears.put(idBudget, listOfYears);
-				}
+	public Map<Integer, TreeSet<Integer>> sortYearsInConcredeBudgetId(ArrayList<Transaction> usersIncomeObjectList) {
+		Map<Integer, TreeSet<Integer>> budgetsToYears = new TreeMap<Integer, TreeSet<Integer>>();
+		for (Transaction uio : usersIncomeObjectList) {
+			if (!budgetsToYears.containsKey(uio.getBudgetId())) {
+				TreeSet<Integer> listOfYears = new TreeSet<Integer>();
+				budgetsToYears.put(uio.getBudgetId(), listOfYears);
 			}
+
+			SortedSet<Integer> years = budgetsToYears.get(uio.getBudgetId());
+			years.add(uio.getDate().getYear());
 		}
-		return mapOfBudgetIdAndYears;
+		return budgetsToYears;
 	}
 	
 	public ArrayList<Integer> sortMonthsForConcreteYearAndBudgetId(ArrayList<Transaction> usersIncomeObjectList, int budgetId, int year) {

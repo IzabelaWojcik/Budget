@@ -26,11 +26,7 @@ public class TextFieldValidator {
 	}
 
 	public boolean checkIfTextFieldIsEmpty(JTextField textField) {
-		if (textField.getText() == null || textField.getText().isEmpty() || textField.getText().trim().isEmpty()
-				|| textField.getText().length() < 2) {
-			return true;
-		} else {
-			return false;
-		}
+		return textField.getText() == null || textField.getText().isEmpty() || textField.getText().trim().isEmpty()
+				|| textField.getText().length() < 2;
 	}
 }
