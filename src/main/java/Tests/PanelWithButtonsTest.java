@@ -27,4 +27,18 @@ public class PanelWithButtonsTest {
 		assertEquals("a", listener.receivedData);
 	}
 
+	@Test
+	public void when_userClicksOneOfButtons_then_registerdListenerRecivesItsName() {
+		SortedSet<String> names = new TreeSet<String>() {{add("a"); add("b"); add("c");}};
+		PanelWithButtonsTestable panel = new PanelWithButtonsTestable(names);
+		Map<String, JButton> buttonNameToButton = panel.getButton();
+		
+		ListenerStub listener = new ListenerStub();
+		panel.register(listener);
+		
+		buttonNameToButton.get("c").doClick();
+		
+		assertEquals("c", listener.receivedData);
+	}
+
 }
