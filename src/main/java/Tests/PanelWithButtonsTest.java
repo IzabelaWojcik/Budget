@@ -2,6 +2,7 @@ package Tests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -24,7 +25,7 @@ public class PanelWithButtonsTest {
 		
 		buttonNameToButton.get("a").doClick();
 		
-		assertEquals("a", listener.receivedData);
+		assertEquals(Arrays.asList("a"), listener.receivedData);
 	}
 
 	@Test
@@ -38,7 +39,22 @@ public class PanelWithButtonsTest {
 		
 		buttonNameToButton.get("c").doClick();
 		
-		assertEquals("c", listener.receivedData);
+		assertEquals(Arrays.asList("c"), listener.receivedData);
 	}
 
+	@Test
+	public void when_userClicksTwoOfButtons_then_registerdListenerRecivesItsNamesInCorrectOrder() {
+		SortedSet<String> names = new TreeSet<String>() {{add("a"); add("b"); add("c");}};
+		PanelWithButtonsTestable panel = new PanelWithButtonsTestable(names);
+		Map<String, JButton> buttonNameToButton = panel.getButton();
+		
+		ListenerStub listener = new ListenerStub();
+		panel.register(listener);
+		
+		buttonNameToButton.get("b").doClick();
+		buttonNameToButton.get("a").doClick();
+		buttonNameToButton.get("a").doClick();
+		
+		assertEquals(Arrays.asList("b", "a", "a"), listener.receivedData);
+	}
 }
