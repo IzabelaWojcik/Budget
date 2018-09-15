@@ -12,8 +12,8 @@ import learning.budget.views.PanelWithButtons;
 
 public class PanelWithButtonsTestable extends PanelWithButtons {
 
-	public PanelWithButtonsTestable(SortedSet<String> buttonsNames) {
-		super(buttonsNames);
+	public PanelWithButtonsTestable(String identifier, SortedSet<String> buttonsNames) {
+		super(identifier, buttonsNames);
 	}
 
 	public Map<String, JButton> getButton(){

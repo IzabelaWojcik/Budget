@@ -10,6 +10,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.javatuples.Triplet;
 
@@ -273,5 +275,14 @@ public class DatabaseReader implements IDatabaseReader{
 			e.printStackTrace();
 		}
 		return savingsObjectList;
+	}
+
+	public List<Transaction> readBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized {
+		List<Transaction> savings = readSavingsFromDataBase();
+		List<Transaction> income = readIncomefromDatabase();
+		List<Transaction> expenditure = readExpenditureFromDataBase();
+		Stream<Transaction> transactions = Stream.concat(Stream.concat(savings.stream(), income.stream()), expenditure.stream());
+		
+		return transactions.filter(t -> t.getBudgetId() == budgetId).collect(Collectors.toList());
 	}
 }

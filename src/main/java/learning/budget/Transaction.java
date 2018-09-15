@@ -106,4 +106,8 @@ public class Transaction {
 	public String getCategoryName() {
 		return nameOfTransactionCategory;
 	}
+	
+	public int getYear() {
+		return getDate().getYear();
+	}
 }
