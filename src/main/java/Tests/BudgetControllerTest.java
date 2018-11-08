@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import javax.swing.JButton;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -22,6 +25,8 @@ import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import Tests.Helpers.GetButtonsHelper;
+import Tests.Helpers.PanelForRemove;
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.DatabaseReader;
 import learning.budget.IDatabaseReader;
@@ -30,7 +35,7 @@ import learning.budget.views.BudgetController;
 import learning.budget.views.PanelWithButtons;
 
 public class BudgetControllerTest {
-
+	
 	HashMap<Integer, String> budgetIdToName = new HashMap<Integer, String>() {{put(1, "a"); put(2, "b"); put(3, "c");}};
 	BudgetController budgetController;
 	
@@ -65,31 +70,48 @@ public class BudgetControllerTest {
 		verify(panelWithBudget).createButtons(expectedButtonNames);
 	}
 
-	@Test
-	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
-		initializeController();
-		
-		int clickedBudgetId = 1, categoryId = 1; 
-		double amount = 10.0;
-		List<Transaction> transactions = new ArrayList<Transaction>(){{
-			add(new Transaction(categoryId, amount, LocalDate.parse("2016-01-01"), clickedBudgetId)); 
-			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
-			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
-			add(new Transaction(categoryId, amount, LocalDate.parse("2015-03-15"), clickedBudgetId));
-			}};
-
-		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
-		
-		budgetController.notify(panelWithBudget.identifier, "a");
-		
-		verify(panelWithYears).createButtons(new TreeSet<String>() {{add("2016"); add("2017"); add("2015");}});
-	}
+//	@Test
+//	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
+//		initializeController();
+//		
+//		int clickedBudgetId = 1, categoryId = 1; 
+//		double amount = 10.0;
+//		List<Transaction> transactions = new ArrayList<Transaction>(){{
+//			add(new Transaction(categoryId, amount, LocalDate.parse("2016-01-01"), clickedBudgetId)); 
+//			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
+//			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
+//			add(new Transaction(categoryId, amount, LocalDate.parse("2015-03-15"), clickedBudgetId));
+//			}};
+//
+//		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
+//		
+//		budgetController.notify(panelWithBudget.identifier, "a");
+//		
+//		verify(panelWithYears).createButtons(new TreeSet<String>() {{add("2016"); add("2017"); add("2015");}});
+//	}
 
 	private void initializeController() throws DatabaseNotInitialized {
 		when(databaseForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
 		budgetController.initializePanelBudget();
 	}
 	
-
+	@Test 
+	public void getButtonsText_getButtonsFromPanel_returnButtonsTextList() throws DatabaseNotInitialized {
+		GetButtonsHelper getButtonsHelper = new GetButtonsHelper();
+		PanelForRemove panelForRemove = new PanelForRemove();
+		
+		JButton b1 = new JButton("2018");
+		JButton b2 = new JButton("2019");
+		JButton b3 = new JButton("2020");
+		Set<String> setExpected = new TreeSet<String>();
+		setExpected.add(b1.getText());
+		setExpected.add(b2.getText());
+		setExpected.add(b3.getText());
+		
+		Set<String> setActual = getButtonsHelper.getButtonsText(panelForRemove);
+		
+		assertEquals(setExpected, setActual);
+		
+	}
 
 }
