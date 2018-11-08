@@ -70,25 +70,25 @@ public class BudgetControllerTest {
 		verify(panelWithBudget).createButtons(expectedButtonNames);
 	}
 
-//	@Test
-//	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
-//		initializeController();
-//		
-//		int clickedBudgetId = 1, categoryId = 1; 
-//		double amount = 10.0;
-//		List<Transaction> transactions = new ArrayList<Transaction>(){{
-//			add(new Transaction(categoryId, amount, LocalDate.parse("2016-01-01"), clickedBudgetId)); 
-//			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
-//			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
-//			add(new Transaction(categoryId, amount, LocalDate.parse("2015-03-15"), clickedBudgetId));
-//			}};
-//
-//		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
-//		
-//		budgetController.notify(panelWithBudget.identifier, "a");
-//		
-//		verify(panelWithYears).createButtons(new TreeSet<String>() {{add("2016"); add("2017"); add("2015");}});
-//	}
+	@Test
+	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
+		initializeController();
+		
+		int clickedBudgetId = 1, categoryId = 1; 
+		double amount = 10.0;
+		List<Transaction> transactions = new ArrayList<Transaction>(){{
+			add(new Transaction(categoryId, amount, LocalDate.parse("2016-01-01"), clickedBudgetId)); 
+			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
+			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
+			add(new Transaction(categoryId, amount, LocalDate.parse("2015-03-15"), clickedBudgetId));
+			}};
+
+		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
+		
+		budgetController.notify(panelWithBudget.identifier, "a");
+		
+		verify(panelWithYears).createButtons(new TreeSet<String>() {{add("2016"); add("2017"); add("2015");}});
+	}
 
 	private void initializeController() throws DatabaseNotInitialized {
 		when(databaseForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
