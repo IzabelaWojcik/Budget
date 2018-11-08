@@ -110,4 +110,8 @@ public class Transaction {
 	public int getYear() {
 		return getDate().getYear();
 	}
+	
+	public int getMonth() {
+		return getDate().getMonthValue();
+	}
 }

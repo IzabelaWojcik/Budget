@@ -66,6 +66,23 @@ public class BudgetController implements IListener{
 										.collect(Collectors.toSet());
 			panelWithYears.createButtons(new TreeSet<String>(years));
 		}
+		else if(notifierId == panelWithYears.identifier)
+		{
+			/////TODO 
+		}
+		//notify(1, "123");
+		//notify(2, "styczen");
+	}
+	
+	public void getMonthsForConcreteYear(String notifierId) {
+		if(notifierId == panelWithYears.identifier)
+		{
+			Set<String> months = transactions.stream()
+										.map(Transaction::getMonth)
+										.map(month -> month.toString())
+										.collect(Collectors.toSet());
+			panelWithMonths.createButtons(new TreeSet<String>(months));
+		}
 	}
 
 }

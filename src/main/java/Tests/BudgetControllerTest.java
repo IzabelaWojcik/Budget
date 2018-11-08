@@ -66,7 +66,7 @@ public class BudgetControllerTest {
 	}
 
 	@Test
-	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAdnCreateButtons() throws DatabaseNotInitialized {
+	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
 		initializeController();
 		
 		int clickedBudgetId = 1, categoryId = 1; 
@@ -89,5 +89,7 @@ public class BudgetControllerTest {
 		when(databaseForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
 		budgetController.initializePanelBudget();
 	}
+	
+
 
 }
