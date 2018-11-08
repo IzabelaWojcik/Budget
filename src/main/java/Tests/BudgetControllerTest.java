@@ -103,10 +103,12 @@ public class BudgetControllerTest {
 	public void notify_redMonthsFromDatabase_controllerRedMonthsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
 		initializeController();
 		
+		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
+		
 		budgetController.notify(panelWithBudget.identifier, "budzet1");
 		budgetController.notify(panelWithYears.identifier, "2017");
 		
-		verify(panelWithMonths).createButtons(new TreeSet<String>() {{add("02"); add("03"); add("12");}});
+		verify(panelWithMonths).createButtons(new TreeSet<String>() {{add("2"); add("3"); add("12");}});
 	}
 
 	private void initializeController() throws DatabaseNotInitialized {

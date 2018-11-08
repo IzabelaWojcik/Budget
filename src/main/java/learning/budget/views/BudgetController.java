@@ -1,5 +1,6 @@
 package learning.budget.views;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,6 +19,10 @@ public class BudgetController implements IListener{
 	private IDatabaseReader databaseReader;
 	private Map<Integer, String> budgetIdToName;
 	private List<Transaction> transactions;
+	private List<Transaction> transactionsForConcreteBudgetYearAndMonth;
+	private String clickedYear;
+	private String clickedMonth;
+	private String clickedBudgetName;
 	
 	public BudgetController(IDatabaseReader databaseReader, PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths) {
 		panelWithBudget = panelBudget;
@@ -51,11 +56,10 @@ public class BudgetController implements IListener{
 	public void notify(String notifierId, String data) {
 		if(notifierId == panelWithBudget.identifier)
 		{
-			String budgetName = data;
+			clickedBudgetName = data;
 			try {
-				transactions = databaseReader.readBudgetFromDatabase(getBudgetId(budgetName));
+				transactions = databaseReader.readBudgetFromDatabase(getBudgetId(clickedBudgetName));
 			} catch (DatabaseNotInitialized e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return;
 			}
@@ -68,21 +72,25 @@ public class BudgetController implements IListener{
 		}
 		else if(notifierId == panelWithYears.identifier)
 		{
-			/////TODO 
-		}
-		//notify(1, "123");
-		//notify(2, "styczen");
-	}
-	
-	public void getMonthsForConcreteYear(String notifierId) {
-		if(notifierId == panelWithYears.identifier)
-		{
+			clickedYear = data;
+			
 			Set<String> months = transactions.stream()
+										.filter(t -> t.getYear() == Integer.parseInt(clickedYear))
 										.map(Transaction::getMonth)
 										.map(month -> month.toString())
 										.collect(Collectors.toSet());
-			panelWithMonths.createButtons(new TreeSet<String>(months));
+			panelWithMonths.createButtons(new TreeSet<String>(months)); 
 		}
+	
+				
+				
+	
+				//TODO in next case:
+//				clickedMonth = data;
+//				List<Transaction> transactionsForConcreteBudgetYearAndMonth = transactions.stream()
+//											.filter(t -> t.getYear() == Integer.getInteger(clickedYear))
+//											.filter(t -> t.getMonth() == Integer.getInteger(clickedMonth))
+//											.collect(Collectors.toList());
 	}
-
+	
 }
