@@ -36,8 +36,11 @@ import learning.budget.views.PanelWithButtons;
 
 public class BudgetControllerTest {
 	
-	HashMap<Integer, String> budgetIdToName = new HashMap<Integer, String>() {{put(1, "a"); put(2, "b"); put(3, "c");}};
+	HashMap<Integer, String> budgetIdToName = new HashMap<Integer, String>() {{put(1, "budzet1"); put(2, "budzet2"); put(3, "budzet3");}};
 	BudgetController budgetController;
+	int clickedBudgetId, categoryId;
+	double amount;
+	List<Transaction> transactions;
 	
 	@Mock
 	IDatabaseReader databaseForTest;
@@ -54,6 +57,21 @@ public class BudgetControllerTest {
 	public void setup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		budgetController = new BudgetController(databaseForTest, panelWithBudget, panelWithYears, panelWithMonths);
 		setIdentifier(panelWithBudget, "panelWithButtons");
+		
+		clickedBudgetId = 1;
+		categoryId = 1; 
+		amount = 10.0;
+		
+		transactions = new ArrayList<Transaction>(){{
+			add(new Transaction(categoryId, amount, LocalDate.parse("2016-01-01"), clickedBudgetId)); 
+			add(new Transaction(categoryId, amount, LocalDate.parse("2017-02-14"), clickedBudgetId)); 
+			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
+			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
+			add(new Transaction(categoryId, amount, LocalDate.parse("2017-12-01"), clickedBudgetId));
+			add(new Transaction(categoryId, amount, LocalDate.parse("2015-05-15"), clickedBudgetId));
+			}};
+			
+		
 	}
 
 	private void setIdentifier(PanelWithButtons panel, String identifier) throws NoSuchFieldException, IllegalAccessException {
@@ -73,28 +91,27 @@ public class BudgetControllerTest {
 	@Test
 	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
 		initializeController();
-		
-		int clickedBudgetId = 1, categoryId = 1; 
-		double amount = 10.0;
-		List<Transaction> transactions = new ArrayList<Transaction>(){{
-			add(new Transaction(categoryId, amount, LocalDate.parse("2016-01-01"), clickedBudgetId)); 
-			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
-			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
-			add(new Transaction(categoryId, amount, LocalDate.parse("2015-03-15"), clickedBudgetId));
-			}};
 
 		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
 		
-		budgetController.notify(panelWithBudget.identifier, "a");
+		budgetController.notify(panelWithBudget.identifier, "budzet1");
 		
 		verify(panelWithYears).createButtons(new TreeSet<String>() {{add("2016"); add("2017"); add("2015");}});
+	}
+	
+	@Test
+	public void notify_redMonthsFromDatabase_controllerRedMonthsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
+		initializeController();
+		
+		budgetController.notify(panelWithBudget.identifier, "budzet1");
+		budgetController.notify(panelWithYears.identifier, "2017");
+		
+		verify(panelWithMonths).createButtons(new TreeSet<String>() {{add("02"); add("03"); add("12");}});
 	}
 
 	private void initializeController() throws DatabaseNotInitialized {
 		when(databaseForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
 		budgetController.initializePanelBudget();
 	}
-	
-
 
 }
