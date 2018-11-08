@@ -27,9 +27,9 @@ public class GetButtonsTextHelperTest {
 		setExpected.add(b2.getText());
 		setExpected.add(b3.getText());
 		
-		Set<String> setActual = getButtonsHelper.getButtonsText(panelForRemove);
+		Set<String> setActualForgetButtonsText = getButtonsHelper.getButtonsText(panelForRemove);
+		Set<String> setActualForgetButtonsText2 = getButtonsHelper.getButtonsText2(panelForRemove);
 		
-		assertEquals(setExpected, setActual);
-		
+		assertEquals(setExpected, setActualForgetButtonsText2);
 	}
 }
