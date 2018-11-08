@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 
 
-public class GetButtonsHelper {
+public class GetButtonsTextHelper {
 	
 	public Set<String> getButtonsText(JPanel panel){
 		Set<String> buttons = new TreeSet<String>();

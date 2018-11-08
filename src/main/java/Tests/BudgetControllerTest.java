@@ -25,7 +25,7 @@ import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import Tests.Helpers.GetButtonsHelper;
+import Tests.Helpers.GetButtonsTextHelper;
 import Tests.Helpers.PanelForRemove;
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.DatabaseReader;
@@ -95,23 +95,6 @@ public class BudgetControllerTest {
 		budgetController.initializePanelBudget();
 	}
 	
-	@Test 
-	public void getButtonsText_getButtonsFromPanel_returnButtonsTextList() throws DatabaseNotInitialized {
-		GetButtonsHelper getButtonsHelper = new GetButtonsHelper();
-		PanelForRemove panelForRemove = new PanelForRemove();
-		
-		JButton b1 = new JButton("2018");
-		JButton b2 = new JButton("2019");
-		JButton b3 = new JButton("2020");
-		Set<String> setExpected = new TreeSet<String>();
-		setExpected.add(b1.getText());
-		setExpected.add(b2.getText());
-		setExpected.add(b3.getText());
-		
-		Set<String> setActual = getButtonsHelper.getButtonsText(panelForRemove);
-		
-		assertEquals(setExpected, setActual);
-		
-	}
+
 
 }
