@@ -3,62 +3,67 @@ package Tests;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.JButton;
 
 import org.javatuples.Pair;
 import org.junit.Test;
-import Tests.Helpers.PanelWithButtonsTestable;
+
+import Tests.Helpers.GetButtonsTextHelper;
 import Tests.Stub.ListenerStub;
+import learning.budget.views.ButtonsData;
+import learning.budget.views.PanelWithButtons;
 
 public class PanelWithButtonsTest {
-	
+	public int panelWithButtonsIdentyfier = 1;
 	@Test
 	public void when_userClicksButton_then_registerdListenerRecivesItsName() {
 		SortedSet<String> names = new TreeSet<String>() {{add("a");}};
-		PanelWithButtonsTestable panel = new PanelWithButtonsTestable("buttons", names);
-		Map<String, JButton> buttonNameToButton = panel.getButton();
+		PanelWithButtons panel = new PanelWithButtons(panelWithButtonsIdentyfier, names);
+		List<JButton> buttons = GetButtonsTextHelper.getButtons2(panel);
 		
 		ListenerStub listener = new ListenerStub();
 		panel.register(listener);
 		
-		buttonNameToButton.get("a").doClick();
+		buttons.get(0).doClick();
 		
-		assertEquals(Arrays.asList(new Pair<String, String>("buttons", "a")), listener.receivedData);
+		assertEquals(Arrays.asList(new ButtonsData(panelWithButtonsIdentyfier, "a")), listener.receivedData);
 	}
 
 	@Test
 	public void when_userClicksOneOfButtons_then_registerdListenerRecivesItsName() {
 		SortedSet<String> names = new TreeSet<String>() {{add("a"); add("b"); add("c");}};
-		PanelWithButtonsTestable panel = new PanelWithButtonsTestable("buttons", names);
-		Map<String, JButton> buttonNameToButton = panel.getButton();
+		PanelWithButtons panel = new PanelWithButtons(panelWithButtonsIdentyfier, names);
+		List<JButton> buttons = GetButtonsTextHelper.getButtons2(panel);
 		
 		ListenerStub listener = new ListenerStub();
 		panel.register(listener);
 		
-		buttonNameToButton.get("c").doClick();
+		buttons.get(2).doClick();
 		
-		assertEquals(Arrays.asList(new Pair<String, String>("buttons", "c")), listener.receivedData);
+		assertEquals(Arrays.asList(new ButtonsData(panelWithButtonsIdentyfier, "c")), listener.receivedData);
 	}
 
 	@Test
 	public void when_userClicksTwoOfButtons_then_registerdListenerRecivesItsNamesInCorrectOrder() {
 		SortedSet<String> names = new TreeSet<String>() {{add("a"); add("b"); add("c");}};
-		PanelWithButtonsTestable panel = new PanelWithButtonsTestable("buttons", names);
-		Map<String, JButton> buttonNameToButton = panel.getButton();
+		PanelWithButtons panel = new PanelWithButtons(panelWithButtonsIdentyfier, names);
+		List<JButton> buttons = GetButtonsTextHelper.getButtons2(panel);
 		
 		ListenerStub listener = new ListenerStub();
 		panel.register(listener);
 		
-		buttonNameToButton.get("b").doClick();
-		buttonNameToButton.get("a").doClick();
-		buttonNameToButton.get("a").doClick();
+		buttons.get(1).doClick();
+		buttons.get(0).doClick();
+		buttons.get(0).doClick();
 		
-		assertEquals(Arrays.asList(new Pair<String, String>("buttons", "b"), 
-								   new Pair<String, String>("buttons", "a"), 
-								   new Pair<String, String>("buttons", "a")), 
+		assertEquals(Arrays.asList(new ButtonsData(panelWithButtonsIdentyfier, "b"), 
+									new ButtonsData(panelWithButtonsIdentyfier, "a"), 
+									new ButtonsData(panelWithButtonsIdentyfier, "a")), 
 				listener.receivedData);
 	}
 }

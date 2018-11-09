@@ -6,11 +6,13 @@ import java.util.List;
 import org.javatuples.Pair;
 
 import learning.budget.views.IListener;
+import learning.budget.views.NotificationData;
 
 public class ListenerStub implements IListener{
-	public List<Pair<String, String>> receivedData = new ArrayList<>();
+	public List<NotificationData> receivedData = new ArrayList<>();
 
-	public void notify(String notifierId, String data) {
-		receivedData.add(new Pair<>(notifierId, data));
+	@Override
+	public void notify(NotificationData notificationData) {
+		receivedData.add(notificationData);
 	}
 }

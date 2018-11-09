@@ -1,6 +1,5 @@
 package learning.budget.views;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -53,10 +52,11 @@ public class BudgetController implements IListener{
 	}
 	
 	@Override
-	public void notify(String notifierId, String data) {
-		if(notifierId == panelWithBudget.identifier)
+	public void notify(NotificationData notificationData) {
+		if(notificationData.notifierId == panelWithBudget.identifier)
 		{
-			clickedBudgetName = data;
+			ButtonsData buttonsData = (ButtonsData) notificationData;
+			clickedBudgetName = buttonsData.name;
 			try {
 				transactions = databaseReader.readBudgetFromDatabase(getBudgetId(clickedBudgetName));
 			} catch (DatabaseNotInitialized e) {
@@ -70,9 +70,10 @@ public class BudgetController implements IListener{
 										.collect(Collectors.toSet());
 			panelWithYears.createButtons(new TreeSet<String>(years));
 		}
-		else if(notifierId == panelWithYears.identifier)
+		else if(notificationData.notifierId == panelWithYears.identifier)
 		{
-			clickedYear = data;
+			ButtonsData buttonsData = (ButtonsData) notificationData;
+			clickedYear = buttonsData.name;
 			
 			Set<String> months = transactions.stream()
 										.filter(t -> t.getYear() == Integer.parseInt(clickedYear))

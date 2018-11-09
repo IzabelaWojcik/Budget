@@ -32,6 +32,7 @@ import learning.budget.DatabaseReader;
 import learning.budget.IDatabaseReader;
 import learning.budget.Transaction;
 import learning.budget.views.BudgetController;
+import learning.budget.views.ButtonsData;
 import learning.budget.views.PanelWithButtons;
 
 public class BudgetControllerTest {
@@ -56,7 +57,7 @@ public class BudgetControllerTest {
 	@Before
 	public void setup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		budgetController = new BudgetController(databaseForTest, panelWithBudget, panelWithYears, panelWithMonths);
-		setIdentifier(panelWithBudget, "panelWithButtons");
+		setIdentifier(panelWithBudget, 123);
 		
 		clickedBudgetId = 1;
 		categoryId = 1; 
@@ -74,7 +75,7 @@ public class BudgetControllerTest {
 		
 	}
 
-	private void setIdentifier(PanelWithButtons panel, String identifier) throws NoSuchFieldException, IllegalAccessException {
+	private void setIdentifier(PanelWithButtons panel, int identifier) throws NoSuchFieldException, IllegalAccessException {
 		Field budgetIdField = PanelWithButtons.class.getField("identifier");
 		budgetIdField.setAccessible(true);
 		budgetIdField.set(panel, identifier);
@@ -94,7 +95,7 @@ public class BudgetControllerTest {
 
 		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
 		
-		budgetController.notify(panelWithBudget.identifier, "budzet1");
+		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
 		
 		verify(panelWithYears).createButtons(new TreeSet<String>() {{add("2016"); add("2017"); add("2015");}});
 	}
@@ -105,8 +106,8 @@ public class BudgetControllerTest {
 		
 		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
 		
-		budgetController.notify(panelWithBudget.identifier, "budzet1");
-		budgetController.notify(panelWithYears.identifier, "2017");
+		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
+		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
 		
 		verify(panelWithMonths).createButtons(new TreeSet<String>() {{add("2"); add("3"); add("12");}});
 	}

@@ -16,26 +16,26 @@ import javax.swing.JPanel;
 
 public class GetButtonsTextHelper {
 	
-	public Set<String> getButtonsText(JPanel panel){
-		Set<String> buttons = new TreeSet<String>();
+	public static List<JButton> getButtons(JPanel panel){
+		List<JButton> buttons = new ArrayList<>();
 		Component[] components = panel.getComponents();
 
 		for (Component component : components) {
 		    if (component.getClass().equals(JButton.class)) {
-		        buttons.add(((JButton) component).getText());
+		        buttons.add(((JButton) component));
 		    }
 		}
 		return buttons;
 	}
 
-	public Set<String> getButtonsText2(JPanel panel){
+	public static List<JButton> getButtons2(JPanel panel){
 		Component[] components = panel.getComponents();
 		
 		Stream<Component> componentsStream = Arrays.stream(components);
-		Set<String> buttons = componentsStream
+		List<JButton> buttons = componentsStream
 				.filter(c -> c.getClass().equals(JButton.class))
-				.map(c -> ((JButton) c).getText())
-				.collect(Collectors.toSet());
+				.map(c -> (JButton) c)
+				.collect(Collectors.toList());
 		
 		return buttons;
 	}
