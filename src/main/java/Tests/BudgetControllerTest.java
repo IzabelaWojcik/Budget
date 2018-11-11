@@ -33,13 +33,14 @@ import learning.budget.IDatabaseReader;
 import learning.budget.Transaction;
 import learning.budget.views.BudgetController;
 import learning.budget.views.ButtonsData;
+import learning.budget.views.PanelAddTransaction;
 import learning.budget.views.PanelWithButtons;
 
 public class BudgetControllerTest {
 	
 	HashMap<Integer, String> budgetIdToName = new HashMap<Integer, String>() {{put(1, "budzet1"); put(2, "budzet2"); put(3, "budzet3");}};
 	BudgetController budgetController;
-	int clickedBudgetId, categoryId;
+	int clickedBudgetId, categoryId1, categoryId2;
 	double amount;
 	List<Transaction> transactions;
 	
@@ -51,32 +52,43 @@ public class BudgetControllerTest {
 	PanelWithButtons panelWithYears;
 	@Mock
 	PanelWithButtons panelWithMonths;
+	@Mock
+	PanelAddTransaction panelAddTransactinon;
 	
 	@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 	@Before
 	public void setup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		budgetController = new BudgetController(databaseForTest, panelWithBudget, panelWithYears, panelWithMonths);
+		budgetController = new BudgetController(databaseForTest, panelWithBudget, panelWithYears, panelWithMonths, panelAddTransactinon);
 		setIdentifier(panelWithBudget, 123);
+		setIdentifier(panelWithYears, 124);
+		setIdentifier(panelWithMonths, 125);
+		setIdentifier(panelAddTransactinon, 126);
 		
 		clickedBudgetId = 1;
-		categoryId = 1; 
+		categoryId1 = 1; 
+		categoryId2 = 2; 
 		amount = 10.0;
 		
 		transactions = new ArrayList<Transaction>(){{
-			add(new Transaction(categoryId, amount, LocalDate.parse("2016-01-01"), clickedBudgetId)); 
-			add(new Transaction(categoryId, amount, LocalDate.parse("2017-02-14"), clickedBudgetId)); 
-			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
-			add(new Transaction(categoryId, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
-			add(new Transaction(categoryId, amount, LocalDate.parse("2017-12-01"), clickedBudgetId));
-			add(new Transaction(categoryId, amount, LocalDate.parse("2015-05-15"), clickedBudgetId));
+			add(new Transaction(categoryId1, amount, LocalDate.parse("2016-01-01"), clickedBudgetId)); 
+			add(new Transaction(categoryId1, amount, LocalDate.parse("2017-02-14"), clickedBudgetId)); 
+			add(new Transaction(categoryId1, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
+			add(new Transaction(categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
+			add(new Transaction(categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId));
+			add(new Transaction(categoryId1, amount, LocalDate.parse("2017-12-01"), clickedBudgetId));
+			add(new Transaction(categoryId1, amount, LocalDate.parse("2015-05-15"), clickedBudgetId));
 			}};
-			
-		
 	}
 
 	private void setIdentifier(PanelWithButtons panel, int identifier) throws NoSuchFieldException, IllegalAccessException {
 		Field budgetIdField = PanelWithButtons.class.getField("identifier");
+		budgetIdField.setAccessible(true);
+		budgetIdField.set(panel, identifier);
+	}
+	
+	private void setIdentifier(PanelAddTransaction panel, int identifier) throws NoSuchFieldException, IllegalAccessException {
+		Field budgetIdField = PanelAddTransaction.class.getField("identifier");
 		budgetIdField.setAccessible(true);
 		budgetIdField.set(panel, identifier);
 	}
@@ -110,6 +122,19 @@ public class BudgetControllerTest {
 		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
 		
 		verify(panelWithMonths).createButtons(new TreeSet<String>() {{add("2"); add("3"); add("12");}});
+	}
+	
+	@Test
+	public void notify_fillCategoryFromTransactionList_controllerTakeCategoryFromListAndPassItToMethodFillingComboBox() throws DatabaseNotInitialized {
+		initializeController();
+			
+		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
+		
+		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
+		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
+		budgetController.notify(new ButtonsData(panelWithMonths.identifier, "3"));
+		
+		verify(panelAddTransactinon).fillComboBox( new ArrayList<String>() {{add("1"); add("2");}});
 	}
 
 	private void initializeController() throws DatabaseNotInitialized {
