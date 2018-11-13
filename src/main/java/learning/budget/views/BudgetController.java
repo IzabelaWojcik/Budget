@@ -1,5 +1,6 @@
 package learning.budget.views;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,7 +19,9 @@ public class BudgetController implements IListener{
 	private PanelAddTransaction panelToAddTransaction;
 	private IDatabaseReader databaseReader;
 	private Map<Integer, String> budgetIdToName;
-	private List<Transaction> transactions;
+	private int budgetId;
+	private List<LocalDate> dates;
+	private List<Transaction> expenditures;
 	private List<Transaction> transactionsForConcreteBudgetYearAndMonth;
 	private String clickedYear;
 	private String clickedMonth;
@@ -68,17 +71,24 @@ public class BudgetController implements IListener{
 	private void handlePanelWithBudgetNotification(NotificationData notificationData) {
 		ButtonsData buttonsData = (ButtonsData) notificationData;
 		clickedBudgetName = buttonsData.name;
+		
+		for(Entry<Integer, String> entry: budgetIdToName.entrySet()) {
+				if(entry.getValue() == clickedBudgetName) {
+					budgetId = entry.getKey();
+				}
+		}
+		
 		try {
-			transactions = databaseReader.readAllTransactionsForConcreteBudgetFromDatabase(getBudgetId(clickedBudgetName));
+			dates = databaseReader.readDatesForBudgetFromDatabase(budgetId);
 		} catch (DatabaseNotInitialized e) {
 			e.printStackTrace();
 			return;
 		}
 		
-		Set<String> years = transactions.stream()
-									.map(Transaction::getYear)
-									.map(year -> year.toString())
-									.collect(Collectors.toSet());
+		Set<String> years = dates.stream()
+								.map(LocalDate::getYear)
+								.map(year -> year.toString())
+								.collect(Collectors.toSet());
 		panelWithYears.createButtons(new TreeSet<String>(years));
 	}
 	
@@ -86,31 +96,35 @@ public class BudgetController implements IListener{
 		ButtonsData buttonsData = (ButtonsData) notificationData;
 		clickedYear = buttonsData.name;
 		
-		Set<String> months = transactions.stream()
-									.filter(t -> t.getYear() == Integer.parseInt(clickedYear))
-									.map(Transaction::getMonth)
-									.map(month -> month.toString())
-									.collect(Collectors.toSet());
+		Set<String> months = dates.stream()
+								.filter(t -> t.getYear() == Integer.parseInt(clickedYear))
+								.map(LocalDate::getMonthValue)
+								.map(month -> month.toString())
+								.collect(Collectors.toSet());
 		panelWithMonths.createButtons(new TreeSet<String>(months));
 	}
 	
 	private void handlePanelWithMonthsNotification(NotificationData notificationData) {
 		ButtonsData buttonsData = (ButtonsData) notificationData;
 		clickedMonth = buttonsData.name;
-		//TODO in next case:
 		
-		List<Transaction> transactionsForConcreteBudgetYearAndMonth = transactions.stream()
-									.filter(t -> t.getYear() == Integer.parseInt(clickedYear)
-									&& t.getMonth() == Integer.parseInt(clickedMonth))
-									.collect(Collectors.toList());
+		try {
+			expenditures = databaseReader.readConcreteTransactionsWithCategoryNameForConcreteBudget("Expenditure", "Expenditure_category", budgetId);
+			
+			List<Transaction> expendituresForConcreteYearAndMonth = expenditures.stream()
+					.filter(t -> t.getYear() == Integer.parseInt(clickedYear)
+							&& t.getMonth() == Integer.parseInt(clickedMonth))
+					.collect(Collectors.toList());
+
+			List<String> categories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId);
+			for(String s: categories) System.out.println(s);
+
+			panelToAddTransaction.fillComboBox(categories);
 		
-		List<String> categories = transactionsForConcreteBudgetYearAndMonth.stream()
-									.map(Transaction::getCategoryId)
-									.distinct()
-									.map(t -> t.toString())
-									.collect(Collectors.toList());
-		for(String s: categories) System.out.println(s);
+		} catch (DatabaseNotInitialized e) {
+			e.printStackTrace();
+			return;
+		}
 		
-		panelToAddTransaction.fillComboBox(categories);
 	}
 }

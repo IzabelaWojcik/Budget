@@ -325,15 +325,17 @@ public class DatabaseReader implements IDatabaseReader{
 							.collect(Collectors.toList());
 	}
 	
-	public List<Transaction> readTransactions(String tablenameForTransaction, String tablenameForCategory, int budgetId, int year, int month) throws DatabaseNotInitialized{
+	public List<Transaction> readConcreteTransactionsWithCategoryNameForConcreteBudget(String tablenameForTransaction, String tablenameForCategory, int budgetId) throws DatabaseNotInitialized{
 		List<Transaction> transactions = readConcreteTransactionsForAllBudgetsFromDatabase(tablenameForTransaction);
 		HashMap<Integer, String>  categories = readCategoryFromDatabase(tablenameForCategory);
 		
 		List<Transaction> transactionsForConcreteBudget = new ArrayList<>();
 		
 		for(Transaction entry: transactions) {
+			if (entry.getBudgetId() == budgetId){
 				Transaction transaction = new Transaction(entry.getTransactionId(), entry.getCategoryId(), entry.getAmount(), entry.getDate(), entry.getBudgetId(), categories.get(entry.getCategoryId()));
 				transactionsForConcreteBudget.add(transaction);
+			}
 		}
 		
 		return transactions;
