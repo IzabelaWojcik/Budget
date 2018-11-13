@@ -69,7 +69,7 @@ public class BudgetController implements IListener{
 		ButtonsData buttonsData = (ButtonsData) notificationData;
 		clickedBudgetName = buttonsData.name;
 		try {
-			transactions = databaseReader.readBudgetFromDatabase(getBudgetId(clickedBudgetName));
+			transactions = databaseReader.readAllTransactionsForConcreteBudgetFromDatabase(getBudgetId(clickedBudgetName));
 		} catch (DatabaseNotInitialized e) {
 			e.printStackTrace();
 			return;

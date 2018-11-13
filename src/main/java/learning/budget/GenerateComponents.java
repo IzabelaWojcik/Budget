@@ -61,8 +61,8 @@ public class GenerateComponents {
 		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
 		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
 		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
-		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDataBase();
-		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDataBase();
+		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDatabase();
+		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDatabase();
 		listFilter = new ListFilter();
 		fillcomponentsWithDataFromDatabase = new FillComponentsFromDataInDatabase();
 		expenditureCategoryNameIdBudgetPairList = databaseReader.readCategoryNameWithBudgetIdFromDatabase("Expenditure_category");

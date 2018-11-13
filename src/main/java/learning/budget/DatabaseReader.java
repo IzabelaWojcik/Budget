@@ -182,8 +182,8 @@ public class DatabaseReader implements IDatabaseReader{
 		}
 		return budgetInNameMap;
 	}
-//FIXME Amend names from expenditure or saving(it is under this) to transaction
-	public ArrayList<Transaction> readExpenditureFromDataBase() throws DatabaseNotInitialized{
+
+	public ArrayList<Transaction> readExpenditureFromDatabase() throws DatabaseNotInitialized{
 		String tablename = "Expenditure";
 		ArrayList<Transaction> expenditureObjectList = new ArrayList<Transaction>();
 		Transaction expenditureObject = null;
@@ -205,8 +205,8 @@ public class DatabaseReader implements IDatabaseReader{
 		}
 		return expenditureObjectList;
 	}
-
-	public ArrayList<Transaction> readExpenditureWithItsIdFromDataBase() throws DatabaseNotInitialized{
+	
+	public ArrayList<Transaction> readExpenditureWithItsIdFromDatabase() throws DatabaseNotInitialized{
 		String tablename = "Expenditure";
 		ArrayList<Transaction> expenditureObjectList = new ArrayList<Transaction>();
 		Transaction expenditureObject = null;
@@ -230,7 +230,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return expenditureObjectList;
 	}
 	
-	public ArrayList<Transaction> readSavingsFromDataBase() throws DatabaseNotInitialized{
+	public ArrayList<Transaction> readSavingsFromDatabase() throws DatabaseNotInitialized{
 		String tablename = "Savings";
 		ArrayList<Transaction> savingsObjectList = new ArrayList<Transaction>();
 		Transaction savingsObject = null;
@@ -253,7 +253,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return savingsObjectList;
 	}
 	
-	public ArrayList<Transaction> readSavingsWithItsIdFromDataBase() throws DatabaseNotInitialized{
+	public ArrayList<Transaction> readSavingsWithItsIdFromDatabase() throws DatabaseNotInitialized{
 		String tablename = "Savings";
 		ArrayList<Transaction> savingsObjectList = new ArrayList<Transaction>();
 		Transaction savingsObject = null;
@@ -277,12 +277,66 @@ public class DatabaseReader implements IDatabaseReader{
 		return savingsObjectList;
 	}
 
-	public List<Transaction> readBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized {
-		List<Transaction> savings = readSavingsFromDataBase();
+	public List<Transaction> readConcreteTransactionsForAllBudgetsFromDatabase(String tablename) throws DatabaseNotInitialized{
+		List<Transaction> transactions = new ArrayList<Transaction>();
+		Transaction transaction = null;
+		try{
+			ResultSet rs = getDataFromTable(tablename);
+			while(rs.next()){
+				int transactionId = rs.getInt(1);
+				int categoryId = rs.getInt(4);
+				int budgetId = rs.getInt(5);
+				double amount = rs.getDouble(2);
+				java.sql.Date sqlDate = rs.getDate(3);
+				
+				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				
+				transaction  = new Transaction(transactionId, categoryId, amount, localDate, budgetId);
+				transactions.add(transaction);
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return transactions;
+	}
+	
+	public List<Transaction> readAllTransactionsForConcreteBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized {
+		List<Transaction> savings = readSavingsFromDatabase();
 		List<Transaction> income = readIncomefromDatabase();
-		List<Transaction> expenditure = readExpenditureFromDataBase();
+		List<Transaction> expenditure = readExpenditureFromDatabase();
 		Stream<Transaction> transactions = Stream.concat(Stream.concat(savings.stream(), income.stream()), expenditure.stream());
 		
 		return transactions.filter(t -> t.getBudgetId() == budgetId).collect(Collectors.toList());
 	}
+	
+	public List<LocalDate> readDatesForBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized {
+		List<Transaction> transactions = readAllTransactionsForConcreteBudgetFromDatabase(budgetId);
+		return transactions.stream()
+							.map(Transaction::getDate)
+							.distinct()
+							.collect(Collectors.toList());
+	}
+	
+	public List<String> readCategoriesForBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized {
+		List<Transaction> transactions = readAllTransactionsForConcreteBudgetFromDatabase(budgetId);
+		return transactions.stream()
+							.map(Transaction::getCategoryName)
+							.distinct()
+							.collect(Collectors.toList());
+	}
+	
+	public List<Transaction> readTransactions(String tablenameForTransaction, String tablenameForCategory, int budgetId, int year, int month) throws DatabaseNotInitialized{
+		List<Transaction> transactions = readConcreteTransactionsForAllBudgetsFromDatabase(tablenameForTransaction);
+		HashMap<Integer, String>  categories = readCategoryFromDatabase(tablenameForCategory);
+		
+		List<Transaction> transactionsForConcreteBudget = new ArrayList<>();
+		
+		for(Transaction entry: transactions) {
+				Transaction transaction = new Transaction(entry.getTransactionId(), entry.getCategoryId(), entry.getAmount(), entry.getDate(), entry.getBudgetId(), categories.get(entry.getCategoryId()));
+				transactionsForConcreteBudget.add(transaction);
+		}
+		
+		return transactions;
+	}
+	
 }

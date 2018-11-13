@@ -22,17 +22,17 @@ public interface IDatabaseReader {
 	
 	public HashMap<Integer, String> readBudgetIdNameFromDatabase() throws DatabaseNotInitialized;
 
-	public ArrayList<Transaction> readExpenditureFromDataBase() throws DatabaseNotInitialized;
+	public ArrayList<Transaction> readExpenditureFromDatabase() throws DatabaseNotInitialized;
 
-	public ArrayList<Transaction> readExpenditureWithItsIdFromDataBase() throws DatabaseNotInitialized;
+	public ArrayList<Transaction> readExpenditureWithItsIdFromDatabase() throws DatabaseNotInitialized;
 
-	public ArrayList<Transaction> readSavingsFromDataBase() throws DatabaseNotInitialized;
+	public ArrayList<Transaction> readSavingsFromDatabase() throws DatabaseNotInitialized;
 
-	public ArrayList<Transaction> readSavingsWithItsIdFromDataBase() throws DatabaseNotInitialized;
+	public ArrayList<Transaction> readSavingsWithItsIdFromDatabase() throws DatabaseNotInitialized;
 	
 	public List<Pair<Integer, String>> readCategoryNameWithBudgetIdFromDatabase(String tablename) throws DatabaseNotInitialized;
 	
 	public List<Triplet<Integer, Integer, String>> readCategoryNameCategoryIdAndBudgetIdFromDatabase(String tablename) throws DatabaseNotInitialized;
 
-	public List<Transaction> readBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized;
+	public List<Transaction> readAllTransactionsForConcreteBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized;
 }

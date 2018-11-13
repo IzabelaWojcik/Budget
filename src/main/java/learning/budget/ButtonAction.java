@@ -41,12 +41,12 @@ public class ButtonAction extends GenerateComponents {
 		incomeCategoryMap = databaseReader.readCategoryFromDatabase("Income_category");
 		userIncomeObjectList = databaseReader.readIncomefromDatabase();
 		usersNameIdMap = databaseReader.readUsersFromDatabasetoHashMap();
-		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
-		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDataBase();
-		savingsObjectList = databaseReader.readSavingsFromDataBase();
+		expenditureObjectList = databaseReader.readExpenditureFromDatabase();
+		expenditureObjectListWithItsId = databaseReader.readExpenditureWithItsIdFromDatabase();
+		savingsObjectList = databaseReader.readSavingsFromDatabase();
 		expenditureCategoryMap = databaseReader.readCategoryFromDatabase("Expenditure_category");
 		savingsCategoryMap = databaseReader.readCategoryFromDatabase("Savings_category");
-		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDataBase();
+		savingsObjectListWithItsId = databaseReader.readSavingsWithItsIdFromDatabase();
 	}
 	
 	public void addOtherIncomeToDatabaseAfterClickingButton(JButton button, JComboBox<String> cbUser,
@@ -162,7 +162,7 @@ public class ButtonAction extends GenerateComponents {
 	public void refreshExpenditureView(JPanel panelExpenditureView, JComboBox<String> cbUser, int budgetId,
 			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked, JLabel lblExpenditureSum) throws DatabaseNotInitialized {
 		panelExpenditureView.removeAll();
-		expenditureObjectList = databaseReader.readExpenditureFromDataBase();
+		expenditureObjectList = databaseReader.readExpenditureFromDatabase();
 		ArrayList<Transaction> expenditureObjectSortedList = sort
 				.sortExpenditureAfterItsDay(expenditureObjectListWithItsId, yearChoosenWithButtonClicked, monthChoosenWithButtonClicked, budgetId);
 		LayoutOptions layoutOptions = new LayoutOptions();
@@ -211,7 +211,7 @@ public class ButtonAction extends GenerateComponents {
 	public void refreshSavingsView(JPanel panelSavingsView, JComboBox<String> cbUser, int budgetId,
 			int monthChoosenWithButtonClicked, int yearChoosenWithButtonClicked) throws DatabaseNotInitialized {
 		panelSavingsView.removeAll();
-		savingsObjectList = databaseReader.readSavingsFromDataBase();
+		savingsObjectList = databaseReader.readSavingsFromDatabase();
 		ArrayList<Transaction> savingsObjectSortedList = sort.sortSavingsAfterItsDay(savingsObjectListWithItsId, yearChoosenWithButtonClicked,
 				monthChoosenWithButtonClicked, budgetId);
 		LayoutOptions layoutOptions = new LayoutOptions();

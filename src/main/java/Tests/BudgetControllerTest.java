@@ -105,7 +105,7 @@ public class BudgetControllerTest {
 	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
 		initializeController();
 
-		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
+		when(databaseForTest.readAllTransactionsForConcreteBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
 		
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
 		
@@ -116,7 +116,7 @@ public class BudgetControllerTest {
 	public void notify_redMonthsFromDatabase_controllerRedMonthsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
 		initializeController();
 		
-		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
+		when(databaseForTest.readAllTransactionsForConcreteBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
 		
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
 		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
@@ -128,7 +128,7 @@ public class BudgetControllerTest {
 	public void notify_fillCategoryFromTransactionList_controllerTakeCategoryFromListAndPassItToMethodFillingComboBox() throws DatabaseNotInitialized {
 		initializeController();
 			
-		when(databaseForTest.readBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
+		when(databaseForTest.readAllTransactionsForConcreteBudgetFromDatabase(clickedBudgetId)).thenReturn(transactions);
 		
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
 		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
