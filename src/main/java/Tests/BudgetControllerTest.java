@@ -56,18 +56,24 @@ public class BudgetControllerTest {
 	@Mock
 	PanelWithButtons panelWithMonths;
 	@Mock
-	PanelAddTransaction panelAddTransaction;
+	PanelAddTransaction panelAddExpenditure;
+	@Mock
+	PanelAddTransaction panelAddSavings;
+	@Mock
+	PanelAddTransaction panelAddIncome;
 	
 	@Rule
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	
 	@Before
 	public void setup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		budgetController = new BudgetController(databaseForTest, panelWithBudget, panelWithYears, panelWithMonths, panelAddTransaction);
+		budgetController = new BudgetController(databaseForTest, 
+												panelWithBudget, panelWithYears, panelWithMonths,
+												panelAddExpenditure, panelAddSavings, panelAddIncome);
 		setIdentifier(panelWithBudget, 123);
 		setIdentifier(panelWithYears, 124);
 		setIdentifier(panelWithMonths, 125);
-		setIdentifier(panelAddTransaction, 126);
+		setIdentifier(panelAddExpenditure, 126);
 		
 		clickedBudgetId = 1;
 		categoryId1 = 1; 
@@ -161,12 +167,16 @@ public class BudgetControllerTest {
 	public void notify_fillCategoryFromTransactionList_controllerRedCategoryFromDatabaseAndPassItToMethodFillingComboBox() throws DatabaseNotInitialized {
 		initializeController();
 			
-		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId)).thenReturn(categories);
+		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
+		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
+		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.INCOME_CATEGORY)).thenReturn(categories);
 		
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
 		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
 		budgetController.notify(new ButtonsData(panelWithMonths.identifier, "3"));
 		
-		verify(panelAddTransaction).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
+		verify(panelAddExpenditure).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
+		verify(panelAddSavings).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
+		verify(panelAddIncome).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
 	}
 }

@@ -39,7 +39,7 @@ public interface IDatabaseReader {
 
 	public List<Transaction> readConcreteTransactionsForAllBudgetsFromDatabase(String tablename) throws DatabaseNotInitialized;
 	
-	public List<String> readCategoriesForBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized;
+	public List<String> readCategoriesForBudgetFromDatabase(int budgetId, String categoryTablename) throws DatabaseNotInitialized;
 	
 	public List<Transaction> readConcreteTransactionsWithCategoryNameForConcreteBudget(String tablenameForTransaction, String tablenameForCategory, int budgetId) throws DatabaseNotInitialized;
 

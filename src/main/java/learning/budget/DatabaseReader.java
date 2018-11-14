@@ -317,10 +317,11 @@ public class DatabaseReader implements IDatabaseReader{
 							.collect(Collectors.toList());
 	}
 	
-	public List<String> readCategoriesForBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized {
-		List<Transaction> transactions = readAllTransactionsForConcreteBudgetFromDatabase(budgetId);
-		return transactions.stream()
-							.map(Transaction::getCategoryName)
+	public List<String> readCategoriesForBudgetFromDatabase(int budgetId, String categoryTablename) throws DatabaseNotInitialized {
+		List<Triplet<Integer, Integer, String>> categories = readCategoryNameCategoryIdAndBudgetIdFromDatabase(categoryTablename);
+		return categories.stream()
+							.filter(c -> c.getValue0() == budgetId)
+							.map(Triplet<Integer, Integer, String>::getValue2)
 							.distinct()
 							.collect(Collectors.toList());
 	}

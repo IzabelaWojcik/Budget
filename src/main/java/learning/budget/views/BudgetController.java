@@ -15,23 +15,31 @@ import learning.budget.IDatabaseReader;
 import learning.budget.Transaction;
 
 public class BudgetController implements IListener{
+	public static final String INCOME_CATEGORY = "Income_category";
+	public static final String SAVINGS_CATEGORY = "Savings_category";
+	public static final String EXPENDITURE_CATEGORY = "Expenditure_category";
+	
 	private PanelWithButtons panelWithBudget, panelWithYears, panelWithMonths;
-	private PanelAddTransaction panelToAddTransaction;
+	private PanelAddTransaction panelToAddExpenditure, panelToAddSavings, panelToAddIncome;
 	private IDatabaseReader databaseReader;
 	private Map<Integer, String> budgetIdToName;
 	private int budgetId;
 	private List<LocalDate> dates;
-	private List<Transaction> expenditures;
+	private List<Transaction> transactions;
 	private List<Transaction> transactionsForConcreteBudgetYearAndMonth;
 	private String clickedYear;
 	private String clickedMonth;
 	private String clickedBudgetName;
 	
-	public BudgetController(IDatabaseReader databaseReader, PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, PanelAddTransaction panelAddTransaction) {
+	public BudgetController(IDatabaseReader databaseReader, 
+							PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, 
+							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddTransaction panelAddIncome) {
 		panelWithBudget = panelBudget;
 		panelWithYears = panelYears;
 		panelWithMonths = panelMonths;
-		panelToAddTransaction = panelAddTransaction;
+		panelToAddExpenditure = panelAddExpenditure;
+		panelToAddSavings = panelAddSavings;
+		panelToAddIncome = panelAddIncome;
 		
 		panelWithBudget.register(this);
 		panelWithYears.register(this);
@@ -109,22 +117,34 @@ public class BudgetController implements IListener{
 		clickedMonth = buttonsData.name;
 		
 		try {
-			expenditures = databaseReader.readConcreteTransactionsWithCategoryNameForConcreteBudget("Expenditure", "Expenditure_category", budgetId);
+			List<Transaction> expenditure = getTransactionForBudgetYearMonth("Expenditure", EXPENDITURE_CATEGORY);
+			List<Transaction> savings = getTransactionForBudgetYearMonth("Savings", SAVINGS_CATEGORY);
+			List<Transaction> income = getTransactionForBudgetYearMonth("Income", INCOME_CATEGORY);
+
+			List<String> expenditureCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, EXPENDITURE_CATEGORY);
+			panelToAddExpenditure.fillComboBox(expenditureCategories);
 			
-			List<Transaction> expendituresForConcreteYearAndMonth = expenditures.stream()
-					.filter(t -> t.getYear() == Integer.parseInt(clickedYear)
-							&& t.getMonth() == Integer.parseInt(clickedMonth))
-					.collect(Collectors.toList());
-
-			List<String> categories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId);
-			for(String s: categories) System.out.println(s);
-
-			panelToAddTransaction.fillComboBox(categories);
+			List<String> savingsCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, SAVINGS_CATEGORY);
+			panelToAddSavings.fillComboBox(savingsCategories);
+			
+			List<String> incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
+			panelToAddIncome.fillComboBox(incomeCategories);
 		
 		} catch (DatabaseNotInitialized e) {
 			e.printStackTrace();
 			return;
 		}
 		
+	}
+
+	private List<Transaction> getTransactionForBudgetYearMonth(String transactionTablename, String categoryTablename) throws DatabaseNotInitialized {
+		transactions = databaseReader.readConcreteTransactionsWithCategoryNameForConcreteBudget(transactionTablename, categoryTablename, budgetId);
+		
+		List<Transaction> transactionsForConcreteYearAndMonth = transactions.stream()
+				.filter(t -> t.getYear() == Integer.parseInt(clickedYear)
+						&& t.getMonth() == Integer.parseInt(clickedMonth))
+				.collect(Collectors.toList());
+		
+		return transactionsForConcreteYearAndMonth;
 	}
 }
