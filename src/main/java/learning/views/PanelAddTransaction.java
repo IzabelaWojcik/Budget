@@ -1,4 +1,4 @@
-package learning.budget.views;
+package learning.views;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -14,6 +14,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import com.toedter.calendar.JDateChooser;
 import learning.budget.IDatabaseWriter;
+import learning.budget.OldViews.ErrorLabelPropertyChangeListener;
+
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;

@@ -31,10 +31,10 @@ import learning.budget.DatabaseNotInitialized;
 import learning.budget.DatabaseReader;
 import learning.budget.IDatabaseReader;
 import learning.budget.Transaction;
-import learning.budget.views.BudgetController;
-import learning.budget.views.ButtonsData;
-import learning.budget.views.PanelAddTransaction;
-import learning.budget.views.PanelWithButtons;
+import learning.budget.OldViews.PanelWithButtons;
+import learning.views.BudgetController;
+import learning.views.ButtonsData;
+import learning.views.PanelAddTransaction;
 
 public class BudgetControllerTest {
 	private HashMap<Integer, String> budgetIdToName = new HashMap<Integer, String>() {{put(1, "budzet1"); put(2, "budzet2"); put(3, "budzet3");}};

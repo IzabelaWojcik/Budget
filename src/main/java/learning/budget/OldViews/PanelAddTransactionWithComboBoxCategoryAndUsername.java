@@ -1,4 +1,4 @@
-package learning.budget.views;
+package learning.budget.OldViews;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;

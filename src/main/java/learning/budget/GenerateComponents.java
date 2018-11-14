@@ -22,13 +22,13 @@ import javax.swing.JPanel;
 import org.javatuples.Triplet;
 
 import javafx.util.Pair;
-import learning.budget.views.AddPanelToAddTransactionWithComboBoxCategoryAndUserListener;
-import learning.budget.views.AddPanelToAddTransactionWithComboBoxCategoryListener;
-import learning.budget.views.AddTransactionToDatabaseListener;
-import learning.budget.views.FillPanelTransactionWithThreeLabelsListener;
-import learning.budget.views.FillPanelTransactionWithTwoLabelsListener;
-import learning.budget.views.PanelAddTransactionWithComboBoxCategory;
-import learning.budget.views.SumOfTransactionAmountListener;
+import learning.budget.OldViews.AddPanelToAddTransactionWithComboBoxCategoryAndUserListener;
+import learning.budget.OldViews.AddPanelToAddTransactionWithComboBoxCategoryListener;
+import learning.budget.OldViews.AddTransactionToDatabaseListener;
+import learning.budget.OldViews.FillPanelTransactionWithThreeLabelsListener;
+import learning.budget.OldViews.FillPanelTransactionWithTwoLabelsListener;
+import learning.budget.OldViews.PanelAddTransactionWithComboBoxCategory;
+import learning.budget.OldViews.SumOfTransactionAmountListener;
 
 public class GenerateComponents {
 	protected IDatabaseReader databaseReader;

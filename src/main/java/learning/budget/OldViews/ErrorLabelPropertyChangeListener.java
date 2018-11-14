@@ -1,4 +1,4 @@
-package learning.budget.views;
+package learning.budget.OldViews;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,7 +9,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 
 public class ErrorLabelPropertyChangeListener extends JLabel implements PropertyChangeListener {
-	ErrorLabelPropertyChangeListener(Color color, Dimension dimension, int alignment) {
+	public ErrorLabelPropertyChangeListener(Color color, Dimension dimension, int alignment) {
 		setForeground(color);
 		setPreferredSize(dimension);
 		setHorizontalAlignment(alignment);

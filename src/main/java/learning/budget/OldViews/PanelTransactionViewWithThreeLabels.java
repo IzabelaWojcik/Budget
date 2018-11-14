@@ -1,4 +1,4 @@
-package learning.budget.views;
+package learning.budget.OldViews;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

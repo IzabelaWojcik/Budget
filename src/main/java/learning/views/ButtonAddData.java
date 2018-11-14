@@ -1,4 +1,4 @@
-package learning.budget.views;
+package learning.views;
 
 import java.time.LocalDate;
 import java.util.Date;

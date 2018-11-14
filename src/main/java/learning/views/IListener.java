@@ -1,4 +1,4 @@
-package learning.budget.views;
+package learning.views;
 
 public interface IListener {
 	
