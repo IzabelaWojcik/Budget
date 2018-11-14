@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.IDatabaseReader;
 import learning.budget.Transaction;
-import learning.budget.OldViews.PanelWithButtons;
 
 public class BudgetController implements IListener{
 	public static final String INCOME_CATEGORY = "Income_category";

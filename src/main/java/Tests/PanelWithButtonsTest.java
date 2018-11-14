@@ -15,8 +15,8 @@ import org.junit.Test;
 
 import Tests.Helpers.GetButtonsTextHelper;
 import Tests.Stub.ListenerStub;
-import learning.budget.OldViews.PanelWithButtons;
 import learning.views.ButtonsData;
+import learning.views.PanelWithButtons;
 
 public class PanelWithButtonsTest {
 	public int panelWithButtonsIdentyfier = 1;

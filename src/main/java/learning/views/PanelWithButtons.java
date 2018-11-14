@@ -1,4 +1,4 @@
-package learning.budget.OldViews;
+package learning.views;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -6,10 +6,6 @@ import java.util.SortedSet;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import learning.views.ButtonsData;
-import learning.views.IListener;
-import learning.views.INotifier;
 
 public class PanelWithButtons extends JPanel implements INotifier{
 	public final int identifier;
