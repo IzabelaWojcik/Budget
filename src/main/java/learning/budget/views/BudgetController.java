@@ -44,6 +44,9 @@ public class BudgetController implements IListener{
 		panelWithBudget.register(this);
 		panelWithYears.register(this);
 		panelWithMonths.register(this);
+		panelToAddExpenditure.register(this);
+		panelToAddSavings.register(this);
+		panelToAddIncome.register(this);
 		
 		this.databaseReader = databaseReader;
 	}
