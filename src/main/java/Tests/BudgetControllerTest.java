@@ -25,7 +25,7 @@ import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import Tests.Helpers.GetButtonsTextHelper;
+import Tests.Helpers.TestHelper;
 import Tests.Helpers.PanelForRemove;
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.DatabaseReader;

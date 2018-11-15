@@ -15,6 +15,7 @@ public class PanelWithButtons extends JPanel implements INotifier{
 	
 	public PanelWithButtons(int id, SortedSet<String> buttonsNames) {
 		identifier = id;
+		listeners = new HashSet<IListener>();
 		createButtons(buttonsNames);
 	}
 
@@ -24,10 +25,7 @@ public class PanelWithButtons extends JPanel implements INotifier{
 			button.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonsData(identifier, name));});});
 			add(button);
 		}
-		
-		listeners = new HashSet<IListener>();
 	}
-
 	
 	@Override
 	public void register(IListener listener) {

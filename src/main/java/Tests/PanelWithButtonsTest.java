@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import org.javatuples.Pair;
 import org.junit.Test;
 
-import Tests.Helpers.GetButtonsTextHelper;
+import Tests.Helpers.TestHelper;
 import Tests.Stub.ListenerStub;
 import learning.views.ButtonsData;
 import learning.views.PanelWithButtons;
@@ -24,7 +24,7 @@ public class PanelWithButtonsTest {
 	public void when_userClicksButton_then_registerdListenerRecivesItsName() {
 		SortedSet<String> names = new TreeSet<String>() {{add("a");}};
 		PanelWithButtons panel = new PanelWithButtons(panelWithButtonsIdentyfier, names);
-		List<JButton> buttons = GetButtonsTextHelper.getButtons2(panel);
+		List<JButton> buttons = TestHelper.getButtons2(panel);
 		
 		ListenerStub listener = new ListenerStub();
 		panel.register(listener);
@@ -38,7 +38,7 @@ public class PanelWithButtonsTest {
 	public void when_userClicksOneOfButtons_then_registerdListenerRecivesItsName() {
 		SortedSet<String> names = new TreeSet<String>() {{add("a"); add("b"); add("c");}};
 		PanelWithButtons panel = new PanelWithButtons(panelWithButtonsIdentyfier, names);
-		List<JButton> buttons = GetButtonsTextHelper.getButtons2(panel);
+		List<JButton> buttons = TestHelper.getButtons2(panel);
 		
 		ListenerStub listener = new ListenerStub();
 		panel.register(listener);
@@ -52,7 +52,7 @@ public class PanelWithButtonsTest {
 	public void when_userClicksTwoOfButtons_then_registerdListenerRecivesItsNamesInCorrectOrder() {
 		SortedSet<String> names = new TreeSet<String>() {{add("a"); add("b"); add("c");}};
 		PanelWithButtons panel = new PanelWithButtons(panelWithButtonsIdentyfier, names);
-		List<JButton> buttons = GetButtonsTextHelper.getButtons2(panel);
+		List<JButton> buttons = TestHelper.getButtons2(panel);
 		
 		ListenerStub listener = new ListenerStub();
 		panel.register(listener);

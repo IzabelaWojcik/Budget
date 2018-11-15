@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ BudgetControllerTest.class, GetButtonsTextHelperTest.class, PanelWithButtonsTest.class })
+@SuiteClasses({ BudgetControllerTest.class, TestHelperTest.class, PanelWithButtonsTest.class })
 public class AllTests {
 
 }
