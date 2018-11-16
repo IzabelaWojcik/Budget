@@ -18,17 +18,20 @@ import org.junit.Test;
 
 import Tests.Helpers.TestHelper;
 import Tests.Stub.ListenerStub;
+import learning.views.ButtonAddIncomeData;
 import learning.views.ButtonAddTransactionData;
 import learning.views.ButtonsData;
+import learning.views.PanelAddIncome;
 import learning.views.PanelAddTransaction;
 import learning.views.PanelWithButtons;
 
-public class PanelAddTransactionTest {
-	PanelAddTransaction panelAddTransaction;
+public class PanelAddIncomeTest {
+	PanelAddIncome panelAddIncome;
 	int notifierId;
 	String dateString;
 	java.util.Date date;
 	String category;
+	String user;
 	String amount;
 	
 	@Before
@@ -40,20 +43,22 @@ public class PanelAddTransactionTest {
 		date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
 		amount  = "12.0";
 		List<String> categories = new ArrayList<String>() {{add("category1"); add("category2"); add("category3");}};
+		List<String> users = new ArrayList<String>() {{add("user1"); add("user2"); add("user3");}};
 		category = categories.get(0);
-		panelAddTransaction = new PanelAddTransaction(identifier, categories, clickedBudgetId);
+		user = users.get(0);
+		panelAddIncome = new PanelAddIncome(identifier, categories, users, clickedBudgetId);
 	}
 	
 	@Test
 	public void when_userClicksButton_then_registredLisynerRecivesItsName() {
-		List<JButton> button = TestHelper.getButtons2(panelAddTransaction);
+		List<JButton> button = TestHelper.getButtons2(panelAddIncome);
 		
 		ListenerStub listener = new ListenerStub();
-		panelAddTransaction.register(listener);
+		panelAddIncome.register(listener);
 		
 		button.get(0).doClick();
 		
-		assertEquals(Arrays.asList(new ButtonAddTransactionData(notifierId, date, category, amount)), listener.receivedData);
-		assertEquals(TestHelper.getButtons(panelAddTransaction).size(), 1);
+		assertEquals(Arrays.asList(new ButtonAddIncomeData(notifierId, date, category, user, amount)), listener.receivedData);
+		assertEquals(TestHelper.getButtons(panelAddIncome).size(), 1);
 	}
 }

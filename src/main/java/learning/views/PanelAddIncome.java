@@ -3,6 +3,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,24 +23,27 @@ import javax.swing.JFormattedTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import org.javatuples.Quintet;
 
-public class PanelAddTransaction extends JPanel implements INotifier{
+public class PanelAddIncome extends JPanel implements INotifier{
 	private JFormattedTextField  formattedTextField;
 	private JDateChooser dateChooser;
-	private JComboBox<String> comboBox;
+	private JComboBox<String> comboBoxCategory;
+	private JComboBox<String> comboBoxUser;
 	private JButton buttonAdd;
 	public final int identifier;
 	private Set<IListener> listeners;
 	
-	public PanelAddTransaction(int id, List<String> categories, int clickedBudgetId){
+	public PanelAddIncome(int id, List<String> categories, List<String> users, int clickedBudgetId){
 		identifier = id;
 		listeners = new HashSet<IListener>();
 		
 		JLabel lblDate = new JLabel("Data:");
 		JLabel lblCategory = new JLabel("Kategoria:");
 		JLabel lblAmount = new JLabel("Kwota:");
+		JLabel lblUser = new JLabel("Użytkownik:");
 		
 		dateChooser = new JDateChooser();
-		comboBox = new JComboBox<String>();
+		comboBoxCategory = new JComboBox<String>();
+		comboBoxUser = new JComboBox<String>();
 		buttonAdd = new JButton("Dodaj");
 		
 		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(170, 20), JLabel.LEFT);
@@ -51,9 +55,10 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 		formattedTextField.setColumns(10);
 		formattedTextField.addPropertyChangeListener(errorLabel);
 		
-		fillComboBox(categories);
+		fillComboBox(categories, comboBoxCategory);
+		fillComboBox(users, comboBoxUser);
 		
-		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddTransactionData(identifier, date, (String) comboBox.getSelectedItem(), formattedTextField.getText()));});});
+		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddTransactionData(identifier, date, (String) comboBoxCategory.getSelectedItem(), formattedTextField.getText()));});});
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -70,7 +75,7 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(comboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(comboBoxCategory, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(dateChooser, GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
 							.addGap(18)
 							.addComponent(errorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -94,7 +99,7 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 									.addGap(18)
 									.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 										.addComponent(lblCategory)
-										.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)))))
+										.addComponent(comboBoxCategory, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)))))
 						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 							.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(lblDate)))
@@ -109,9 +114,9 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 		setLayout(groupLayout);
 	}
 
-	public void fillComboBox(List<String> categories) {
-		for(String category: categories){
-			comboBox.addItem(category);
+	public void fillComboBox(List<String> list, JComboBox combobox) {
+		for(String s: list){
+			combobox.addItem(s);
 	    }
 	}
 
@@ -124,4 +129,5 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 	public void deregister(IListener listener) {
 		listeners.remove(listener);
 	}
+	
 }
