@@ -1,26 +1,60 @@
 package learning.views;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.javatuples.Pair;
+import org.javatuples.Triplet;
 
 public class PanelViewTransaction extends JPanel{
+	private JTable table;
+	private Object rows[][];
+	private String columns[];
+	private TableModel model = null;
 	
-	public PanelViewTransaction(String data1, String data2, String data3) {
+	public PanelViewTransaction() {
 		setPreferredSize(new Dimension(210, 20));
+		setLayout(new FlowLayout());
 		
-		JLabel lblData1 = new JLabel(data1, JLabel.LEFT);
-		lblData1.setPreferredSize(new Dimension(80, 20));
+		table = new JTable(model);
 		
-		JLabel lblData2 = new JLabel(data2, JLabel.LEFT);
-		lblData2.setPreferredSize(new Dimension(80,  20));
+		JScrollPane scrollPane = new JScrollPane(table);
 		
-		JLabel lblData3 = new JLabel(data3, JLabel.LEFT);
-		lblData3.setPreferredSize(new Dimension(50, 20));
-		
-		add(lblData1);
-		add(lblData2);
-		add(lblData3);
+		add(scrollPane);
+	}
+	
+	public void fillPanel(List<Triplet<String, String, String>> list, Triplet<String, String, String> namesForColumns) {
+		String columnsNames[] = {namesForColumns.getValue0(), namesForColumns.getValue1(), namesForColumns.getValue2()};
+		Object rows[][] = new String[list.size()][columnsNames.length];
+	
+		for(int i = 0; i < list.size(); i++) {
+			for(int j = 0; j < columnsNames.length; j++) {
+				rows[i][j] = list.get(i).getValue(j);
+			}
+		}
+		TableModel model = new DefaultTableModel(rows, columnsNames);
+		table = new JTable(model);
+	}
+	
+	public void fillPanel(List<Pair<String, String>> list, Pair<String, String> namesForColumns) {
+		String columnsNames[] = {namesForColumns.getValue0(), namesForColumns.getValue1()};
+		Object rows[][] = new String[list.size()][columnsNames.length];
+	
+		for(int i = 0; i < list.size(); i++) {
+			for(int j = 0; j < columnsNames.length; j++) {
+				rows[i][j] = list.get(i).getValue(j);
+			}
+		}
+		TableModel model = new DefaultTableModel(rows, columnsNames);
+		table = new JTable(model);
 	}
 }

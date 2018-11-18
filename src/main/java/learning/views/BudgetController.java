@@ -21,6 +21,7 @@ public class BudgetController implements IListener{
 	
 	private PanelWithButtons panelWithBudget, panelWithYears, panelWithMonths;
 	private PanelAddTransaction panelToAddExpenditure, panelToAddSavings, panelToAddIncome;
+	private PanelViewTransaction panelExpenditureView, panelSavingsView, panelOtherIncomeView;
 	private IDatabaseReader databaseReader;
 	private Map<Integer, String> budgetIdToName;
 	private int budgetId;
@@ -33,7 +34,9 @@ public class BudgetController implements IListener{
 	
 	public BudgetController(IDatabaseReader databaseReader, 
 							PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, 
-							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddTransaction panelAddIncome) {
+							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddTransaction panelAddIncome,
+							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelOtherIncomeView) 
+	{
 		panelWithBudget = panelBudget;
 		panelWithYears = panelYears;
 		panelWithMonths = panelMonths;

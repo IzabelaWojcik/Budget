@@ -34,6 +34,7 @@ import learning.budget.Transaction;
 import learning.views.BudgetController;
 import learning.views.ButtonsData;
 import learning.views.PanelAddTransaction;
+import learning.views.PanelViewTransaction;
 import learning.views.PanelWithButtons;
 
 public class BudgetControllerTest {
@@ -61,6 +62,12 @@ public class BudgetControllerTest {
 	PanelAddTransaction panelAddSavings;
 	@Mock
 	PanelAddTransaction panelAddIncome;
+	@Mock
+	PanelViewTransaction panelExpenditureView;
+	@Mock
+	PanelViewTransaction panelSavingsView;
+	@Mock
+	PanelViewTransaction panelOtherIncomeView;
 	
 	@Rule
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -69,7 +76,9 @@ public class BudgetControllerTest {
 	public void setup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		budgetController = new BudgetController(databaseForTest, 
 												panelWithBudget, panelWithYears, panelWithMonths,
-												panelAddExpenditure, panelAddSavings, panelAddIncome);
+												panelAddExpenditure, panelAddSavings, panelAddIncome,
+												panelExpenditureView, panelSavingsView, panelOtherIncomeView
+												);
 		setIdentifier(panelWithBudget, 123);
 		setIdentifier(panelWithYears, 124);
 		setIdentifier(panelWithMonths, 125);
