@@ -44,17 +44,4 @@ public class PanelViewTransaction extends JPanel{
 		TableModel model = new DefaultTableModel(rows, columnsNames);
 		table = new JTable(model);
 	}
-	
-	public void fillPanel(List<Pair<String, String>> list, Pair<String, String> namesForColumns) {
-		String columnsNames[] = {namesForColumns.getValue0(), namesForColumns.getValue1()};
-		Object rows[][] = new String[list.size()][columnsNames.length];
-	
-		for(int i = 0; i < list.size(); i++) {
-			for(int j = 0; j < columnsNames.length; j++) {
-				rows[i][j] = list.get(i).getValue(j);
-			}
-		}
-		TableModel model = new DefaultTableModel(rows, columnsNames);
-		table = new JTable(model);
-	}
 }

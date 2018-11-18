@@ -21,7 +21,7 @@ public class BudgetController implements IListener{
 	
 	private PanelWithButtons panelWithBudget, panelWithYears, panelWithMonths;
 	private PanelAddTransaction panelToAddExpenditure, panelToAddSavings, panelToAddIncome;
-	private PanelViewTransaction panelExpenditureView, panelSavingsView, panelOtherIncomeView;
+	private PanelViewTransaction panelExpenditureView, panelSavingsView, panelIncomeView;
 	private IDatabaseReader databaseReader;
 	private Map<Integer, String> budgetIdToName;
 	private int budgetId;

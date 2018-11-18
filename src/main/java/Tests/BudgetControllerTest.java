@@ -67,7 +67,7 @@ public class BudgetControllerTest {
 	@Mock
 	PanelViewTransaction panelSavingsView;
 	@Mock
-	PanelViewTransaction panelOtherIncomeView;
+	PanelViewTransaction panelIncomeView;
 	
 	@Rule
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -77,7 +77,7 @@ public class BudgetControllerTest {
 		budgetController = new BudgetController(databaseForTest, 
 												panelWithBudget, panelWithYears, panelWithMonths,
 												panelAddExpenditure, panelAddSavings, panelAddIncome,
-												panelExpenditureView, panelSavingsView, panelOtherIncomeView
+												panelExpenditureView, panelSavingsView, panelIncomeView
 												);
 		setIdentifier(panelWithBudget, 123);
 		setIdentifier(panelWithYears, 124);
