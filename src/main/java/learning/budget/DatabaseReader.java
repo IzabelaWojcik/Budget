@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -278,7 +279,7 @@ public class DatabaseReader implements IDatabaseReader{
 	}
 
 	public List<Transaction> readConcreteTransactionsForAllBudgetsFromDatabase(String tablename) throws DatabaseNotInitialized{
-		List<Transaction> transactions = new ArrayList<Transaction>();
+		ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 		Transaction transaction = null;
 		try{
 			ResultSet rs = getDataFromTable(tablename);
@@ -297,6 +298,22 @@ public class DatabaseReader implements IDatabaseReader{
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return transactions;
+	}
+	
+	public List<Transaction> readConcreteTransactionsWithCategoryNameForConcreteBudget(String tablenameForTransaction, String tablenameForCategory, int budgetId) throws DatabaseNotInitialized{
+		List<Transaction> transactions = readConcreteTransactionsForAllBudgetsFromDatabase(tablenameForTransaction);
+		Map<Integer, String>  categories = readCategoryFromDatabase(tablenameForCategory);
+		
+		List<Transaction> transactionsForConcreteBudget = new ArrayList<>();
+		
+		for(Transaction entry: transactions) {
+			if (entry.getBudgetId() == budgetId){
+				Transaction transaction = new Transaction(entry.getTransactionId(), entry.getCategoryId(), entry.getAmount(), entry.getDate(), entry.getBudgetId(), categories.get(entry.getCategoryId()));
+				transactionsForConcreteBudget.add(transaction);
+			}
+		}
+		
 		return transactions;
 	}
 	
@@ -324,22 +341,6 @@ public class DatabaseReader implements IDatabaseReader{
 							.map(Triplet<Integer, Integer, String>::getValue2)
 							.distinct()
 							.collect(Collectors.toList());
-	}
-	
-	public List<Transaction> readConcreteTransactionsWithCategoryNameForConcreteBudget(String tablenameForTransaction, String tablenameForCategory, int budgetId) throws DatabaseNotInitialized{
-		List<Transaction> transactions = readConcreteTransactionsForAllBudgetsFromDatabase(tablenameForTransaction);
-		HashMap<Integer, String>  categories = readCategoryFromDatabase(tablenameForCategory);
-		
-		List<Transaction> transactionsForConcreteBudget = new ArrayList<>();
-		
-		for(Transaction entry: transactions) {
-			if (entry.getBudgetId() == budgetId){
-				Transaction transaction = new Transaction(entry.getTransactionId(), entry.getCategoryId(), entry.getAmount(), entry.getDate(), entry.getBudgetId(), categories.get(entry.getCategoryId()));
-				transactionsForConcreteBudget.add(transaction);
-			}
-		}
-		
-		return transactions;
 	}
 	
 }

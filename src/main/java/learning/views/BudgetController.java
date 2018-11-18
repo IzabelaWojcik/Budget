@@ -1,6 +1,7 @@
 package learning.views;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,18 +11,26 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import org.javatuples.Triplet;
+
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.IDatabaseReader;
 import learning.budget.Transaction;
 
 public class BudgetController implements IListener{
+	public static final String INCOME = "Income";
+	public static final String SAVINGS = "Savings";
+	public static final String EXPENDITURE = "Expenditure";
 	public static final String INCOME_CATEGORY = "Income_category";
 	public static final String SAVINGS_CATEGORY = "Savings_category";
 	public static final String EXPENDITURE_CATEGORY = "Expenditure_category";
+	public static final Triplet<String, String, String> columnsNameDateCategoryAmount = new Triplet<String, String, String>("Date:", "Category:", "Amount:");
+	public static final Triplet<String, String, String> columnsNameUserNameCategoryAmount = new Triplet<String, String, String>("User:", "Category:", "Amount:");
+	
 	
 	private PanelWithButtons panelWithBudget, panelWithYears, panelWithMonths;
 	private PanelAddTransaction panelToAddExpenditure, panelToAddSavings, panelToAddIncome;
-	private PanelViewTransaction panelExpenditureView, panelSavingsView, panelIncomeView;
+	private PanelViewTransaction panelViewExpenditure, panelViewSavings, panelViewIncome;
 	private IDatabaseReader databaseReader;
 	private Map<Integer, String> budgetIdToName;
 	private int budgetId;
@@ -35,7 +44,7 @@ public class BudgetController implements IListener{
 	public BudgetController(IDatabaseReader databaseReader, 
 							PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, 
 							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddTransaction panelAddIncome,
-							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelOtherIncomeView) 
+							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelIncomeView) 
 	{
 		panelWithBudget = panelBudget;
 		panelWithYears = panelYears;
@@ -43,6 +52,9 @@ public class BudgetController implements IListener{
 		panelToAddExpenditure = panelAddExpenditure;
 		panelToAddSavings = panelAddSavings;
 		panelToAddIncome = panelAddIncome;
+		panelViewExpenditure = panelExpenditureView;
+		panelViewSavings = panelSavingsView;
+		panelViewIncome = panelIncomeView;
 		
 		panelWithBudget.register(this);
 		panelWithYears.register(this);
@@ -123,9 +135,9 @@ public class BudgetController implements IListener{
 		clickedMonth = buttonsData.name;
 		
 		try {
-			List<Transaction> expenditure = getTransactionForBudgetYearMonth("Expenditure", EXPENDITURE_CATEGORY);
-			List<Transaction> savings = getTransactionForBudgetYearMonth("Savings", SAVINGS_CATEGORY);
-			List<Transaction> income = getTransactionForBudgetYearMonth("Income", INCOME_CATEGORY);
+			List<Transaction> expenditures = getTransactionForBudgetYearMonth(EXPENDITURE, EXPENDITURE_CATEGORY);
+			List<Transaction> savings = getTransactionForBudgetYearMonth(SAVINGS, SAVINGS_CATEGORY);
+			List<Transaction> income = getTransactionForBudgetYearMonth(INCOME, INCOME_CATEGORY);
 
 			List<String> expenditureCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, EXPENDITURE_CATEGORY);
 			panelToAddExpenditure.fillComboBox(expenditureCategories);
@@ -135,12 +147,23 @@ public class BudgetController implements IListener{
 			
 			List<String> incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
 			panelToAddIncome.fillComboBox(incomeCategories);
-		
+			
+			List<Triplet<String, String, String>> expendituresToFillPanel = dataToFillPanel(expenditures);
+			List<Triplet<String, String, String>> savingsToFillPanel = dataToFillPanel(savings);
+			List<Triplet<String, String, String>> incomeToFillPanel = dataToFillPanel(income);
+			
+			for(Triplet<String, String, String> t: expendituresToFillPanel) {
+				System.out.println(t.getValue0());
+			}
+			
+			panelViewExpenditure.fillPanel(expendituresToFillPanel, columnsNameDateCategoryAmount);
+			panelViewSavings.fillPanel(savingsToFillPanel, columnsNameDateCategoryAmount);
+			panelViewIncome.fillPanel(incomeToFillPanel, columnsNameUserNameCategoryAmount);
+	
 		} catch (DatabaseNotInitialized e) {
 			e.printStackTrace();
 			return;
 		}
-		
 	}
 
 	private List<Transaction> getTransactionForBudgetYearMonth(String transactionTablename, String categoryTablename) throws DatabaseNotInitialized {
@@ -152,5 +175,13 @@ public class BudgetController implements IListener{
 				.collect(Collectors.toList());
 		
 		return transactionsForConcreteYearAndMonth;
+	}
+	
+	private List<Triplet<String, String, String>> dataToFillPanel(List<Transaction> transactions){
+		List<Triplet<String, String, String>> list = new ArrayList<Triplet<String, String, String>>();
+		for(Transaction t: transactions) {
+			list.add(new Triplet(t.getDate().toString(), t.getCategoryName(), String.valueOf(t.getAmount())));
+		}
+		return list;
 	}
 }

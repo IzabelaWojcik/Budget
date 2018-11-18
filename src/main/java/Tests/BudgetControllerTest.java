@@ -15,6 +15,7 @@ import java.util.TreeSet;
 
 import javax.swing.JButton;
 
+import org.javatuples.Triplet;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,13 +41,16 @@ import learning.views.PanelWithButtons;
 public class BudgetControllerTest {
 	private HashMap<Integer, String> budgetIdToName = new HashMap<Integer, String>() {{put(1, "budzet1"); put(2, "budzet2"); put(3, "budzet3");}};
 	private BudgetController budgetController;
-	private int clickedBudgetId, categoryId1, categoryId2;
+	private int clickedBudgetId, categoryId1, categoryId2, transactionId;
 	private double amount;
 	private List<LocalDate> dates;
 	private List<String> categories;
-	private List<Transaction> expenditures, savings, incomes, transactions;
+	private List<Transaction> expenditures, savings, income, transactions;
 	private String categoryName1;
 	private String categoryName2;
+	private String categoryName3;
+	private List<Triplet<String, String, String>> listOfTripletsExpenditure, listOfTripletsSavings, listOfTripletsIncome;
+	private Triplet<String, String, String> columnsName;
 	
 	@Mock
 	IDatabaseReader databaseForTest;
@@ -87,26 +91,28 @@ public class BudgetControllerTest {
 		clickedBudgetId = 1;
 		categoryId1 = 1; 
 		categoryId2 = 2; 
+		transactionId  = 123;
 		categoryName1 = "Zakupy";
 		categoryName2 = "Opłaty";
+		categoryName2 = "Kredyty";
 		amount = 10.0;
 		
 		expenditures = new ArrayList<Transaction>(){{
-			add(new Transaction(categoryId1, amount, LocalDate.parse("2016-01-01"), clickedBudgetId)); 
-			add(new Transaction(categoryId1, amount, LocalDate.parse("2017-02-14"), clickedBudgetId)); 
-			add(new Transaction(categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
+			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2016-01-01"), clickedBudgetId, categoryName1)); 
+			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2017-02-14"), clickedBudgetId, categoryName2)); 
+			add(new Transaction(transactionId, categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId, categoryName1)); 
 			}};
 			
 		savings = new ArrayList<Transaction>(){{
-			add(new Transaction(categoryId1, amount, LocalDate.parse("2017-03-17"), clickedBudgetId)); 
-			add(new Transaction(categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId));
-			add(new Transaction(categoryId1, amount, LocalDate.parse("2017-12-01"), clickedBudgetId));
+			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2017-03-17"), clickedBudgetId, categoryName1)); 
+			add(new Transaction(transactionId, categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId, categoryName2));
+			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2017-12-01"), clickedBudgetId, categoryName3));
 			}};
 			
-		incomes = new ArrayList<Transaction>(){{
-			add(new Transaction(categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId));
-			add(new Transaction(categoryId1, amount, LocalDate.parse("2017-12-01"), clickedBudgetId));
-			add(new Transaction(categoryId1, amount, LocalDate.parse("2015-05-15"), clickedBudgetId));
+		income = new ArrayList<Transaction>(){{
+			add(new Transaction(transactionId, categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId, categoryName2));
+			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2017-12-01"), clickedBudgetId, categoryName3));
+			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2015-05-15"), clickedBudgetId, categoryName3));
 			}};
 			
 		dates = new ArrayList<LocalDate>(){{
@@ -122,6 +128,22 @@ public class BudgetControllerTest {
 			add(categoryName1); 
 			add(categoryName2); 
 			}};
+			
+		listOfTripletsExpenditure = new ArrayList<Triplet<String, String, String>>(){{
+			add(new Triplet("2017-03-17", categoryName1, String.valueOf(amount))); 
+			}};
+			
+		listOfTripletsSavings = new ArrayList<Triplet<String, String, String>>(){{
+			add(new Triplet("2017-03-17", categoryName1, String.valueOf(amount))); 
+			add(new Triplet("2017-03-17", categoryName2, String.valueOf(amount))); 
+			}};
+
+		listOfTripletsIncome = new ArrayList<Triplet<String, String, String>>(){{
+			add(new Triplet("2017-03-17", categoryName2, String.valueOf(amount))); 
+			}};
+
+		columnsName = new Triplet<String, String, String>("column1", "column2", "column3");
+			
 	}
 
 	private void setIdentifier(PanelWithButtons panel, int identifier) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -173,9 +195,12 @@ public class BudgetControllerTest {
 	}
 	
 	@Test
-	public void notify_fillCategoryFromTransactionList_controllerRedCategoryFromDatabaseAndPassItToMethodFillingComboBox() throws DatabaseNotInitialized {
+	public void notify_fillPanelsWithCollectedData_controllerCollectsDataAndFillsDependentPanels() throws DatabaseNotInitialized {
 		initializeController();
-			
+		when(databaseForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, clickedBudgetId)).thenReturn(expenditures);
+		when(databaseForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, clickedBudgetId)).thenReturn(savings);
+		when(databaseForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.INCOME, BudgetController.INCOME_CATEGORY, clickedBudgetId)).thenReturn(income);
+		
 		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
 		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
 		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.INCOME_CATEGORY)).thenReturn(categories);
@@ -187,5 +212,10 @@ public class BudgetControllerTest {
 		verify(panelAddExpenditure).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
 		verify(panelAddSavings).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
 		verify(panelAddIncome).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
+	
+		verify(panelExpenditureView).fillPanel(listOfTripletsExpenditure, budgetController.columnsNameDateCategoryAmount);
+		verify(panelSavingsView).fillPanel(listOfTripletsSavings, budgetController.columnsNameDateCategoryAmount);
+		verify(panelIncomeView).fillPanel(listOfTripletsIncome, budgetController.columnsNameUserNameCategoryAmount);
 	}
+	
 }
