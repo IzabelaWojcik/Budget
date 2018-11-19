@@ -94,7 +94,6 @@ public class BudgetViews extends JFrame {
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWriter;
 		
-		//SortedSet<String> budgetButtonsNames = databaseReader.readBudgetNameFromDatabase();
 		panelBudgetButtons = new PanelWithButtons(PANEL_WITH_BUDGET_BUTTONS_ID);
 		panelYearsButtons = new PanelWithButtons(PANEL_WITH_YEARS_BUTTONS_ID);
 		panelMonthsButtons = new PanelWithButtons(PANEL_WITH_MONTHS_BUTTONS_ID);

@@ -13,11 +13,6 @@ public class PanelWithButtons extends JPanel implements INotifier{
 	
 	public PanelWithButtons(int id) { identifier = id;};
 	
-	public PanelWithButtons(int id, SortedSet<String> buttonsNames) {
-		identifier = id;
-		createButtons(buttonsNames);
-	}
-
 	public void createButtons(SortedSet<String> buttonsNames) {
 		for(String name: buttonsNames) {
 			JButton button = new JButton(name);
