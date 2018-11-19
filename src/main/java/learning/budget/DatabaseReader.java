@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -182,6 +185,21 @@ public class DatabaseReader implements IDatabaseReader{
 			e.printStackTrace();
 		}
 		return budgetInNameMap;
+	}
+	
+	public SortedSet<String> readBudgetNameFromDatabase() throws DatabaseNotInitialized{
+		String tablename = "Budget_name";
+		SortedSet<String> budgetNames = new TreeSet<String>();
+		try {
+			ResultSet rs = getDataFromTable(tablename);
+			while (rs.next()) {
+				String names = rs.getString(2);
+				budgetNames.add(names);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return budgetNames;
 	}
 
 	public ArrayList<Transaction> readExpenditureFromDatabase() throws DatabaseNotInitialized{

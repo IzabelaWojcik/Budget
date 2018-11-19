@@ -30,7 +30,7 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 	public final int identifier;
 	private Set<IListener> listeners;
 	
-	public PanelAddTransaction(int id, List<String> categories, int clickedBudgetId){
+	public PanelAddTransaction(int id){
 		identifier = id;
 		listeners = new HashSet<IListener>();
 		
@@ -50,8 +50,6 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 		formattedTextField = new JFormattedTextField(DecimalFormat.getInstance());
 		formattedTextField.setColumns(10);
 		formattedTextField.addPropertyChangeListener(errorLabel);
-		
-		fillComboBox(categories);
 		
 		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddTransactionData(identifier, date, (String) comboBox.getSelectedItem(), formattedTextField.getText()));});});
 		

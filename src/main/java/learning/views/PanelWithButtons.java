@@ -9,13 +9,12 @@ import javax.swing.JPanel;
 
 public class PanelWithButtons extends JPanel implements INotifier{
 	public final int identifier;
-	private Set<IListener> listeners;
+	private Set<IListener> listeners = new HashSet<IListener>();
 	
 	public PanelWithButtons(int id) { identifier = id;};
 	
 	public PanelWithButtons(int id, SortedSet<String> buttonsNames) {
 		identifier = id;
-		listeners = new HashSet<IListener>();
 		createButtons(buttonsNames);
 	}
 

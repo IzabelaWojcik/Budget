@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.javatuples.Triplet;
 
@@ -45,4 +46,5 @@ public interface IDatabaseReader {
 
 	public List<LocalDate> readDatesForBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized;
 
+	public SortedSet<String> readBudgetNameFromDatabase() throws DatabaseNotInitialized;
 }

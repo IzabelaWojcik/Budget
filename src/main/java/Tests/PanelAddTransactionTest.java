@@ -33,7 +33,6 @@ public class PanelAddTransactionTest {
 	
 	@Before
 	public void setup() throws ParseException {
-		int clickedBudgetId = 1;
 		int identifier = 1;
 		notifierId = 1;
 		dateString = "15-10-2018";
@@ -41,7 +40,7 @@ public class PanelAddTransactionTest {
 		amount  = "12.0";
 		List<String> categories = new ArrayList<String>() {{add("category1"); add("category2"); add("category3");}};
 		category = categories.get(0);
-		panelAddTransaction = new PanelAddTransaction(identifier, categories, clickedBudgetId);
+		panelAddTransaction = new PanelAddTransaction(identifier);
 	}
 	
 	@Test

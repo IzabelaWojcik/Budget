@@ -1,6 +1,8 @@
 package learning.views;
 
 import java.awt.EventQueue;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,10 +22,22 @@ import java.awt.CardLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JCheckBox;
 
 public class BudgetViews extends JFrame {
+	private static final int PANEL_WITH_BUDGET_BUTTONS_ID = 1;
+	private static final int PANEL_WITH_YEARS_BUTTONS_ID = 2;
+	private static final int PANEL_WITH_MONTHS_BUTTONS_ID = 3;
+	private static final int PANEL_INCOME_VIEW_ID = 4;
+	private static final int PANEL_EXPENDITURE_VIEW_ID = 5;
+	private static final int PANEL_SAVINGS_VIEW_ID = 6;
+	private static final int PANEL_ADD_INCOME_ID = 7;
+	private static final int PANEL_ADD_EXPENDITURE_ID = 8;
+	private static final int PANEL_ADD_SAVINGS_ID = 9;
+	
 	private JButton btnAddNewMonth;
 	private JPanel contentPane;
+	private JPanel jpanelWithCardLayout;
 	private JPanel jpanelForButtons;
 	private JPanel jpanelEmpty;
 	private JPanel jpanelWithAllContent;
@@ -32,20 +46,22 @@ public class BudgetViews extends JFrame {
 	private JPanel jpanelIncomeView;
 	private JPanel jpanelExpenditureView;
 	private JPanel jpanelAddIncome;
-	private JScrollPane scrollPaneSavingsView;
 	private JPanel jpanelSavingsView;
+	private JPanel jpanelAddExpenditure;
+	private JPanel jpanelAddSavings;
 	private JLabel lblIncomeSum;
 	private JLabel lblexpenditureSum;
 	private JLabel lblSavingsSum;
+	private JScrollPane scrollPaneSavingsView;
 	private JScrollPane scrollPaneAddExpenditure;
 	private JScrollPane scrollPaneAddSavings;
-	private JPanel jpanelAddExpenditure;
-	private JPanel jpanelAddSavings;
 	
+	private PanelWithButtons panelBudgetButtons, panelYearsButtons, panelMonthsButtons;
 	private PanelAddTransaction panelAddIncome, panelAddExpenditure, panelAddSavings;
 	private PanelViewTransaction panelViewIncome, panelViewExpenditure, panelViewSavings;
 	private IDatabaseWriter databaseWriter;
 	private IDatabaseReader databaseReader;
+	private BudgetController budgetController;
 
 	/**
 	 * Launch the application.
@@ -76,6 +92,33 @@ public class BudgetViews extends JFrame {
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWriter;
 		
+		SortedSet<String> budgetButtonsNames = databaseReader.readBudgetNameFromDatabase();
+		panelBudgetButtons = new PanelWithButtons(PANEL_WITH_BUDGET_BUTTONS_ID, budgetButtonsNames);
+		panelYearsButtons = new PanelWithButtons(PANEL_WITH_YEARS_BUTTONS_ID);
+		panelMonthsButtons = new PanelWithButtons(PANEL_WITH_MONTHS_BUTTONS_ID);
+		
+		panelViewIncome = new PanelViewTransaction();
+		panelViewExpenditure = new PanelViewTransaction();
+		panelViewSavings = new PanelViewTransaction();
+		
+		panelAddIncome = new PanelAddTransaction(PANEL_ADD_INCOME_ID);
+		panelAddExpenditure = new PanelAddTransaction(PANEL_ADD_EXPENDITURE_ID);
+		panelAddSavings = new PanelAddTransaction(PANEL_ADD_SAVINGS_ID);
+		
+		budgetController = new BudgetController(databaseReader, panelBudgetButtons, panelYearsButtons, panelMonthsButtons,
+				panelAddExpenditure, panelAddSavings, panelAddIncome, panelViewExpenditure, panelViewSavings, panelViewIncome);
+				
+		initialize();
+		
+		CardLayout cardLayout = (CardLayout) jpanelWithCardLayout.getLayout();
+		if(budgetButtonsNames.size() <= 0) {
+			cardLayout.show(jpanelWithCardLayout, "name_14638012768301");
+		}else {
+			cardLayout.show(jpanelWithCardLayout, "name_14640815504738");
+		}
+	}
+
+	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1025, 900);
 		contentPane = new JPanel();
@@ -83,8 +126,9 @@ public class BudgetViews extends JFrame {
 		setContentPane(contentPane);
 		
 		jpanelForButtons = new JPanel();
+		//jpanelForButtons.add(panelBudgetButtons);
 		
-		JPanel panelWithCardLayout = new JPanel();
+		jpanelWithCardLayout = new JPanel();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -92,7 +136,7 @@ public class BudgetViews extends JFrame {
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(jpanelForButtons, GroupLayout.PREFERRED_SIZE, 968, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panelWithCardLayout, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(jpanelWithCardLayout, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -101,15 +145,25 @@ public class BudgetViews extends JFrame {
 					.addContainerGap()
 					.addComponent(jpanelForButtons, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panelWithCardLayout, GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE))
+					.addComponent(jpanelWithCardLayout, GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE))
 		);
-		panelWithCardLayout.setLayout(new CardLayout(0, 0));
+		jpanelWithCardLayout.setLayout(new CardLayout(0, 0));
 		
 		jpanelEmpty = new JPanel();
-		panelWithCardLayout.add(jpanelEmpty, "name_14638012768301");
+		jpanelWithCardLayout.add(jpanelEmpty, "name_14638012768301");
+		GroupLayout gl_jpanelEmpty = new GroupLayout(jpanelEmpty);
+		gl_jpanelEmpty.setHorizontalGroup(
+			gl_jpanelEmpty.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 1022, Short.MAX_VALUE)
+		);
+		gl_jpanelEmpty.setVerticalGroup(
+			gl_jpanelEmpty.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 619, Short.MAX_VALUE)
+		);
+		jpanelEmpty.setLayout(gl_jpanelEmpty);
 		
 		jpanelWithAllContent = new JPanel();
-		panelWithCardLayout.add(jpanelWithAllContent, "name_14640815504738");
+		jpanelWithCardLayout.add(jpanelWithAllContent, "name_14640815504738");
 		
 		btnAddNewMonth = new JButton("Add new month");
 		
