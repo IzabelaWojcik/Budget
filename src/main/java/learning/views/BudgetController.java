@@ -152,10 +152,6 @@ public class BudgetController implements IListener{
 			List<Triplet<String, String, String>> savingsToFillPanel = dataToFillPanel(savings);
 			List<Triplet<String, String, String>> incomeToFillPanel = dataToFillPanel(income);
 			
-			for(Triplet<String, String, String> t: expendituresToFillPanel) {
-				System.out.println(t.getValue0());
-			}
-			
 			panelViewExpenditure.fillPanel(expendituresToFillPanel, columnsNameDateCategoryAmount);
 			panelViewSavings.fillPanel(savingsToFillPanel, columnsNameDateCategoryAmount);
 			panelViewIncome.fillPanel(incomeToFillPanel, columnsNameUserNameCategoryAmount);
