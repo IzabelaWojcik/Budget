@@ -77,7 +77,7 @@ public class BudgetControllerTest {
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
 	
 	@Before
-	public void setup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void setup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, DatabaseNotInitialized {
 		budgetController = new BudgetController(databaseForTest, 
 												panelWithBudget, panelWithYears, panelWithMonths,
 												panelAddExpenditure, panelAddSavings, panelAddIncome,

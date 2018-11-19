@@ -44,7 +44,7 @@ public class BudgetController implements IListener{
 	public BudgetController(IDatabaseReader databaseReader, 
 							PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, 
 							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddTransaction panelAddIncome,
-							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelIncomeView) 
+							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelIncomeView) throws DatabaseNotInitialized 
 	{
 		panelWithBudget = panelBudget;
 		panelWithYears = panelYears;
@@ -56,6 +56,9 @@ public class BudgetController implements IListener{
 		panelViewSavings = panelSavingsView;
 		panelViewIncome = panelIncomeView;
 		
+		this.databaseReader = databaseReader;
+		initializePanelBudget();
+		
 		panelWithBudget.register(this);
 		panelWithYears.register(this);
 		panelWithMonths.register(this);
@@ -63,7 +66,6 @@ public class BudgetController implements IListener{
 		panelToAddSavings.register(this);
 		panelToAddIncome.register(this);
 		
-		this.databaseReader = databaseReader;
 	}
 	
 	public void initializePanelBudget() throws DatabaseNotInitialized {

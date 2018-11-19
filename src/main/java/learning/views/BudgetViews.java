@@ -1,6 +1,8 @@
 package learning.views;
 
 import java.awt.EventQueue;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -92,8 +94,8 @@ public class BudgetViews extends JFrame {
 		databaseReader = _databaseReader;
 		databaseWriter = _databaseWriter;
 		
-		SortedSet<String> budgetButtonsNames = databaseReader.readBudgetNameFromDatabase();
-		panelBudgetButtons = new PanelWithButtons(PANEL_WITH_BUDGET_BUTTONS_ID, budgetButtonsNames);
+		//SortedSet<String> budgetButtonsNames = databaseReader.readBudgetNameFromDatabase();
+		panelBudgetButtons = new PanelWithButtons(PANEL_WITH_BUDGET_BUTTONS_ID);
 		panelYearsButtons = new PanelWithButtons(PANEL_WITH_YEARS_BUTTONS_ID);
 		panelMonthsButtons = new PanelWithButtons(PANEL_WITH_MONTHS_BUTTONS_ID);
 		
@@ -111,11 +113,11 @@ public class BudgetViews extends JFrame {
 		initialize();
 		
 		CardLayout cardLayout = (CardLayout) jpanelWithCardLayout.getLayout();
-		if(budgetButtonsNames.size() <= 0) {
-			cardLayout.show(jpanelWithCardLayout, "name_14638012768301");
-		}else {
-			cardLayout.show(jpanelWithCardLayout, "name_14640815504738");
-		}
+//		if(budgetButtonsNames.size() <= 0) {
+//			cardLayout.show(jpanelWithCardLayout, "name_14638012768301");
+//		}else {
+//			cardLayout.show(jpanelWithCardLayout, "name_14640815504738");
+//		}
 	}
 
 	private void initialize() {
@@ -126,7 +128,24 @@ public class BudgetViews extends JFrame {
 		setContentPane(contentPane);
 		
 		jpanelForButtons = new JPanel();
-		//jpanelForButtons.add(panelBudgetButtons);
+		
+		JPanel panel = new JPanel();
+		GroupLayout gl_panelForButtons = new GroupLayout(jpanelForButtons);
+		gl_panelForButtons.setHorizontalGroup(
+			gl_panelForButtons.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelForButtons.createSequentialGroup()
+					.addGap(64)
+					.addComponent(panelBudgetButtons, GroupLayout.PREFERRED_SIZE, 880, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(24, Short.MAX_VALUE))
+		);
+		gl_panelForButtons.setVerticalGroup(
+			gl_panelForButtons.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelForButtons.createSequentialGroup()
+					.addGap(36)
+					.addComponent(panelBudgetButtons, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(134, Short.MAX_VALUE))
+		);
+		jpanelForButtons.setLayout(gl_panelForButtons);
 		
 		jpanelWithCardLayout = new JPanel();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
@@ -316,16 +335,7 @@ public class BudgetViews extends JFrame {
 		scrollPaneIncomeView.setViewportView(jpanelIncomeView);
 		jpanelForViews.setLayout(gl_panelForViews);
 		jpanelWithAllContent.setLayout(gl_panelWithAllContent);
-		GroupLayout gl_panelForButtons = new GroupLayout(jpanelForButtons);
-		gl_panelForButtons.setHorizontalGroup(
-			gl_panelForButtons.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 948, Short.MAX_VALUE)
-		);
-		gl_panelForButtons.setVerticalGroup(
-			gl_panelForButtons.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 200, Short.MAX_VALUE)
-		);
-		jpanelForButtons.setLayout(gl_panelForButtons);
+		
 		contentPane.setLayout(gl_contentPane);
 	}
 }
