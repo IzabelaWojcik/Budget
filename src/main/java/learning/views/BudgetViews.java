@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JCheckBox;
+import javax.swing.JSplitPane;
 
 public class BudgetViews extends JFrame {
 	private static final int PANEL_WITH_BUDGET_BUTTONS_ID = 1;
@@ -39,9 +40,7 @@ public class BudgetViews extends JFrame {
 	
 	private JButton btnAddNewMonth;
 	private JPanel contentPane;
-	private JPanel jpanelWithCardLayout;
 	private JPanel jpanelForButtons;
-	private JPanel jpanelEmpty;
 	private JPanel jpanelWithAllContent;
 	private JPanel jpanelForViews;
 	private JPanel jpanelForAddingTransactions;
@@ -110,8 +109,6 @@ public class BudgetViews extends JFrame {
 				panelAddExpenditure, panelAddSavings, panelAddIncome, panelViewExpenditure, panelViewSavings, panelViewIncome);
 				
 		initialize();
-		
-		CardLayout cardLayout = (CardLayout) jpanelWithCardLayout.getLayout();
 //		if(budgetButtonsNames.size() <= 0) {
 //			cardLayout.show(jpanelWithCardLayout, "name_14638012768301");
 //		}else {
@@ -132,56 +129,21 @@ public class BudgetViews extends JFrame {
 		GroupLayout gl_panelForButtons = new GroupLayout(jpanelForButtons);
 		gl_panelForButtons.setHorizontalGroup(
 			gl_panelForButtons.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelForButtons.createSequentialGroup()
-					.addGap(64)
-					.addComponent(panelBudgetButtons, GroupLayout.PREFERRED_SIZE, 880, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(24, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING, gl_panelForButtons.createSequentialGroup()
+					.addContainerGap(38, Short.MAX_VALUE)
+					.addComponent(panelBudgetButtons, GroupLayout.PREFERRED_SIZE, 934, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		gl_panelForButtons.setVerticalGroup(
 			gl_panelForButtons.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelForButtons.createSequentialGroup()
 					.addGap(36)
 					.addComponent(panelBudgetButtons, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(134, Short.MAX_VALUE))
+					.addContainerGap(132, Short.MAX_VALUE))
 		);
 		jpanelForButtons.setLayout(gl_panelForButtons);
 		
-		jpanelWithCardLayout = new JPanel();
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(jpanelForButtons, GroupLayout.PREFERRED_SIZE, 968, GroupLayout.PREFERRED_SIZE)
-						.addComponent(jpanelWithCardLayout, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(jpanelForButtons, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(jpanelWithCardLayout, GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE))
-		);
-		jpanelWithCardLayout.setLayout(new CardLayout(0, 0));
-		
-		jpanelEmpty = new JPanel();
-		jpanelWithCardLayout.add(jpanelEmpty, "name_14638012768301");
-		GroupLayout gl_jpanelEmpty = new GroupLayout(jpanelEmpty);
-		gl_jpanelEmpty.setHorizontalGroup(
-			gl_jpanelEmpty.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 1022, Short.MAX_VALUE)
-		);
-		gl_jpanelEmpty.setVerticalGroup(
-			gl_jpanelEmpty.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 619, Short.MAX_VALUE)
-		);
-		jpanelEmpty.setLayout(gl_jpanelEmpty);
-		
 		jpanelWithAllContent = new JPanel();
-		jpanelWithCardLayout.add(jpanelWithAllContent, "name_14640815504738");
 		
 		btnAddNewMonth = new JButton("Add new month");
 		
@@ -190,19 +152,17 @@ public class BudgetViews extends JFrame {
 		jpanelForAddingTransactions = new JPanel();
 		GroupLayout gl_panelWithAllContent = new GroupLayout(jpanelWithAllContent);
 		gl_panelWithAllContent.setHorizontalGroup(
-			gl_panelWithAllContent.createParallelGroup(Alignment.TRAILING)
+			gl_panelWithAllContent.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelWithAllContent.createSequentialGroup()
-					.addGap(35)
-					.addComponent(btnAddNewMonth)
-					.addContainerGap(864, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, gl_panelWithAllContent.createSequentialGroup()
-					.addGroup(gl_panelWithAllContent.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panelWithAllContent.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panelWithAllContent.createSequentialGroup()
-							.addGap(38)
-							.addComponent(jpanelForAddingTransactions, GroupLayout.PREFERRED_SIZE, 935, GroupLayout.PREFERRED_SIZE))
-						.addGroup(Alignment.LEADING, gl_panelWithAllContent.createSequentialGroup()
+							.addGap(35)
+							.addComponent(btnAddNewMonth))
+						.addGroup(gl_panelWithAllContent.createSequentialGroup()
 							.addGap(26)
-							.addComponent(jpanelForViews, GroupLayout.PREFERRED_SIZE, 947, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(gl_panelWithAllContent.createParallelGroup(Alignment.LEADING)
+								.addComponent(jpanelForAddingTransactions, GroupLayout.PREFERRED_SIZE, 935, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jpanelForViews, GroupLayout.PREFERRED_SIZE, 947, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap(49, Short.MAX_VALUE))
 		);
 		gl_panelWithAllContent.setVerticalGroup(
@@ -334,6 +294,25 @@ public class BudgetViews extends JFrame {
 		scrollPaneIncomeView.setViewportView(jpanelIncomeView);
 		jpanelForViews.setLayout(gl_panelForViews);
 		jpanelWithAllContent.setLayout(gl_panelWithAllContent);
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(jpanelForButtons, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(jpanelWithAllContent, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 984, Short.MAX_VALUE))
+					.addContainerGap(1, Short.MAX_VALUE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(jpanelForButtons, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(jpanelWithAllContent, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(7, Short.MAX_VALUE))
+		);
 		
 		contentPane.setLayout(gl_contentPane);
 	}
