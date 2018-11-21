@@ -14,6 +14,7 @@ public class PanelWithButtons extends JPanel implements INotifier{
 	public PanelWithButtons(int id) { identifier = id; listeners = new HashSet<IListener>();};
 	
 	public void createButtons(SortedSet<String> buttonsNames) {
+		removeAll();
 		for(String name: buttonsNames) {
 			JButton button = new JButton(name);
 			button.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonsData(identifier, name));});});
