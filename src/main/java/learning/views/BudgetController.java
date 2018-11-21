@@ -57,7 +57,6 @@ public class BudgetController implements IListener{
 		panelViewIncome = panelIncomeView;
 		
 		this.databaseReader = databaseReader;
-		initializePanelBudget();
 		
 		panelWithBudget.register(this);
 		panelWithYears.register(this);
@@ -65,7 +64,7 @@ public class BudgetController implements IListener{
 		panelToAddExpenditure.register(this);
 		panelToAddSavings.register(this);
 		panelToAddIncome.register(this);
-		
+		initializePanelBudget();
 	}
 	
 	public void initializePanelBudget() throws DatabaseNotInitialized {
@@ -92,6 +91,10 @@ public class BudgetController implements IListener{
 		}
 		else if(notificationData.notifierId == panelWithMonths.identifier) {
 			handlePanelWithMonthsNotification(notificationData);
+		}
+		else
+		{
+			throw new IllegalArgumentException("Unexpected identifier: " + notificationData.notifierId);
 		}
 	
 	}

@@ -9,9 +9,9 @@ import javax.swing.JPanel;
 
 public class PanelWithButtons extends JPanel implements INotifier{
 	public final int identifier;
-	private Set<IListener> listeners = new HashSet<IListener>();
+	private Set<IListener> listeners;
 	
-	public PanelWithButtons(int id) { identifier = id;};
+	public PanelWithButtons(int id) { identifier = id; listeners = new HashSet<IListener>();};
 	
 	public void createButtons(SortedSet<String> buttonsNames) {
 		for(String name: buttonsNames) {
@@ -19,6 +19,8 @@ public class PanelWithButtons extends JPanel implements INotifier{
 			button.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonsData(identifier, name));});});
 			add(button);
 		}
+		revalidate();
+		repaint();
 	}
 	
 	@Override
