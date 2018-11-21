@@ -1,10 +1,6 @@
 package learning.views;
 
 import java.awt.EventQueue;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,12 +16,9 @@ import learning.budget.IDatabaseWriter;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.CardLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JCheckBox;
-import javax.swing.JSplitPane;
 
 public class BudgetViews extends JFrame {
 	private static final int PANEL_WITH_BUDGET_BUTTONS_ID = 1;
@@ -46,16 +39,11 @@ public class BudgetViews extends JFrame {
 	private JPanel jpanelForAddingTransactions;
 	private JPanel jpanelIncomeView;
 	private JPanel jpanelExpenditureView;
-	private JPanel jpanelAddIncome;
 	private JPanel jpanelSavingsView;
-	private JPanel jpanelAddExpenditure;
-	private JPanel jpanelAddSavings;
 	private JLabel lblIncomeSum;
 	private JLabel lblexpenditureSum;
 	private JLabel lblSavingsSum;
 	private JScrollPane scrollPaneSavingsView;
-	private JScrollPane scrollPaneAddExpenditure;
-	private JScrollPane scrollPaneAddSavings;
 	
 	private PanelWithButtons panelBudgetButtons, panelYearsButtons, panelMonthsButtons;
 	private PanelAddTransaction panelAddIncome, panelAddExpenditure, panelAddSavings;
@@ -186,11 +174,6 @@ public class BudgetViews extends JFrame {
 					.addContainerGap(25, Short.MAX_VALUE))
 		);
 		
-		JScrollPane scrollPaneAddIncome = new JScrollPane();
-		
-		scrollPaneAddExpenditure = new JScrollPane();
-		
-		scrollPaneAddSavings = new JScrollPane();
 		GroupLayout gl_panelForAddingTransactions = new GroupLayout(jpanelForAddingTransactions);
 		gl_panelForAddingTransactions.setHorizontalGroup(
 			gl_panelForAddingTransactions.createParallelGroup(Alignment.LEADING)
@@ -214,14 +197,6 @@ public class BudgetViews extends JFrame {
 					.addContainerGap(15, Short.MAX_VALUE))
 		);
 		
-		jpanelAddSavings = new JPanel();
-		scrollPaneAddSavings.setViewportView(jpanelAddSavings);
-		
-		jpanelAddExpenditure = new JPanel();
-		scrollPaneAddExpenditure.setViewportView(jpanelAddExpenditure);
-		
-		jpanelAddIncome = new JPanel();
-		scrollPaneAddIncome.setViewportView(jpanelAddIncome);
 		jpanelForAddingTransactions.setLayout(gl_panelForAddingTransactions);
 		
 		JLabel lblIncome = new JLabel("Income:");
