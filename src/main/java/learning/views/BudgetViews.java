@@ -196,11 +196,11 @@ public class BudgetViews extends JFrame {
 			gl_panelForAddingTransactions.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelForAddingTransactions.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(scrollPaneAddIncome, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
+					.addComponent(panelAddIncome, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
 					.addGap(43)
-					.addComponent(scrollPaneAddExpenditure, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
+					.addComponent(panelAddExpenditure, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
 					.addGap(43)
-					.addComponent(scrollPaneAddSavings, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
+					.addComponent(panelAddSavings, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(186, Short.MAX_VALUE))
 		);
 		gl_panelForAddingTransactions.setVerticalGroup(
@@ -208,9 +208,9 @@ public class BudgetViews extends JFrame {
 				.addGroup(gl_panelForAddingTransactions.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panelForAddingTransactions.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPaneAddSavings, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollPaneAddExpenditure, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollPaneAddIncome, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panelAddSavings, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panelAddExpenditure, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panelAddIncome, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(15, Short.MAX_VALUE))
 		);
 		
