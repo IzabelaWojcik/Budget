@@ -160,7 +160,6 @@ public class BudgetController implements IListener{
 					.filter(u -> u.getBudgerId() == budgetId)
 					.map(u -> u.getUserName())
 					.collect(Collectors.toList());
-					
 			panelToAddIncome.fillComboBox(userNames, panelToAddIncome.getComboboxUser());
 			
 			List<Triplet<String, String, String>> expendituresToFillPanel = dataToFillPanel(expenditures);

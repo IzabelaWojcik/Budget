@@ -24,13 +24,14 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import org.javatuples.Quintet;
 
 public class PanelAddIncome extends JPanel implements INotifier{
+	public final int identifier;
+	
 	private JFormattedTextField  formattedTextField;
 	private JDateChooser dateChooser;
 	private JComboBox<String> comboBoxCategory;
-	private JComboBox<String> comboBoxUser;
 	private JButton buttonAdd;
-	public final int identifier;
 	private Set<IListener> listeners;
+	private JComboBox<String> comboBoxUser;
 	
 	public PanelAddIncome(int id){
 		identifier = id;
@@ -43,7 +44,6 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		
 		dateChooser = new JDateChooser();
 		comboBoxCategory = new JComboBox<String>();
-		comboBoxUser = new JComboBox<String>();
 		buttonAdd = new JButton("Dodaj");
 		
 		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(170, 20), JLabel.LEFT);
@@ -57,56 +57,70 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		
 		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddTransactionData(identifier, date, (String) comboBoxCategory.getSelectedItem(), formattedTextField.getText()));});});
 		
+		comboBoxUser = new JComboBox<String>();
+		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addGap(12)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGap(28)
+								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+									.addComponent(lblCategory)
+									.addComponent(lblAmount))
+								.addPreferredGap(ComponentPlacement.UNRELATED))
+							.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lblUser, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(lblDate)
-							.addGap(5))
-						.addComponent(lblAmount)
-						.addComponent(lblCategory))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGap(18)))
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(comboBoxCategory, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(dateChooser, GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE))
-							.addGap(18)
-							.addComponent(errorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-							.addComponent(buttonAdd)
-							.addComponent(formattedTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addGap(20))
+							.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+							.addGap(25))
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(comboBoxUser, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboBoxCategory, 0, 137, Short.MAX_VALUE)
+								.addComponent(formattedTextField, GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+								.addComponent(buttonAdd, Alignment.TRAILING))
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addComponent(errorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(8)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(16)
+							.addGap(22)
+							.addComponent(errorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(6)
-									.addComponent(errorLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(18)
-									.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-										.addComponent(lblCategory)
-										.addComponent(comboBoxCategory, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)))))
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-							.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblDate)))
-					.addGap(18)
+								.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblDate))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(comboBoxUser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblUser))))
+					.addPreferredGap(ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblAmount)
-						.addComponent(formattedTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+						.addComponent(comboBoxCategory, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblCategory))
+					.addGap(12)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(formattedTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblAmount))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(buttonAdd)
-					.addGap(29))
+					.addGap(45))
 		);
 		setLayout(groupLayout);
 	}
@@ -134,5 +148,4 @@ public class PanelAddIncome extends JPanel implements INotifier{
 	public void deregister(IListener listener) {
 		listeners.remove(listener);
 	}
-	
 }

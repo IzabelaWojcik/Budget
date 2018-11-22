@@ -180,12 +180,12 @@ public class BudgetViews extends JFrame {
 			gl_panelForAddingTransactions.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelForAddingTransactions.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(panelAddIncome, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
-					.addGap(43)
-					.addComponent(panelAddExpenditure, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
-					.addGap(43)
-					.addComponent(panelAddSavings, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(186, Short.MAX_VALUE))
+					.addComponent(panelAddIncome, GroupLayout.PREFERRED_SIZE, 275, GroupLayout.PREFERRED_SIZE)
+					.addGap(26)
+					.addComponent(panelAddExpenditure, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)
+					.addGap(28)
+					.addComponent(panelAddSavings, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(83, Short.MAX_VALUE))
 		);
 		gl_panelForAddingTransactions.setVerticalGroup(
 			gl_panelForAddingTransactions.createParallelGroup(Alignment.LEADING)
