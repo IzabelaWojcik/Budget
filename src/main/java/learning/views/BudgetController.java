@@ -11,6 +11,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import javax.swing.JButton;
+
 import org.javatuples.Triplet;
 
 import learning.budget.DatabaseNotInitialized;
@@ -140,6 +142,8 @@ public class BudgetController implements IListener{
 								.map(month -> month.toString())
 								.collect(Collectors.toSet());
 		panelWithMonths.createButtons(new TreeSet<String>(months));
+		
+		
 	}
 	
 	private void handlePanelWithMonthsNotification(NotificationData notificationData) {
@@ -152,20 +156,10 @@ public class BudgetController implements IListener{
 			List<Transaction> income = getTransactionForBudgetYearMonth(INCOME, INCOME_CATEGORY);
 
 			List<String> expenditureCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, EXPENDITURE_CATEGORY);
-			panelToAddExpenditure.fillComboBox(expenditureCategories);
-			
 			List<String> savingsCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, SAVINGS_CATEGORY);
-			panelToAddSavings.fillComboBox(savingsCategories);
-			
 			List<String> incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
-			panelToAddIncome.fillComboBox(incomeCategories, panelToAddIncome.getComboboxCategory());
 			
-			List<UsersObject> userNamesIdsBudgetIds = databaseReader.readUsersFromDatabase();
-			List<String> userNames = userNamesIdsBudgetIds.stream()
-					.filter(u -> u.getBudgerId() == budgetId)
-					.map(u -> u.getUserName())
-					.collect(Collectors.toList());
-			panelToAddIncome.fillComboBox(userNames, panelToAddIncome.getComboboxUser());
+			fillPanelsToAddTransactions(expenditureCategories, savingsCategories, incomeCategories);
 			
 			List<Triplet<String, String, String>> expendituresToFillPanel = dataToFillPanel(expenditures);
 			List<Triplet<String, String, String>> savingsToFillPanel = dataToFillPanel(savings);
@@ -179,6 +173,19 @@ public class BudgetController implements IListener{
 			e.printStackTrace();
 			return;
 		}
+	}
+
+	private void fillPanelsToAddTransactions(List<String> expenditureCategories, List<String> savingsCategories, List<String> incomeCategories) throws DatabaseNotInitialized {
+		List<UsersObject> userNamesIdsBudgetIds = databaseReader.readUsersFromDatabase();
+		List<String> userNames = userNamesIdsBudgetIds.stream()
+				.filter(u -> u.getBudgerId() == budgetId)
+				.map(u -> u.getUserName())
+				.collect(Collectors.toList());
+		
+		panelToAddExpenditure.fillComboBox(expenditureCategories);
+		panelToAddSavings.fillComboBox(savingsCategories);
+		panelToAddIncome.fillComboBox(incomeCategories, panelToAddIncome.getComboboxCategory());
+		panelToAddIncome.fillComboBox(userNames, panelToAddIncome.getComboboxUser());
 	}
 
 	private List<Transaction> getTransactionForBudgetYearMonth(String transactionTablename, String categoryTablename) throws DatabaseNotInitialized {
