@@ -28,10 +28,10 @@ public class PanelAddIncome extends JPanel implements INotifier{
 	
 	private JFormattedTextField  formattedTextField;
 	private JDateChooser dateChooser;
-	private JComboBox<String> comboBoxCategory;
 	private JButton buttonAdd;
 	private Set<IListener> listeners;
 	private JComboBox<String> comboBoxUser;
+	private JComboBox<String> comboBoxCategory;
 	
 	public PanelAddIncome(int id){
 		identifier = id;
@@ -44,6 +44,7 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		
 		dateChooser = new JDateChooser();
 		comboBoxCategory = new JComboBox<String>();
+		comboBoxUser = new JComboBox<String>();
 		buttonAdd = new JButton("Dodaj");
 		
 		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(170, 20), JLabel.LEFT);
@@ -55,9 +56,7 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		formattedTextField.setColumns(10);
 		formattedTextField.addPropertyChangeListener(errorLabel);
 		
-		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddTransactionData(identifier, date, (String) comboBoxCategory.getSelectedItem(), formattedTextField.getText()));});});
-		
-		comboBoxUser = new JComboBox<String>();
+		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddIncomeData(identifier, date, (String) comboBoxUser.getSelectedItem(), (String) comboBoxCategory.getSelectedItem(), formattedTextField.getText()));});});
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
