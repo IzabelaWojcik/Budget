@@ -129,6 +129,10 @@ public class PanelAddIncome extends JPanel implements INotifier{
 			combobox.addItem(s);
 	    }
 	}
+
+	public void clearComboBox(JComboBox comboBox) {
+		comboBox.removeAllItems();
+	} 
 	
 	public JComboBox getComboboxUser() {
 		return comboBoxUser;

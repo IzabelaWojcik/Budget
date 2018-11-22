@@ -112,6 +112,10 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 	    }
 	}
 
+	public void clearComboBox() {
+		comboBox.removeAllItems();
+	}
+
 	@Override
 	public void register(IListener listener) {
 		listeners.add(listener);

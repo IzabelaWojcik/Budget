@@ -104,12 +104,17 @@ public class BudgetController implements IListener{
 	private void handlePanelWithBudgetNotification(NotificationData notificationData) {
 		ButtonsData buttonsData = (ButtonsData) notificationData;
 		clickedBudgetName = buttonsData.name;
-		
+
 		for(Entry<Integer, String> entry: budgetIdToName.entrySet()) {
 				if(entry.getValue() == clickedBudgetName) {
 					budgetId = entry.getKey();
 				}
 		}
+		
+		panelToAddExpenditure.clearComboBox();
+		panelToAddSavings.clearComboBox();
+		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxCategory());
+		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxUser());
 		
 		try {
 			dates = databaseReader.readDatesForBudgetFromDatabase(budgetId);
