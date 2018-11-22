@@ -64,7 +64,7 @@ public class DatabaseReader implements IDatabaseReader{
 		return date;
 	}
 	
-	public ArrayList<UsersObject> readUsersFromDatabase() throws DatabaseNotInitialized{
+	public List<UsersObject> readUsersFromDatabase() throws DatabaseNotInitialized{
 		String tablename = "Users";
 		ArrayList<UsersObject> userList = new ArrayList<UsersObject>();
 		try{

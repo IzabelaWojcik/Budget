@@ -46,7 +46,8 @@ public class BudgetViews extends JFrame {
 	private JScrollPane scrollPaneSavingsView;
 	
 	private PanelWithButtons panelBudgetButtons, panelYearsButtons, panelMonthsButtons;
-	private PanelAddTransaction panelAddIncome, panelAddExpenditure, panelAddSavings;
+	private PanelAddTransaction panelAddExpenditure, panelAddSavings;
+	private PanelAddIncome panelAddIncome;
 	private PanelViewTransaction panelViewIncome, panelViewExpenditure, panelViewSavings;
 	private IDatabaseWriter databaseWriter;
 	private IDatabaseReader databaseReader;
@@ -90,7 +91,7 @@ public class BudgetViews extends JFrame {
 		panelViewExpenditure = new PanelViewTransaction();
 		panelViewSavings = new PanelViewTransaction();
 		
-		panelAddIncome = new PanelAddTransaction(PANEL_ADD_INCOME_ID);
+		panelAddIncome = new PanelAddIncome(PANEL_ADD_INCOME_ID);
 		panelAddExpenditure = new PanelAddTransaction(PANEL_ADD_EXPENDITURE_ID);
 		panelAddSavings = new PanelAddTransaction(PANEL_ADD_SAVINGS_ID);
 		

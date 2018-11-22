@@ -46,7 +46,7 @@ public class PanelAddIncomeTest {
 		List<String> users = new ArrayList<String>() {{add("user1"); add("user2"); add("user3");}};
 		category = categories.get(0);
 		user = users.get(0);
-		panelAddIncome = new PanelAddIncome(identifier, categories, users, clickedBudgetId);
+		panelAddIncome = new PanelAddIncome(identifier);
 	}
 	
 	@Test

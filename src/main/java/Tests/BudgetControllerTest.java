@@ -14,6 +14,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 import org.javatuples.Triplet;
 import org.junit.Before;
@@ -32,8 +33,10 @@ import learning.budget.DatabaseNotInitialized;
 import learning.budget.DatabaseReader;
 import learning.budget.IDatabaseReader;
 import learning.budget.Transaction;
+import learning.budget.UsersObject;
 import learning.views.BudgetController;
 import learning.views.ButtonsData;
+import learning.views.PanelAddIncome;
 import learning.views.PanelAddTransaction;
 import learning.views.PanelViewTransaction;
 import learning.views.PanelWithButtons;
@@ -41,7 +44,7 @@ import learning.views.PanelWithButtons;
 public class BudgetControllerTest {
 	private HashMap<Integer, String> budgetIdToName = new HashMap<Integer, String>() {{put(1, "budzet1"); put(2, "budzet2"); put(3, "budzet3");}};
 	private BudgetController budgetController;
-	private int clickedBudgetId, categoryId1, categoryId2, transactionId;
+	private int clickedBudgetId, noClickedBudgetId, categoryId1, categoryId2, transactionId;
 	private double amount;
 	private List<LocalDate> dates;
 	private List<String> categories;
@@ -49,6 +52,15 @@ public class BudgetControllerTest {
 	private String categoryName1;
 	private String categoryName2;
 	private String categoryName3;
+	private String userName1;
+	private String userName2;
+	private String userName3;
+	private String userName4;
+	private int userId1;
+	private int userId2;
+	private int userId3;
+	private int userId4;
+	private ArrayList<UsersObject> userNamesIdsBudgetIds;
 	private List<Triplet<String, String, String>> listOfTripletsExpenditure, listOfTripletsSavings, listOfTripletsIncome;
 	private Triplet<String, String, String> columnsName;
 	
@@ -65,7 +77,7 @@ public class BudgetControllerTest {
 	@Mock
 	PanelAddTransaction panelAddSavings;
 	@Mock
-	PanelAddTransaction panelAddIncome;
+	PanelAddIncome panelAddIncome;
 	@Mock
 	PanelViewTransaction panelExpenditureView;
 	@Mock
@@ -89,6 +101,7 @@ public class BudgetControllerTest {
 		setIdentifier(panelAddExpenditure, 126);
 		
 		clickedBudgetId = 1;
+		noClickedBudgetId = 2;
 		categoryId1 = 1; 
 		categoryId2 = 2; 
 		transactionId  = 123;
@@ -129,6 +142,14 @@ public class BudgetControllerTest {
 			add(categoryName2); 
 			}};
 			
+		userNamesIdsBudgetIds = new ArrayList<UsersObject>() {{
+			add(new UsersObject(userId1, userName1, clickedBudgetId));
+			add(new UsersObject(userId2, userName2, noClickedBudgetId));
+			add(new UsersObject(userId3, userName3, clickedBudgetId));
+			add(new UsersObject(userId4, userName4, clickedBudgetId));
+			}};	
+
+			
 		listOfTripletsExpenditure = new ArrayList<Triplet<String, String, String>>(){{
 			add(new Triplet("2017-03-17", categoryName1, String.valueOf(amount))); 
 			}};
@@ -154,6 +175,12 @@ public class BudgetControllerTest {
 	
 	private void setIdentifier(PanelAddTransaction panel, int identifier) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Field budgetIdField = PanelAddTransaction.class.getField("identifier");
+		budgetIdField.setAccessible(true);
+		budgetIdField.set(panel, identifier);
+	}
+	
+	private void setIdentifier(PanelAddIncome panel, int identifier) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field budgetIdField = PanelAddIncome.class.getField("identifier");
 		budgetIdField.setAccessible(true);
 		budgetIdField.set(panel, identifier);
 	}
@@ -200,6 +227,7 @@ public class BudgetControllerTest {
 		when(databaseForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, clickedBudgetId)).thenReturn(expenditures);
 		when(databaseForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, clickedBudgetId)).thenReturn(savings);
 		when(databaseForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.INCOME, BudgetController.INCOME_CATEGORY, clickedBudgetId)).thenReturn(income);
+		when(databaseForTest.readUsersFromDatabase()).thenReturn(userNamesIdsBudgetIds);
 		
 		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
 		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
@@ -211,8 +239,9 @@ public class BudgetControllerTest {
 		
 		verify(panelAddExpenditure).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
 		verify(panelAddSavings).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
-		verify(panelAddIncome).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
-	
+		verify(panelAddIncome).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}}, panelAddIncome.getComboboxCategory());
+		verify(panelAddIncome).fillComboBox( new ArrayList<String>() {{add(userName1); add(userName2);}}, panelAddIncome.getComboboxUser());
+		
 		verify(panelExpenditureView).fillPanel(listOfTripletsExpenditure, budgetController.columnsNameDateCategoryAmount);
 		verify(panelSavingsView).fillPanel(listOfTripletsSavings, budgetController.columnsNameDateCategoryAmount);
 		verify(panelIncomeView).fillPanel(listOfTripletsIncome, budgetController.columnsNameUserNameCategoryAmount);

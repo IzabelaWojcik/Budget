@@ -32,7 +32,7 @@ public class PanelAddIncome extends JPanel implements INotifier{
 	public final int identifier;
 	private Set<IListener> listeners;
 	
-	public PanelAddIncome(int id, List<String> categories, List<String> users, int clickedBudgetId){
+	public PanelAddIncome(int id){
 		identifier = id;
 		listeners = new HashSet<IListener>();
 		
@@ -54,9 +54,6 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		formattedTextField = new JFormattedTextField(DecimalFormat.getInstance());
 		formattedTextField.setColumns(10);
 		formattedTextField.addPropertyChangeListener(errorLabel);
-		
-		fillComboBox(categories, comboBoxCategory);
-		fillComboBox(users, comboBoxUser);
 		
 		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddTransactionData(identifier, date, (String) comboBoxCategory.getSelectedItem(), formattedTextField.getText()));});});
 		
@@ -118,6 +115,14 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		for(String s: list){
 			combobox.addItem(s);
 	    }
+	}
+	
+	public JComboBox getComboboxUser() {
+		return comboBoxUser;
+	}
+	
+	public JComboBox getComboboxCategory() {
+		return comboBoxCategory;
 	}
 
 	@Override

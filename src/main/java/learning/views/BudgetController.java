@@ -16,6 +16,7 @@ import org.javatuples.Triplet;
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.IDatabaseReader;
 import learning.budget.Transaction;
+import learning.budget.UsersObject;
 
 public class BudgetController implements IListener{
 	public static final String INCOME = "Income";
@@ -29,7 +30,8 @@ public class BudgetController implements IListener{
 	
 	
 	private PanelWithButtons panelWithBudget, panelWithYears, panelWithMonths;
-	private PanelAddTransaction panelToAddExpenditure, panelToAddSavings, panelToAddIncome;
+	private PanelAddTransaction panelToAddExpenditure, panelToAddSavings;
+	private PanelAddIncome panelToAddIncome;
 	private PanelViewTransaction panelViewExpenditure, panelViewSavings, panelViewIncome;
 	private IDatabaseReader databaseReader;
 	private Map<Integer, String> budgetIdToName;
@@ -43,7 +45,7 @@ public class BudgetController implements IListener{
 	
 	public BudgetController(IDatabaseReader databaseReader, 
 							PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, 
-							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddTransaction panelAddIncome,
+							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddIncome panelAddIncome,
 							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelIncomeView) throws DatabaseNotInitialized 
 	{
 		panelWithBudget = panelBudget;
@@ -151,7 +153,15 @@ public class BudgetController implements IListener{
 			panelToAddSavings.fillComboBox(savingsCategories);
 			
 			List<String> incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
-			panelToAddIncome.fillComboBox(incomeCategories);
+			panelToAddIncome.fillComboBox(incomeCategories, panelToAddIncome.getComboboxCategory());
+			
+			List<UsersObject> userNamesIdsBudgetIds = databaseReader.readUsersFromDatabase();
+			List<String> userNames = userNamesIdsBudgetIds.stream()
+					.filter(u -> u.getBudgerId() == budgetId)
+					.map(u -> u.getUserName())
+					.collect(Collectors.toList());
+					
+			panelToAddIncome.fillComboBox(userNames, panelToAddIncome.getComboboxUser());
 			
 			List<Triplet<String, String, String>> expendituresToFillPanel = dataToFillPanel(expenditures);
 			List<Triplet<String, String, String>> savingsToFillPanel = dataToFillPanel(savings);
