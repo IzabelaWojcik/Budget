@@ -110,7 +110,7 @@ public class BudgetViews extends JFrame {
 
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1025, 900);
+		setBounds(100, 100, 1045, 880);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -161,7 +161,7 @@ public class BudgetViews extends JFrame {
 							.addGroup(gl_panelWithAllContent.createParallelGroup(Alignment.LEADING)
 								.addComponent(jpanelForAddingTransactions, GroupLayout.PREFERRED_SIZE, 935, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jpanelForViews, GroupLayout.PREFERRED_SIZE, 947, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(49, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		gl_panelWithAllContent.setVerticalGroup(
 			gl_panelWithAllContent.createParallelGroup(Alignment.LEADING)
@@ -171,8 +171,8 @@ public class BudgetViews extends JFrame {
 					.addGap(24)
 					.addComponent(jpanelForViews, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(jpanelForAddingTransactions, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(25, Short.MAX_VALUE))
+					.addComponent(jpanelForAddingTransactions, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(22, Short.MAX_VALUE))
 		);
 		
 		GroupLayout gl_panelForAddingTransactions = new GroupLayout(jpanelForAddingTransactions);
@@ -185,17 +185,17 @@ public class BudgetViews extends JFrame {
 					.addComponent(panelAddExpenditure, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)
 					.addGap(28)
 					.addComponent(panelAddSavings, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(83, Short.MAX_VALUE))
+					.addContainerGap(124, Short.MAX_VALUE))
 		);
 		gl_panelForAddingTransactions.setVerticalGroup(
 			gl_panelForAddingTransactions.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelForAddingTransactions.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panelForAddingTransactions.createParallelGroup(Alignment.LEADING)
-						.addComponent(panelAddSavings, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panelAddExpenditure, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panelAddIncome, GroupLayout.PREFERRED_SIZE, 174, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(15, Short.MAX_VALUE))
+					.addGroup(gl_panelForAddingTransactions.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(panelAddSavings, GroupLayout.PREFERRED_SIZE, 190, Short.MAX_VALUE)
+						.addComponent(panelAddIncome, 0, 0, Short.MAX_VALUE)
+						.addComponent(panelAddExpenditure, GroupLayout.PREFERRED_SIZE, 198, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
 		jpanelForAddingTransactions.setLayout(gl_panelForAddingTransactions);
@@ -281,13 +281,13 @@ public class BudgetViews extends JFrame {
 		jpanelWithAllContent.setLayout(gl_panelWithAllContent);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(jpanelForButtons, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(jpanelWithAllContent, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 984, Short.MAX_VALUE))
-					.addContainerGap(1, Short.MAX_VALUE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(jpanelWithAllContent, GroupLayout.PREFERRED_SIZE, 982, GroupLayout.PREFERRED_SIZE)
+						.addComponent(jpanelForButtons, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -295,8 +295,8 @@ public class BudgetViews extends JFrame {
 					.addContainerGap()
 					.addComponent(jpanelForButtons, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(jpanelWithAllContent, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(7, Short.MAX_VALUE))
+					.addComponent(jpanelWithAllContent, GroupLayout.PREFERRED_SIZE, 612, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		
 		contentPane.setLayout(gl_contentPane);
