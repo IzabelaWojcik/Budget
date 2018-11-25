@@ -150,6 +150,11 @@ public class BudgetController implements IListener{
 		ButtonsData buttonsData = (ButtonsData) notificationData;
 		clickedMonth = buttonsData.name;
 		
+		panelToAddExpenditure.clearComboBox();
+		panelToAddSavings.clearComboBox();
+		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxCategory());
+		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxUser());
+		
 		try {
 			List<Transaction> expenditures = getTransactionForBudgetYearMonth(EXPENDITURE, EXPENDITURE_CATEGORY);
 			List<Transaction> savings = getTransactionForBudgetYearMonth(SAVINGS, SAVINGS_CATEGORY);
