@@ -142,8 +142,6 @@ public class BudgetController implements IListener{
 								.map(month -> month.toString())
 								.collect(Collectors.toSet());
 		panelWithMonths.createButtons(new TreeSet<String>(months));
-		
-		
 	}
 	
 	private void handlePanelWithMonthsNotification(NotificationData notificationData) {
@@ -164,7 +162,13 @@ public class BudgetController implements IListener{
 			List<String> savingsCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, SAVINGS_CATEGORY);
 			List<String> incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
 			
-			fillPanelsToAddTransactions(expenditureCategories, savingsCategories, incomeCategories);
+			List<UsersObject> userNamesIdsBudgetIds = databaseReader.readUsersFromDatabase();
+			List<String> userNames = userNamesIdsBudgetIds.stream()
+					.filter(u -> u.getBudgerId() == budgetId)
+					.map(u -> u.getUserName())
+					.collect(Collectors.toList());
+			
+			fillPanelsToAddTransactions(expenditureCategories, savingsCategories, incomeCategories, userNames);
 			
 			List<Triplet<String, String, String>> expendituresToFillPanel = dataToFillPanel(expenditures);
 			List<Triplet<String, String, String>> savingsToFillPanel = dataToFillPanel(savings);
@@ -180,13 +184,7 @@ public class BudgetController implements IListener{
 		}
 	}
 
-	private void fillPanelsToAddTransactions(List<String> expenditureCategories, List<String> savingsCategories, List<String> incomeCategories) throws DatabaseNotInitialized {
-		List<UsersObject> userNamesIdsBudgetIds = databaseReader.readUsersFromDatabase();
-		List<String> userNames = userNamesIdsBudgetIds.stream()
-				.filter(u -> u.getBudgerId() == budgetId)
-				.map(u -> u.getUserName())
-				.collect(Collectors.toList());
-		
+	private void fillPanelsToAddTransactions(List<String> expenditureCategories, List<String> savingsCategories, List<String> incomeCategories, List<String> userNames) throws DatabaseNotInitialized {
 		panelToAddExpenditure.fillComboBox(expenditureCategories);
 		panelToAddSavings.fillComboBox(savingsCategories);
 		panelToAddIncome.fillComboBox(incomeCategories, panelToAddIncome.getComboboxCategory());
@@ -208,6 +206,7 @@ public class BudgetController implements IListener{
 		List<Triplet<String, String, String>> list = new ArrayList<Triplet<String, String, String>>();
 		for(Transaction t: transactions) {
 			list.add(new Triplet(t.getDate().toString(), t.getCategoryName(), String.valueOf(t.getAmount())));
+			System.out.println(t.getDate().toString()+ t.getCategoryName()+ String.valueOf(t.getAmount()));
 		}
 		return list;
 	}
