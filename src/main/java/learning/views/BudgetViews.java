@@ -101,11 +101,6 @@ public class BudgetViews extends JFrame {
 				panelViewExpenditure, panelViewSavings, panelViewIncome);
 			
 		initialize();
-//		if(budgetButtonsNames.size() <= 0) {
-//			cardLayout.show(jpanelWithCardLayout, "name_14638012768301");
-//		}else {
-//			cardLayout.show(jpanelWithCardLayout, "name_14640815504738");
-//		}
 	}
 
 	private void initialize() {
