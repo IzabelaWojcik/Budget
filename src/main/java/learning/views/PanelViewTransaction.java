@@ -26,11 +26,11 @@ public class PanelViewTransaction extends JPanel{
 		setLayout(new FlowLayout());
 		
 		table = new JTable(model);
-		
-		//JScrollPane scrollPane = new JScrollPane(table);
-		
-		//add(scrollPane);
-		add(table);
+		//FIXME
+//		JScrollPane scrollPane = new JScrollPane(table);
+//		
+//		add(scrollPane);
+//		scrollPane.add(table);
 	}
 	
 	public void fillPanel(List<Triplet<String, String, String>> list, Triplet<String, String, String> namesForColumns) {
@@ -42,10 +42,11 @@ public class PanelViewTransaction extends JPanel{
 				rows[i][j] = list.get(i).getValue(j);
 			}
 		}
+		
 		TableModel model = new DefaultTableModel(rows, columnsNames);
 		table = new JTable(model);
-		//add(table);
-		//revalidate();
-		//repaint();
+		add(table);
+		revalidate();
+		repaint();
 	}
 }

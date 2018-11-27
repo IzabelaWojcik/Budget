@@ -279,6 +279,7 @@ public class BudgetViews extends JFrame {
 		
 		jpanelIncomeView = new JPanel();
 		scrollPaneIncomeView.setViewportView(panelViewIncome);
+		
 		jpanelForViews.setLayout(gl_panelForViews);
 		jpanelWithAllContent.setLayout(gl_panelWithAllContent);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
