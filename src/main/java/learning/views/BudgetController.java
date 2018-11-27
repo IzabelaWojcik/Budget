@@ -198,16 +198,17 @@ public class BudgetController implements IListener{
 				.filter(t -> t.getYear() == Integer.parseInt(clickedYear)
 						&& t.getMonth() == Integer.parseInt(clickedMonth))
 				.collect(Collectors.toList());
-		
+
 		return transactionsForConcreteYearAndMonth;
 	}
 	
 	private List<Triplet<String, String, String>> dataToFillPanel(List<Transaction> transactions){
 		List<Triplet<String, String, String>> list = new ArrayList<Triplet<String, String, String>>();
+		
 		for(Transaction t: transactions) {
 			list.add(new Triplet(t.getDate().toString(), t.getCategoryName(), String.valueOf(t.getAmount())));
-			System.out.println(t.getDate().toString()+ t.getCategoryName()+ String.valueOf(t.getAmount()));
 		}
+		
 		return list;
 	}
 }

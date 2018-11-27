@@ -331,8 +331,7 @@ public class DatabaseReader implements IDatabaseReader{
 				transactionsForConcreteBudget.add(transaction);
 			}
 		}
-		
-		return transactions;
+		return transactionsForConcreteBudget;
 	}
 	
 	public List<Transaction> readAllTransactionsForConcreteBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized {

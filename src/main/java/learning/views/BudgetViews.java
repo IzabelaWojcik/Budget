@@ -44,7 +44,6 @@ public class BudgetViews extends JFrame {
 	private JLabel lblIncomeSum;
 	private JLabel lblexpenditureSum;
 	private JLabel lblSavingsSum;
-	private JScrollPane scrollPaneSavingsView;
 	
 	private PanelWithButtons panelBudgetButtons, panelYearsButtons, panelMonthsButtons;
 	private PanelAddTransaction panelAddExpenditure, panelAddSavings;
@@ -54,6 +53,9 @@ public class BudgetViews extends JFrame {
 	private IDatabaseReader databaseReader;
 	private BudgetController budgetController;
 	private NotificationData notificationData;
+	private JScrollPane scrollPaneIncomeView;
+	private JScrollPane scrollPaneExpenditureView;
+	private JScrollPane scrollPaneSavingsView;
 
 	/**
 	 * Launch the application.
@@ -202,10 +204,10 @@ public class BudgetViews extends JFrame {
 		
 		JLabel lblSavings = new JLabel("Savings:");
 		
-		JScrollPane scrollPaneIncomeView = new JScrollPane();
+		scrollPaneIncomeView = new JScrollPane();
 		scrollPaneIncomeView.setPreferredSize(new Dimension(210, 20));
 		
-		JScrollPane scrollPaneExpenditureView = new JScrollPane();
+		scrollPaneExpenditureView = new JScrollPane();
 		
 		scrollPaneSavingsView = new JScrollPane();
 		scrollPaneSavingsView.setPreferredSize(new Dimension(210, 20));
