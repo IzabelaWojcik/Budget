@@ -55,4 +55,10 @@ public class PanelViewTransaction extends JPanel{
 		scrollPane.revalidate();
 		scrollPane.repaint();
 	}
+	
+	public void clearPanel() {
+		scrollPane.setViewportView(null);
+		scrollPane.revalidate();
+		scrollPane.repaint();
+	}
 }

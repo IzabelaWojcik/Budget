@@ -121,6 +121,10 @@ public class BudgetController implements IListener{
 		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxCategory());
 		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxUser());
 		
+		panelViewExpenditure.clearPanel();
+		panelViewSavings.clearPanel();
+		panelViewIncome.clearPanel();
+		
 		try {
 			dates = databaseReader.readDatesForBudgetFromDatabase(budgetId);
 		} catch (DatabaseNotInitialized e) {
@@ -138,6 +142,10 @@ public class BudgetController implements IListener{
 	private void handlePanelWithYearsNotification(NotificationData notificationData) {
 		ButtonsData buttonsData = (ButtonsData) notificationData;
 		clickedYear = buttonsData.name;
+		
+		panelViewExpenditure.clearPanel();
+		panelViewSavings.clearPanel();
+		panelViewIncome.clearPanel();
 		
 		Set<String> months = dates.stream()
 								.filter(t -> t.getYear() == Integer.parseInt(clickedYear))
