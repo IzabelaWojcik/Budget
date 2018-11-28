@@ -1,36 +1,41 @@
 package learning.views;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import org.javatuples.Pair;
 import org.javatuples.Triplet;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.ScrollPaneConstants;
 
 public class PanelViewTransaction extends JPanel{
 	private JTable table;
-	private Object rows[][];
-	private String columns[];
-	private TableModel model = null;
+	private JScrollPane scrollPane;
 	
 	public PanelViewTransaction() {
-		setPreferredSize(new Dimension(210, 20));
-		setLayout(new FlowLayout());
+		setPreferredSize(new Dimension(215, 200));
 		
-		table = new JTable(model);
-		//FIXME
-//		JScrollPane scrollPane = new JScrollPane(table);
-//		
-//		add(scrollPane);
-//		scrollPane.add(table);
+		scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		GroupLayout groupLayout = new GroupLayout(this);
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+		);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
+		setLayout(groupLayout);
 	}
 	
 	public void fillPanel(List<Triplet<String, String, String>> list, Triplet<String, String, String> namesForColumns) {
@@ -45,8 +50,8 @@ public class PanelViewTransaction extends JPanel{
 		
 		TableModel model = new DefaultTableModel(rows, columnsNames);
 		table = new JTable(model);
-		add(table);
-		revalidate();
-		repaint();
+		scrollPane.setViewportView(table);
+		scrollPane.revalidate();
+		scrollPane.repaint();
 	}
 }
