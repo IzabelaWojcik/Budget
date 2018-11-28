@@ -24,6 +24,12 @@ public class PanelWithButtons extends JPanel implements INotifier{
 		repaint();
 	}
 	
+	public void clearPanel() {
+		this.removeAll();
+		revalidate();
+		repaint();
+	}
+	
 	@Override
 	public void register(IListener listener) {
 		listeners.add(listener);

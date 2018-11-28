@@ -113,6 +113,9 @@ public class BudgetController implements IListener{
 				}
 		}
 		
+		panelWithYears.clearPanel();
+		panelWithMonths.clearPanel();
+		
 		panelToAddExpenditure.clearComboBox();
 		panelToAddSavings.clearComboBox();
 		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxCategory());
