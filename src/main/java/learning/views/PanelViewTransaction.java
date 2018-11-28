@@ -50,6 +50,7 @@ public class PanelViewTransaction extends JPanel{
 		
 		TableModel model = new DefaultTableModel(rows, columnsNames);
 		table = new JTable(model);
+		table.setEnabled(false);
 		scrollPane.setViewportView(table);
 		scrollPane.revalidate();
 		scrollPane.repaint();
