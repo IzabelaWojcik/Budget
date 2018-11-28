@@ -318,6 +318,22 @@ public class DatabaseReader implements IDatabaseReader{
 		}
 		return transactions;
 	}
+
+	public List<Transaction> readIncomeForConcreteBugdetFromDatabase(int budgetId) throws DatabaseNotInitialized{
+		List<Transaction> incomes = readIncomefromDatabase();
+		HashMap<Integer, String> users = readUsersFromDatabasetoHashMap();
+		Map<Integer, String>  categories = readCategoryFromDatabase("Income_category");
+		
+		List<Transaction> incomesForConcreteBudget = new ArrayList<>();
+		
+		for(Transaction entry: incomes) {
+			if (entry.getBudgetId() == budgetId){
+				Transaction transaction = new Transaction(entry.getTransactionId(), entry.getCategoryId(), entry.getAmount(), entry.getDate(), entry.getBudgetId(), categories.get(entry.getCategoryId()), entry.getUserId(), users.get(entry.getUserId()));
+				incomesForConcreteBudget.add(transaction);
+			}
+		}
+		return incomesForConcreteBudget;
+	}
 	
 	public List<Transaction> readConcreteTransactionsWithCategoryNameForConcreteBudget(String tablenameForTransaction, String tablenameForCategory, int budgetId) throws DatabaseNotInitialized{
 		List<Transaction> transactions = readConcreteTransactionsForAllBudgetsFromDatabase(tablenameForTransaction);
@@ -359,5 +375,4 @@ public class DatabaseReader implements IDatabaseReader{
 							.distinct()
 							.collect(Collectors.toList());
 	}
-	
 }

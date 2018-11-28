@@ -47,4 +47,6 @@ public interface IDatabaseReader {
 	public List<LocalDate> readDatesForBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized;
 
 	public SortedSet<String> readBudgetNameFromDatabase() throws DatabaseNotInitialized;
+	
+	public List<Transaction> readIncomeForConcreteBugdetFromDatabase(int budgetId) throws DatabaseNotInitialized;
 }
