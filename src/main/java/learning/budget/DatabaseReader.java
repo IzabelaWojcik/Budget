@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -367,12 +366,11 @@ public class DatabaseReader implements IDatabaseReader{
 							.collect(Collectors.toList());
 	}
 	
-	public List<String> readCategoriesForBudgetFromDatabase(int budgetId, String categoryTablename) throws DatabaseNotInitialized {
+	public Map<Integer, String> readCategoriesForBudgetFromDatabase(int budgetId, String categoryTablename) throws DatabaseNotInitialized {
 		List<Triplet<Integer, Integer, String>> categories = readCategoryNameCategoryIdAndBudgetIdFromDatabase(categoryTablename);
-		return categories.stream()
+		Map<Integer, String> map = categories.stream()
 							.filter(c -> c.getValue0() == budgetId)
-							.map(Triplet<Integer, Integer, String>::getValue2)
-							.distinct()
-							.collect(Collectors.toList());
+							.collect(Collectors.toMap(Triplet<Integer, Integer, String>::getValue1, Triplet<Integer, Integer, String>::getValue2));
+		return map;
 	}
 }

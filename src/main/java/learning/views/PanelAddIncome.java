@@ -3,25 +3,20 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Map.Entry;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import com.toedter.calendar.JDateChooser;
-import learning.budget.IDatabaseWriter;
 import learning.budget.OldViews.ErrorLabelPropertyChangeListener;
 
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import org.javatuples.Quintet;
 
 public class PanelAddIncome extends JPanel implements INotifier{
 	public final int identifier;

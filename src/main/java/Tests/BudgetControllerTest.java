@@ -32,6 +32,7 @@ import Tests.Helpers.PanelForRemove;
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.DatabaseReader;
 import learning.budget.IDatabaseReader;
+import learning.budget.IDatabaseWriter;
 import learning.budget.Transaction;
 import learning.budget.UsersObject;
 import learning.views.BudgetController;
@@ -47,7 +48,7 @@ public class BudgetControllerTest {
 	private int clickedBudgetId, noClickedBudgetId, categoryId1, categoryId2, transactionId;
 	private double amount;
 	private List<LocalDate> dates;
-	private List<String> categories;
+	private Map<Integer, String> categories;
 	private List<Transaction> expenditures, savings, income, transactions;
 	private String categoryName1;
 	private String categoryName2;
@@ -65,7 +66,9 @@ public class BudgetControllerTest {
 	private Triplet<String, String, String> columnsName;
 	
 	@Mock
-	IDatabaseReader databaseForTest;
+	IDatabaseReader databaseReaderForTest;
+	@Mock
+	IDatabaseWriter databaseWriterForTest;
 	@Mock
 	PanelWithButtons panelWithBudget;
 	@Mock
@@ -90,7 +93,7 @@ public class BudgetControllerTest {
 	
 	@Before
 	public void setup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, DatabaseNotInitialized {
-		budgetController = new BudgetController(databaseForTest, 
+		budgetController = new BudgetController(databaseReaderForTest, databaseWriterForTest,
 												panelWithBudget, panelWithYears, panelWithMonths,
 												panelAddExpenditure, panelAddSavings, panelAddIncome,
 												panelExpenditureView, panelSavingsView, panelIncomeView
@@ -137,9 +140,9 @@ public class BudgetControllerTest {
 			add(LocalDate.parse("2015-05-15"));
 			}};
 			
-		categories = new ArrayList<String>(){{
-			add(categoryName1); 
-			add(categoryName2); 
+		categories = new HashMap<Integer, String>(){{
+			put(categoryId1, categoryName1); 
+			put(categoryId2, categoryName2); 
 			}};
 			
 		userNamesIdsBudgetIds = new ArrayList<UsersObject>() {{
@@ -186,7 +189,7 @@ public class BudgetControllerTest {
 	}
 
 	private void initializeController() throws DatabaseNotInitialized {
-		when(databaseForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
+		when(databaseReaderForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
 		budgetController.initializePanelBudget();
 	}
 	
@@ -202,7 +205,7 @@ public class BudgetControllerTest {
 	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
 		initializeController();
 
-		when(databaseForTest.readDatesForBudgetFromDatabase(clickedBudgetId)).thenReturn(dates);
+		when(databaseReaderForTest.readDatesForBudgetFromDatabase(clickedBudgetId)).thenReturn(dates);
 		
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
 		
@@ -213,7 +216,7 @@ public class BudgetControllerTest {
 	public void notify_redMonthsFromDatabase_controllerRedMonthsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
 		initializeController();
 		
-		when(databaseForTest.readDatesForBudgetFromDatabase(clickedBudgetId)).thenReturn(dates);
+		when(databaseReaderForTest.readDatesForBudgetFromDatabase(clickedBudgetId)).thenReturn(dates);
 		
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
 		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
@@ -224,14 +227,14 @@ public class BudgetControllerTest {
 	@Test
 	public void notify_fillPanelsWithCollectedData_controllerCollectsDataAndFillsDependentPanels() throws DatabaseNotInitialized {
 		initializeController();
-		when(databaseForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, clickedBudgetId)).thenReturn(expenditures);
-		when(databaseForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, clickedBudgetId)).thenReturn(savings);
-		when(databaseForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.INCOME, BudgetController.INCOME_CATEGORY, clickedBudgetId)).thenReturn(income);
-		when(databaseForTest.readUsersFromDatabase()).thenReturn(userNamesIdsBudgetIds);
+		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, clickedBudgetId)).thenReturn(expenditures);
+		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, clickedBudgetId)).thenReturn(savings);
+		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.INCOME, BudgetController.INCOME_CATEGORY, clickedBudgetId)).thenReturn(income);
+		when(databaseReaderForTest.readUsersFromDatabase()).thenReturn(userNamesIdsBudgetIds);
 		
-		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
-		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
-		when(databaseForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.INCOME_CATEGORY)).thenReturn(categories);
+		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
+		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
+		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.INCOME_CATEGORY)).thenReturn(categories);
 		
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
 		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));

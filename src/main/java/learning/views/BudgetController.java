@@ -1,6 +1,8 @@
 package learning.views;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import org.javatuples.Triplet;
 
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.IDatabaseReader;
+import learning.budget.IDatabaseWriter;
 import learning.budget.Transaction;
 import learning.budget.UsersObject;
 
@@ -36,16 +39,20 @@ public class BudgetController implements IListener{
 	private PanelAddIncome panelToAddIncome;
 	private PanelViewTransaction panelViewExpenditure, panelViewSavings, panelViewIncome;
 	private IDatabaseReader databaseReader;
+	private IDatabaseWriter databaseWriter;
 	private Map<Integer, String> budgetIdToName;
 	private int budgetId;
 	private List<LocalDate> dates;
 	private List<Transaction> transactions;
 	private List<Transaction> transactionsForConcreteBudgetYearAndMonth;
+	private Map<Integer, String> expenditureCategories;
+	private Map<Integer, String> savingsCategories;
+	private Map<Integer, String> incomeCategories;
 	private String clickedYear;
 	private String clickedMonth;
 	private String clickedBudgetName;
 	
-	public BudgetController(IDatabaseReader databaseReader, 
+	public BudgetController(IDatabaseReader databaseReader, IDatabaseWriter databasewriter,
 							PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, 
 							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddIncome panelAddIncome,
 							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelIncomeView) throws DatabaseNotInitialized 
@@ -61,6 +68,7 @@ public class BudgetController implements IListener{
 		panelViewIncome = panelIncomeView;
 		
 		this.databaseReader = databaseReader;
+		this.databaseWriter = databasewriter;
 		
 		panelWithBudget.register(this);
 		panelWithYears.register(this);
@@ -95,6 +103,19 @@ public class BudgetController implements IListener{
 		}
 		else if(notificationData.notifierId == panelWithMonths.identifier) {
 			handlePanelWithMonthsNotification(notificationData);
+		}
+		else if(notificationData.notifierId == panelToAddExpenditure.identifier) {
+			ButtonAddTransactionData buttonAdd = (ButtonAddTransactionData) notificationData;
+			int idCategory = 0;
+			for(Entry<Integer, String> e: expenditureCategories.entrySet()) {
+				if(buttonAdd.category.equals(e.getValue())) {
+					idCategory = e.getKey();	
+				}
+			}
+			if(idCategory != 0) {
+				databaseWriter.writeExpenditureOrSavingsToDatabase(Double.parseDouble(buttonAdd.amount), Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), idCategory, getBudgetId(clickedBudgetName), EXPENDITURE);
+			}
+			
 		}
 		else
 		{
@@ -169,9 +190,13 @@ public class BudgetController implements IListener{
 			List<Transaction> savings = readTransactionForBudgetYearMonth(SAVINGS, SAVINGS_CATEGORY);
 			List<Transaction> income = readIncomeForBudgetYearMonth(INCOME, INCOME_CATEGORY);
 
-			List<String> expenditureCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, EXPENDITURE_CATEGORY);
-			List<String> savingsCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, SAVINGS_CATEGORY);
-			List<String> incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
+			//FIXME
+			//expenditureCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, EXPENDITURE_CATEGORY);
+			//savingsCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, SAVINGS_CATEGORY);
+			//incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
+			expenditureCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, EXPENDITURE_CATEGORY);
+			savingsCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, SAVINGS_CATEGORY);
+			incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
 			
 			List<UsersObject> userNamesIdsBudgetIds = databaseReader.readUsersFromDatabase();
 			List<String> userNames = userNamesIdsBudgetIds.stream()
@@ -195,10 +220,26 @@ public class BudgetController implements IListener{
 		}
 	}
 
-	private void fillPanelsToAddTransactions(List<String> expenditureCategories, List<String> savingsCategories, List<String> incomeCategories, List<String> userNames) throws DatabaseNotInitialized {
-		panelToAddExpenditure.fillComboBox(expenditureCategories);
-		panelToAddSavings.fillComboBox(savingsCategories);
-		panelToAddIncome.fillComboBox(incomeCategories, panelToAddIncome.getComboboxCategory());
+	private void fillPanelsToAddTransactions(Map<Integer, String> expenditureCategories, Map<Integer, String> savingsCategories, Map<Integer, String> incomeCategories, List<String> userNames) throws DatabaseNotInitialized {
+		List<String> expendituresCat = new ArrayList<String>();
+		List<String> savingsCat = new ArrayList<String>();
+		List<String> incomeCat = new ArrayList<String>();
+		
+		for(Entry<Integer, String> e: expenditureCategories.entrySet()) {
+			expendituresCat.add(e.getValue());
+		}
+		
+		for(Entry<Integer, String> e: savingsCategories.entrySet()) {
+			savingsCat.add(e.getValue());
+		}
+		
+		for(Entry<Integer, String> e: incomeCategories.entrySet()) {
+			incomeCat.add(e.getValue());
+		}
+		
+		panelToAddExpenditure.fillComboBox(expendituresCat);
+		panelToAddSavings.fillComboBox(savingsCat);
+		panelToAddIncome.fillComboBox(incomeCat, panelToAddIncome.getComboboxCategory());
 		panelToAddIncome.fillComboBox(userNames, panelToAddIncome.getComboboxUser());
 	}
 

@@ -98,7 +98,7 @@ public class BudgetViews extends JFrame {
 		panelAddExpenditure = new PanelAddTransaction(PANEL_ADD_EXPENDITURE_ID);
 		panelAddSavings = new PanelAddTransaction(PANEL_ADD_SAVINGS_ID);
 		
-		budgetController = new BudgetController(databaseReader, 
+		budgetController = new BudgetController(databaseReader, databaseWriter,
 				panelBudgetButtons, panelYearsButtons, panelMonthsButtons,
 				panelAddExpenditure, panelAddSavings, panelAddIncome, 
 				panelViewExpenditure, panelViewSavings, panelViewIncome);
