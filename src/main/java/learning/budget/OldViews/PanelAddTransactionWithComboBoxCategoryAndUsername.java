@@ -33,7 +33,7 @@ public class PanelAddTransactionWithComboBoxCategoryAndUsername extends JPanel{
 		JButton btnAdd = new JButton("Dodaj");
 		comboBoxUser = new JComboBox<String>();
 		
-		errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+		//errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(130, 20), JLabel.LEFT);
 		
 		textFieldAmount = new JFormattedTextField(NumberFormat.getInstance());
 		textFieldAmount.setColumns(10);

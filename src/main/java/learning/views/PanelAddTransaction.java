@@ -12,7 +12,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import com.toedter.calendar.JDateChooser;
-import learning.budget.OldViews.ErrorLabelPropertyChangeListener;
 
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -27,6 +26,8 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 	private Set<IListener> listeners;
 	
 	public PanelAddTransaction(int id){
+		setVisible(false);
+		setEnabled(false);
 		identifier = id;
 		listeners = new HashSet<IListener>();
 		
@@ -37,15 +38,18 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 		dateChooser = new JDateChooser();
 		comboBox = new JComboBox<String>();
 		buttonAdd = new JButton("Dodaj");
+		buttonAdd.setEnabled(false);
 		
-		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(170, 20), JLabel.LEFT);
+		ErrorLabelKeyRelisedListener errorLabel = new ErrorLabelKeyRelisedListener(buttonAdd, Color.RED, new Dimension(170, 20), JLabel.LEFT);
+		errorLabel.setVisible(false);
+		errorLabel.setEnabled(false);
 		
 		Date date = new Date();
 		dateChooser.setDate(date);
 
 		formattedTextField = new JFormattedTextField(DecimalFormat.getInstance());
 		formattedTextField.setColumns(10);
-		formattedTextField.addPropertyChangeListener(errorLabel);
+		formattedTextField.addKeyListener(errorLabel);
 		
 		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddTransactionData(identifier, date, (String) comboBox.getSelectedItem(), formattedTextField.getText()));});});
 		

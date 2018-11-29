@@ -48,6 +48,7 @@ public class BudgetController implements IListener{
 	private Map<Integer, String> expenditureCategories;
 	private Map<Integer, String> savingsCategories;
 	private Map<Integer, String> incomeCategories;
+	private List<UsersObject> userNamesIdsBudgetIds;
 	private String clickedYear;
 	private String clickedMonth;
 	private String clickedBudgetName;
@@ -105,23 +106,53 @@ public class BudgetController implements IListener{
 			handlePanelWithMonthsNotification(notificationData);
 		}
 		else if(notificationData.notifierId == panelToAddExpenditure.identifier) {
-			ButtonAddTransactionData buttonAdd = (ButtonAddTransactionData) notificationData;
-			int idCategory = 0;
-			for(Entry<Integer, String> e: expenditureCategories.entrySet()) {
-				if(buttonAdd.category.equals(e.getValue())) {
-					idCategory = e.getKey();	
-				}
-			}
-			if(idCategory != 0) {
-				databaseWriter.writeExpenditureOrSavingsToDatabase(Double.parseDouble(buttonAdd.amount), Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), idCategory, getBudgetId(clickedBudgetName), EXPENDITURE);
-			}
-			
+			handlePanelToAddDataToDatabase(notificationData, expenditureCategories, EXPENDITURE);
+		}
+		else if(notificationData.notifierId == panelToAddSavings.identifier) {
+			handlePanelToAddDataToDatabase(notificationData, savingsCategories, SAVINGS);
+		}
+		else if(notificationData.notifierId == panelToAddIncome.identifier) {
+			handlePanelToAddIncomeToDatabase(notificationData);
 		}
 		else
 		{
 			throw new IllegalArgumentException("Unexpected identifier: " + notificationData.notifierId);
 		}
+	}
 	
+	private void handlePanelToAddDataToDatabase(NotificationData notificationData, Map<Integer, String> categories, String tablename) {
+		ButtonAddTransactionData buttonAdd = (ButtonAddTransactionData) notificationData;
+		int idCategory = 0;
+		for(Entry<Integer, String> e: categories.entrySet()) {
+			if(buttonAdd.category.equals(e.getValue())) {
+				idCategory = e.getKey();	
+			}
+		}
+		if(idCategory != 0) {
+			databaseWriter.writeExpenditureOrSavingsToDatabase(Double.parseDouble(buttonAdd.amount), Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), idCategory, getBudgetId(clickedBudgetName), tablename);
+		}
+	}
+	
+	private void handlePanelToAddIncomeToDatabase(NotificationData notificationData) {
+		ButtonAddIncomeData buttonAdd = (ButtonAddIncomeData) notificationData;
+		int idCategory = 0;
+		int idUser = 0;
+		
+		for(Entry<Integer, String> e: incomeCategories.entrySet()) {
+			if(buttonAdd.category.equals(e.getValue())) {
+				idCategory = e.getKey();	
+			}
+		}
+		
+		for(UsersObject uo: userNamesIdsBudgetIds) {
+			if(buttonAdd.user.equals(uo.getUserName())) {
+				idUser = uo.getUserId();
+			}
+		}
+		
+		if(idCategory != 0 && idUser != 0) {
+			databaseWriter.writeIncomeToDatabase(Double.parseDouble(buttonAdd.amount), Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), idUser, idCategory, getBudgetId(clickedBudgetName));
+		}
 	}
 
 	private void handlePanelWithBudgetNotification(NotificationData notificationData) {
@@ -185,20 +216,20 @@ public class BudgetController implements IListener{
 		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxCategory());
 		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxUser());
 		
+		panelToAddExpenditure.setVisible(true);
+		panelToAddSavings.setVisible(true);
+		panelToAddIncome.setVisible(true);
+		
 		try {
 			List<Transaction> expenditures = readTransactionForBudgetYearMonth(EXPENDITURE, EXPENDITURE_CATEGORY);
 			List<Transaction> savings = readTransactionForBudgetYearMonth(SAVINGS, SAVINGS_CATEGORY);
 			List<Transaction> income = readIncomeForBudgetYearMonth(INCOME, INCOME_CATEGORY);
 
-			//FIXME
-			//expenditureCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, EXPENDITURE_CATEGORY);
-			//savingsCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, SAVINGS_CATEGORY);
-			//incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
 			expenditureCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, EXPENDITURE_CATEGORY);
 			savingsCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, SAVINGS_CATEGORY);
 			incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
 			
-			List<UsersObject> userNamesIdsBudgetIds = databaseReader.readUsersFromDatabase();
+			userNamesIdsBudgetIds = databaseReader.readUsersFromDatabase();
 			List<String> userNames = userNamesIdsBudgetIds.stream()
 					.filter(u -> u.getBudgerId() == budgetId)
 					.map(u -> u.getUserName())

@@ -41,17 +41,17 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		comboBoxCategory = new JComboBox<String>();
 		comboBoxUser = new JComboBox<String>();
 		buttonAdd = new JButton("Dodaj");
+		buttonAdd.setEnabled(false);
 		
-		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(170, 20), JLabel.LEFT);
-		
+		ErrorLabelKeyRelisedListener errorLabel = new ErrorLabelKeyRelisedListener(buttonAdd, Color.RED, new Dimension(170, 20), JLabel.LEFT);
 		Date date = new Date();
 		dateChooser.setDate(date);
 
 		formattedTextField = new JFormattedTextField(DecimalFormat.getInstance());
 		formattedTextField.setColumns(10);
-		formattedTextField.addPropertyChangeListener(errorLabel);
+		formattedTextField.addKeyListener(errorLabel);
 		
-		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddIncomeData(identifier, date, (String) comboBoxUser.getSelectedItem(), (String) comboBoxCategory.getSelectedItem(), formattedTextField.getText()));});});
+		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddIncomeData(identifier, date, (String) comboBoxCategory.getSelectedItem(), (String) comboBoxUser.getSelectedItem(), formattedTextField.getText()));});});
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(

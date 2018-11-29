@@ -27,7 +27,7 @@ public class PanelAddTransactionWithComboBoxCategory extends JPanel{
 		JDateChooser dateChooser = new JDateChooser();
 		JComboBox<String> comboBoxCategory = new JComboBox<String>();
 		JButton btnAdd = new JButton("Dodaj");
-		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(170, 20), JLabel.LEFT);
+		ErrorLabelPropertyChangeListener errorLabel = new ErrorLabelPropertyChangeListener(btnAdd, Color.RED, new Dimension(170, 20), JLabel.LEFT);
 
 		Date date = new Date();
 		dateChooser.setDate(date);

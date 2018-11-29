@@ -24,7 +24,8 @@ public class PanelUserIncome extends JPanel {
 		add(userName);
 		add(salary);
 
-		errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(130, 20), JLabel.LEFT);
+		//FIXME
+		//errorLabel = new ErrorLabelPropertyChangeListener(Color.RED, new Dimension(130, 20), JLabel.LEFT);
 		salary.addPropertyChangeListener(errorLabel);
 		add(errorLabel);
 
