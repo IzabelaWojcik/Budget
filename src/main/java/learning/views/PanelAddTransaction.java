@@ -51,7 +51,9 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 		formattedTextField.setColumns(10);
 		formattedTextField.addKeyListener(errorLabel);
 		
-		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddTransactionData(identifier, date, (String) comboBox.getSelectedItem(), formattedTextField.getText()));});});
+		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddTransactionData(identifier, dateChooser.getDate(), (String) comboBox.getSelectedItem(), formattedTextField.getText()));});
+										formattedTextField.setText("");
+										buttonAdd.setEnabled(false);});
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(

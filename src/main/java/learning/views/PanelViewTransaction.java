@@ -32,9 +32,6 @@ public class PanelViewTransaction extends JPanel{
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
 		);
-		
-		table = new JTable();
-		scrollPane.setViewportView(table);
 		setLayout(groupLayout);
 	}
 	
