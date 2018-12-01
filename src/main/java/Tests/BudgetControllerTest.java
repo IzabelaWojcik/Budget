@@ -15,6 +15,7 @@ import java.util.TreeSet;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 
 import org.javatuples.Triplet;
 import org.junit.Before;
@@ -46,6 +47,7 @@ public class BudgetControllerTest {
 	private HashMap<Integer, String> budgetIdToName = new HashMap<Integer, String>() {{put(1, "budzet1"); put(2, "budzet2"); put(3, "budzet3");}};
 	private BudgetController budgetController;
 	private int clickedBudgetId, noClickedBudgetId, categoryId1, categoryId2, transactionId;
+	private JLabel lblExpenditureSum, lblSavingsSum, lblIncomeSum;
 	private double amount;
 	private List<LocalDate> dates;
 	private Map<Integer, String> categories;
@@ -96,7 +98,8 @@ public class BudgetControllerTest {
 		budgetController = new BudgetController(databaseReaderForTest, databaseWriterForTest,
 												panelWithBudget, panelWithYears, panelWithMonths,
 												panelAddExpenditure, panelAddSavings, panelAddIncome,
-												panelExpenditureView, panelSavingsView, panelIncomeView
+												panelExpenditureView, panelSavingsView, panelIncomeView,
+												lblExpenditureSum, lblSavingsSum, lblIncomeSum
 												);
 		setIdentifier(panelWithBudget, 123);
 		setIdentifier(panelWithYears, 124);

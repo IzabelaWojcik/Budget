@@ -42,7 +42,7 @@ public class BudgetViews extends JFrame {
 	private JPanel jpanelExpenditureView;
 	private JPanel jpanelSavingsView;
 	private JLabel lblIncomeSum;
-	private JLabel lblexpenditureSum;
+	private JLabel lblExpenditureSum;
 	private JLabel lblSavingsSum;
 	
 	private PanelWithButtons panelBudgetButtons, panelYearsButtons, panelMonthsButtons;
@@ -98,10 +98,15 @@ public class BudgetViews extends JFrame {
 		panelAddExpenditure = new PanelAddTransaction(PANEL_ADD_EXPENDITURE_ID);
 		panelAddSavings = new PanelAddTransaction(PANEL_ADD_SAVINGS_ID);
 		
+		lblIncomeSum = new JLabel("New label");
+		lblExpenditureSum = new JLabel("New label");
+		lblSavingsSum = new JLabel("New label");
+		
 		budgetController = new BudgetController(databaseReader, databaseWriter,
 				panelBudgetButtons, panelYearsButtons, panelMonthsButtons,
 				panelAddExpenditure, panelAddSavings, panelAddIncome, 
-				panelViewExpenditure, panelViewSavings, panelViewIncome);
+				panelViewExpenditure, panelViewSavings, panelViewIncome,
+				lblExpenditureSum, lblSavingsSum, lblIncomeSum);
 			
 		initialize();
 	}
@@ -212,11 +217,6 @@ public class BudgetViews extends JFrame {
 		scrollPaneSavingsView = new JScrollPane();
 		scrollPaneSavingsView.setPreferredSize(new Dimension(210, 20));
 		
-		lblIncomeSum = new JLabel("New label");
-		
-		lblexpenditureSum = new JLabel("New label");
-		
-		lblSavingsSum = new JLabel("New label");
 		GroupLayout gl_panelForViews = new GroupLayout(jpanelForViews);
 		gl_panelForViews.setHorizontalGroup(
 			gl_panelForViews.createParallelGroup(Alignment.LEADING)
@@ -236,7 +236,7 @@ public class BudgetViews extends JFrame {
 						.addGroup(gl_panelForViews.createSequentialGroup()
 							.addGap(14)
 							.addGroup(gl_panelForViews.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblexpenditureSum)
+								.addComponent(lblExpenditureSum)
 								.addComponent(scrollPaneExpenditureView, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE))))
 					.addGroup(gl_panelForViews.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panelForViews.createSequentialGroup()
@@ -266,7 +266,7 @@ public class BudgetViews extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panelForViews.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblIncomeSum)
-						.addComponent(lblexpenditureSum)
+						.addComponent(lblExpenditureSum)
 						.addComponent(lblSavingsSum))
 					.addGap(176))
 		);

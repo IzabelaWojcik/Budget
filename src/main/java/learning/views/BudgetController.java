@@ -14,6 +14,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 
 import org.javatuples.Triplet;
 
@@ -38,6 +39,7 @@ public class BudgetController implements IListener{
 	private PanelAddTransaction panelToAddExpenditure, panelToAddSavings;
 	private PanelAddIncome panelToAddIncome;
 	private PanelViewTransaction panelViewExpenditure, panelViewSavings, panelViewIncome;
+	private JLabel lblExpenditureSum, lblSavingsSum, lblIncomeSum;
 	private IDatabaseReader databaseReader;
 	private IDatabaseWriter databaseWriter;
 	private Map<Integer, String> budgetIdToName;
@@ -62,7 +64,8 @@ public class BudgetController implements IListener{
 	public BudgetController(IDatabaseReader databaseReader, IDatabaseWriter databasewriter,
 							PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, 
 							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddIncome panelAddIncome,
-							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelIncomeView) throws DatabaseNotInitialized 
+							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelIncomeView,
+							JLabel labelExpenditureSum, JLabel labelSavingsSum, JLabel labelIncomeSum) throws DatabaseNotInitialized 
 	{
 		panelWithBudget = panelBudget;
 		panelWithYears = panelYears;
@@ -73,6 +76,9 @@ public class BudgetController implements IListener{
 		panelViewExpenditure = panelExpenditureView;
 		panelViewSavings = panelSavingsView;
 		panelViewIncome = panelIncomeView;
+		lblExpenditureSum = labelExpenditureSum;
+		lblSavingsSum = labelSavingsSum;
+		lblIncomeSum = labelIncomeSum;
 		
 		this.databaseReader = databaseReader;
 		this.databaseWriter = databasewriter;
@@ -112,10 +118,10 @@ public class BudgetController implements IListener{
 			handlePanelWithMonthsNotification(notificationData);
 		}
 		else if(notificationData.notifierId == panelToAddExpenditure.identifier) {
-			handlePanelToAddDataToDatabase(notificationData, panelViewExpenditure, expenditureCategories, EXPENDITURE, EXPENDITURE_CATEGORY);
+			handlePanelToAddDataToDatabase(notificationData, panelViewExpenditure, expenditureCategories, EXPENDITURE, EXPENDITURE_CATEGORY, lblExpenditureSum);
 		}
 		else if(notificationData.notifierId == panelToAddSavings.identifier) {
-			handlePanelToAddDataToDatabase(notificationData, panelViewSavings, savingsCategories, SAVINGS, SAVINGS_CATEGORY);
+			handlePanelToAddDataToDatabase(notificationData, panelViewSavings, savingsCategories, SAVINGS, SAVINGS_CATEGORY, lblSavingsSum);
 		}
 		else if(notificationData.notifierId == panelToAddIncome.identifier) {
 			handlePanelToAddIncomeToDatabase(notificationData);
@@ -126,7 +132,7 @@ public class BudgetController implements IListener{
 		}
 	}
 	
-	private void handlePanelToAddDataToDatabase(NotificationData notificationData, PanelViewTransaction panelViewTransaction, Map<Integer, String> categories, String tablenameTransaction, String tablenameCategory) {
+	private void handlePanelToAddDataToDatabase(NotificationData notificationData, PanelViewTransaction panelViewTransaction, Map<Integer, String> categories, String tablenameTransaction, String tablenameCategory, JLabel lblSum) {
 		ButtonAddTransactionData buttonAdd = (ButtonAddTransactionData) notificationData;
 		int idCategory = 0;
 		List<Transaction> transaction = null;
@@ -148,9 +154,12 @@ public class BudgetController implements IListener{
 			}
 			
 			if(localDate.getYear() == Double.parseDouble(clickedYear) && localDate.getMonthValue() == Integer.parseInt(clickedMonth)) {
+				String sum = null;
 				panelViewTransaction.clearPanel();
 				datesCategoriesAmounts = dataToFillPanel(transaction);
 				panelViewTransaction.fillPanel(datesCategoriesAmounts, columnsNameDateCategoryAmount);
+			
+				lblSum.setText("suma = " + sumOfAmount(datesCategoriesAmounts));
 			}
 		}
 	}
@@ -184,6 +193,8 @@ public class BudgetController implements IListener{
 				panelViewIncome.clearPanel();
 				incomeToFillPanel = dataToFillPanelIncome(income);
 				panelViewIncome.fillPanel(incomeToFillPanel, columnsNameUserNameCategoryAmount);
+				
+				lblIncomeSum.setText("suma = " + sumOfAmount(incomeToFillPanel));
 			}
 		}
 	}
@@ -276,6 +287,10 @@ public class BudgetController implements IListener{
 			panelViewExpenditure.fillPanel(expendituresToFillPanel, columnsNameDateCategoryAmount);
 			panelViewSavings.fillPanel(savingsToFillPanel, columnsNameDateCategoryAmount);
 			panelViewIncome.fillPanel(incomeToFillPanel, columnsNameUserNameCategoryAmount);
+			
+			lblExpenditureSum.setText("suma = " + sumOfAmount(expendituresToFillPanel));
+			lblSavingsSum.setText("suma = " + sumOfAmount(savingsToFillPanel));
+			lblIncomeSum.setText("suma = " + sumOfAmount(incomeToFillPanel));
 	
 		} catch (DatabaseNotInitialized e) {
 			e.printStackTrace();
@@ -346,5 +361,13 @@ public class BudgetController implements IListener{
 		}
 		
 		return list;
+	}
+	
+	public String sumOfAmount(List<Triplet<String, String, String>> dataToFillPanel) {
+		double sum = 0;
+		for(Triplet t: dataToFillPanel) {
+			sum += Double.parseDouble((String) t.getValue2());
+		}
+		return String.valueOf(sum);
 	}
 }
