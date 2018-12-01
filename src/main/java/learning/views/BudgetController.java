@@ -54,6 +54,8 @@ public class BudgetController implements IListener{
 	private List<Triplet<String, String, String>>expendituresToFillPanel;
 	private List<Triplet<String, String, String>> savingsToFillPanel;
 	private List<Triplet<String, String, String>> incomeToFillPanel;
+	private Set<String> years;
+	private Set<String> months;
 	private List<Transaction> expenditures;
 	private List<Transaction> savings;
 	private List<Transaction> income;
@@ -161,7 +163,30 @@ public class BudgetController implements IListener{
 			
 				lblSum.setText("suma = " + sumOfAmount(datesCategoriesAmounts));
 			}
+
+			if(!years.contains(localDate.getYear())) {
+				createYearsButtons();
+			}
+			
+			if(!months.contains(localDate.getMonthValue())) {
+				createMonthsButtons();
+			}
 		}
+	}
+
+	private void createYearsButtons() {
+		try {
+			dates = databaseReader.readDatesForBudgetFromDatabase(budgetId);
+		} catch (DatabaseNotInitialized e) {
+			e.printStackTrace();
+			return;
+		}
+		panelWithYears.clearPanel();
+		years = dates.stream()
+				.map(LocalDate::getYear)
+				.map(year -> year.toString())
+				.collect(Collectors.toSet());
+		panelWithYears.createButtons(new TreeSet<String>(years));
 	}
 	
 	private void handlePanelToAddIncomeToDatabase(NotificationData notificationData) {
@@ -196,6 +221,14 @@ public class BudgetController implements IListener{
 				
 				lblIncomeSum.setText("suma = " + sumOfAmount(incomeToFillPanel));
 			}
+			
+			if(!years.contains(localDate.getYear())) {
+				createYearsButtons();
+			}
+			
+			if(!months.contains(localDate.getMonthValue())) {
+				createMonthsButtons();
+			}
 		}
 	}
 
@@ -220,18 +253,7 @@ public class BudgetController implements IListener{
 		panelViewSavings.clearPanel();
 		panelViewIncome.clearPanel();
 		
-		try {
-			dates = databaseReader.readDatesForBudgetFromDatabase(budgetId);
-		} catch (DatabaseNotInitialized e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		Set<String> years = dates.stream()
-								.map(LocalDate::getYear)
-								.map(year -> year.toString())
-								.collect(Collectors.toSet());
-		panelWithYears.createButtons(new TreeSet<String>(years));
+		createYearsButtons();
 	}
 	
 	private void handlePanelWithYearsNotification(NotificationData notificationData) {
@@ -242,11 +264,15 @@ public class BudgetController implements IListener{
 		panelViewSavings.clearPanel();
 		panelViewIncome.clearPanel();
 		
-		Set<String> months = dates.stream()
-								.filter(t -> t.getYear() == Integer.parseInt(clickedYear))
-								.map(LocalDate::getMonthValue)
-								.map(month -> month.toString())
-								.collect(Collectors.toSet());
+		createMonthsButtons();
+	}
+
+	private void createMonthsButtons() {
+		months = dates.stream()
+					.filter(t -> t.getYear() == Integer.parseInt(clickedYear))
+					.map(LocalDate::getMonthValue)
+					.map(month -> month.toString())
+					.collect(Collectors.toSet());
 		panelWithMonths.createButtons(new TreeSet<String>(months));
 	}
 	
