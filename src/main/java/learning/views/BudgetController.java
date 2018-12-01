@@ -174,21 +174,6 @@ public class BudgetController implements IListener{
 		}
 	}
 
-	private void createYearsButtons() {
-		try {
-			dates = databaseReader.readDatesForBudgetFromDatabase(budgetId);
-		} catch (DatabaseNotInitialized e) {
-			e.printStackTrace();
-			return;
-		}
-		panelWithYears.clearPanel();
-		years = dates.stream()
-				.map(LocalDate::getYear)
-				.map(year -> year.toString())
-				.collect(Collectors.toSet());
-		panelWithYears.createButtons(new TreeSet<String>(years));
-	}
-	
 	private void handlePanelToAddIncomeToDatabase(NotificationData notificationData) {
 		ButtonAddIncomeData buttonAdd = (ButtonAddIncomeData) notificationData;
 		int idCategory = 0;
@@ -267,15 +252,6 @@ public class BudgetController implements IListener{
 		createMonthsButtons();
 	}
 
-	private void createMonthsButtons() {
-		months = dates.stream()
-					.filter(t -> t.getYear() == Integer.parseInt(clickedYear))
-					.map(LocalDate::getMonthValue)
-					.map(month -> month.toString())
-					.collect(Collectors.toSet());
-		panelWithMonths.createButtons(new TreeSet<String>(months));
-	}
-	
 	private void handlePanelWithMonthsNotification(NotificationData notificationData) {
 		ButtonsData buttonsData = (ButtonsData) notificationData;
 		clickedMonth = buttonsData.name;
@@ -395,5 +371,29 @@ public class BudgetController implements IListener{
 			sum += Double.parseDouble((String) t.getValue2());
 		}
 		return String.valueOf(sum);
+	}
+	
+	private void createYearsButtons() {
+		try {
+			dates = databaseReader.readDatesForBudgetFromDatabase(budgetId);
+		} catch (DatabaseNotInitialized e) {
+			e.printStackTrace();
+			return;
+		}
+		panelWithYears.clearPanel();
+		years = dates.stream()
+				.map(LocalDate::getYear)
+				.map(year -> year.toString())
+				.collect(Collectors.toSet());
+		panelWithYears.createButtons(new TreeSet<String>(years).descendingSet());
+	}
+	
+	private void createMonthsButtons() {
+		months = dates.stream()
+					.filter(t -> t.getYear() == Integer.parseInt(clickedYear))
+					.map(LocalDate::getMonthValue)
+					.map(month -> month.toString())
+					.collect(Collectors.toSet());
+		panelWithMonths.createButtons(new TreeSet<String>(months).descendingSet());
 	}
 }
