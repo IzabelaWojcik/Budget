@@ -118,24 +118,26 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		setLayout(groupLayout);
 	}
 
-	public void fillComboBox(List<String> list, JComboBox combobox) {
+	public void fillComboBoxCategory(List<String> list) {
 		for(String s: list){
-			combobox.addItem(s);
+			comboBoxCategory.addItem(s);
+	    }
+	}
+	
+	public void fillComboBoxUser(List<String> list) {
+		for(String s: list){
+			comboBoxUser.addItem(s);
 	    }
 	}
 
-	public void clearComboBox(JComboBox comboBox) {
-		comboBox.removeAllItems();
+	public void clearComboBoxCategory() {
+		comboBoxCategory.removeAllItems();
 	} 
 	
-	public JComboBox getComboboxUser() {
-		return comboBoxUser;
-	}
+	public void clearComboBoxUser() {
+		comboBoxUser.removeAllItems();
+	} 
 	
-	public JComboBox getComboboxCategory() {
-		return comboBoxCategory;
-	}
-
 	@Override
 	public void register(IListener listener) {
 		listeners.add(listener);

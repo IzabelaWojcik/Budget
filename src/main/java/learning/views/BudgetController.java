@@ -203,9 +203,8 @@ public class BudgetController implements IListener{
 		
 		panelToAddExpenditure.clearComboBox();
 		panelToAddSavings.clearComboBox();
-		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxCategory());
-		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxUser());
-		
+		panelToAddIncome.clearComboBoxCategory();
+		panelToAddIncome.clearComboBoxUser();		
 		panelViewExpenditure.clearPanel();
 		panelViewSavings.clearPanel();
 		panelViewIncome.clearPanel();
@@ -246,8 +245,8 @@ public class BudgetController implements IListener{
 		
 		panelToAddExpenditure.clearComboBox();
 		panelToAddSavings.clearComboBox();
-		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxCategory());
-		panelToAddIncome.clearComboBox(panelToAddIncome.getComboboxUser());
+		panelToAddIncome.clearComboBoxCategory();
+		panelToAddIncome.clearComboBoxUser();
 		
 		panelToAddExpenditure.setVisible(true);
 		panelToAddSavings.setVisible(true);
@@ -303,8 +302,8 @@ public class BudgetController implements IListener{
 		
 		panelToAddExpenditure.fillComboBox(expendituresCat);
 		panelToAddSavings.fillComboBox(savingsCat);
-		panelToAddIncome.fillComboBox(incomeCat, panelToAddIncome.getComboboxCategory());
-		panelToAddIncome.fillComboBox(userNames, panelToAddIncome.getComboboxUser());
+		panelToAddIncome.fillComboBoxCategory(incomeCat);
+		panelToAddIncome.fillComboBoxUser(userNames);
 	}
 
 	private List<Transaction> readTransactionForBudgetYearMonth(String transactionTablename, String categoryTablename) throws DatabaseNotInitialized {
