@@ -30,10 +30,8 @@ public class PanelAddIncome extends JPanel implements INotifier{
 	private JComboBox<String> comboBoxUser;
 	private JComboBox<String> comboBoxCategory;
 	
-	DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
-	DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-	char groupSeparator = symbols.getGroupingSeparator();
-	String gs = "" + groupSeparator;
+	final static DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
+	final static String groupSeparator = "" + formatter.getDecimalFormatSymbols().getGroupingSeparator();
 	
 	public PanelAddIncome(int id){
 		identifier = id;
@@ -60,7 +58,7 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		
 		buttonAdd.addActionListener(e -> {listeners.stream().forEach(
 				listener -> {
-					listener.notify(new ButtonAddIncomeData(identifier, dateChooser.getDate(), (String) comboBoxCategory.getSelectedItem(), (String) comboBoxUser.getSelectedItem(), formattedTextField.getText().replaceAll(gs, "")));}); 
+					listener.notify(new ButtonAddIncomeData(identifier, dateChooser.getDate(), (String) comboBoxCategory.getSelectedItem(), (String) comboBoxUser.getSelectedItem(), formattedTextField.getText().replaceAll(groupSeparator, "")));}); 
 					formattedTextField.setText("");
 					buttonAdd.setEnabled(false);
 					});

@@ -27,10 +27,8 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 	public final int identifier;
 	private Set<IListener> listeners;
 	
-	DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
-	DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-	char groupSeparator = symbols.getGroupingSeparator();
-	String gs = "" + groupSeparator;
+	final static DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
+	final static String groupSeparator = "" + formatter.getDecimalFormatSymbols().getGroupingSeparator();
 	
 	public PanelAddTransaction(int id){
 		setVisible(false);
@@ -59,7 +57,7 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 		formattedTextField.addKeyListener(errorLabel);
 		
 		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {
-				listener.notify(new ButtonAddTransactionData(identifier, dateChooser.getDate(), (String) comboBox.getSelectedItem(), formattedTextField.getText().replaceAll(gs, "")));});
+				listener.notify(new ButtonAddTransactionData(identifier, dateChooser.getDate(), (String) comboBox.getSelectedItem(), formattedTextField.getText().replaceAll(groupSeparator, "")));});
 				formattedTextField.setText("");
 				buttonAdd.setEnabled(false);});
 		
