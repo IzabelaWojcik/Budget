@@ -1,6 +1,5 @@
 package learning.views;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 public class ButtonAddTransactionData extends NotificationData{
