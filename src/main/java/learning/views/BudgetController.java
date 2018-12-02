@@ -1,5 +1,8 @@
 package learning.views;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -194,6 +197,7 @@ public class BudgetController implements IListener{
 		if(idCategory != 0 && idUser != 0) {
 			LocalDate localDate = Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 			databaseWriter.writeIncomeToDatabase(Double.parseDouble(buttonAdd.amount), Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), idUser, idCategory, getBudgetId(clickedBudgetName));
+			
 			try {
 				income = readIncomeForBudgetYearMonth(INCOME, INCOME_CATEGORY);
 			} catch (DatabaseNotInitialized e1) {

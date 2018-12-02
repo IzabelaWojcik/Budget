@@ -4,6 +4,8 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +26,11 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 	private JButton buttonAdd;
 	public final int identifier;
 	private Set<IListener> listeners;
+	
+	DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
+	DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+	char groupSeparator = symbols.getGroupingSeparator();
+	String gs = "" + groupSeparator;
 	
 	public PanelAddTransaction(int id){
 		setVisible(false);
@@ -51,9 +58,10 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 		formattedTextField.setColumns(10);
 		formattedTextField.addKeyListener(errorLabel);
 		
-		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddTransactionData(identifier, dateChooser.getDate(), (String) comboBox.getSelectedItem(), formattedTextField.getText()));});
-										formattedTextField.setText("");
-										buttonAdd.setEnabled(false);});
+		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {
+				listener.notify(new ButtonAddTransactionData(identifier, dateChooser.getDate(), (String) comboBox.getSelectedItem(), formattedTextField.getText().replaceAll(gs, "")));});
+				formattedTextField.setText("");
+				buttonAdd.setEnabled(false);});
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(

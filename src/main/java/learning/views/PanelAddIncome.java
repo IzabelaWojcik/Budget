@@ -4,6 +4,8 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +30,11 @@ public class PanelAddIncome extends JPanel implements INotifier{
 	private JComboBox<String> comboBoxUser;
 	private JComboBox<String> comboBoxCategory;
 	
+	DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
+	DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+	char groupSeparator = symbols.getGroupingSeparator();
+	String gs = "" + groupSeparator;
+	
 	public PanelAddIncome(int id){
 		identifier = id;
 		listeners = new HashSet<IListener>();
@@ -51,9 +58,12 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		formattedTextField.setColumns(10);
 		formattedTextField.addKeyListener(errorLabel);
 		
-		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonAddIncomeData(identifier, dateChooser.getDate(), (String) comboBoxCategory.getSelectedItem(), (String) comboBoxUser.getSelectedItem(), formattedTextField.getText()));}); 
-										formattedTextField.setText("");
-										buttonAdd.setEnabled(false);});
+		buttonAdd.addActionListener(e -> {listeners.stream().forEach(
+				listener -> {
+					listener.notify(new ButtonAddIncomeData(identifier, dateChooser.getDate(), (String) comboBoxCategory.getSelectedItem(), (String) comboBoxUser.getSelectedItem(), formattedTextField.getText().replaceAll(gs, "")));}); 
+					formattedTextField.setText("");
+					buttonAdd.setEnabled(false);
+					});
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
