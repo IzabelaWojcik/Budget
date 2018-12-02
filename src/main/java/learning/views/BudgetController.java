@@ -220,29 +220,6 @@ public class BudgetController implements IListener{
 		}
 	}
 
-	private void fillComboboxInPanelsToAddTransactions(Map<Integer, String> expenditureCategories, Map<Integer, String> savingsCategories, Map<Integer, String> incomeCategories, List<String> userNames) throws DatabaseNotInitialized {
-		List<String> expendituresCat = new ArrayList<String>();
-		List<String> savingsCat = new ArrayList<String>();
-		List<String> incomeCat = new ArrayList<String>();
-		
-		for(Entry<Integer, String> e: expenditureCategories.entrySet()) {
-			expendituresCat.add(e.getValue());
-		}
-		
-		for(Entry<Integer, String> e: savingsCategories.entrySet()) {
-			savingsCat.add(e.getValue());
-		}
-		
-		for(Entry<Integer, String> e: incomeCategories.entrySet()) {
-			incomeCat.add(e.getValue());
-		}
-		
-		panelToAddExpenditure.fillComboBox(expendituresCat);
-		panelToAddSavings.fillComboBox(savingsCat);
-		panelToAddIncome.fillComboBoxCategory(incomeCat);
-		panelToAddIncome.fillComboBoxUser(userNames);
-	}
-
 	private void handlePanelToAddDataToDatabase(NotificationData notificationData, PanelViewTransaction panelViewTransaction, Map<Integer, String> categories, String tablenameTransaction, String tablenameCategory, JLabel lblSum) {
 		ButtonAddTransactionData buttonAdd = (ButtonAddTransactionData) notificationData;
 		int idCategory = 0;
@@ -347,6 +324,29 @@ public class BudgetController implements IListener{
 				.collect(Collectors.toList());
 
 		return incomeForConcreteYearAndMonth;
+	}
+	
+	private void fillComboboxInPanelsToAddTransactions(Map<Integer, String> expenditureCategories, Map<Integer, String> savingsCategories, Map<Integer, String> incomeCategories, List<String> userNames) throws DatabaseNotInitialized {
+		List<String> expendituresCat = new ArrayList<String>();
+		List<String> savingsCat = new ArrayList<String>();
+		List<String> incomeCat = new ArrayList<String>();
+		
+		for(Entry<Integer, String> e: expenditureCategories.entrySet()) {
+			expendituresCat.add(e.getValue());
+		}
+		
+		for(Entry<Integer, String> e: savingsCategories.entrySet()) {
+			savingsCat.add(e.getValue());
+		}
+		
+		for(Entry<Integer, String> e: incomeCategories.entrySet()) {
+			incomeCat.add(e.getValue());
+		}
+		
+		panelToAddExpenditure.fillComboBox(expendituresCat);
+		panelToAddSavings.fillComboBox(savingsCat);
+		panelToAddIncome.fillComboBoxCategory(incomeCat);
+		panelToAddIncome.fillComboBoxUser(userNames);
 	}
 	
 	private List<Triplet<String, String, String>> dataToFillPanel(List<Transaction> transactions){
