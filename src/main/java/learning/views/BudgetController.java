@@ -394,6 +394,10 @@ public class BudgetController implements IListener{
 					.map(LocalDate::getMonthValue)
 					.map(month -> month.toString())
 					.collect(Collectors.toSet());
-		panelWithMonths.createButtons(new TreeSet<String>(months).descendingSet());
+		
+		TreeSet<String> sortedMonths = new TreeSet<>((m1, m2) -> Integer.parseInt(m2) - Integer.parseInt(m1));
+		sortedMonths.addAll(months);
+		
+		panelWithMonths.createButtons(sortedMonths);
 	}
 }
