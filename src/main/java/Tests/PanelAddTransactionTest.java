@@ -50,6 +50,7 @@ public class PanelAddTransactionTest {
 		ListenerStub listener = new ListenerStub();
 		panelAddTransaction.register(listener);
 		
+		button.get(0).setEnabled(true);
 		button.get(0).doClick();
 		
 		assertEquals(Arrays.asList(new ButtonAddTransactionData(notifierId, date, category, amount)), listener.receivedData);

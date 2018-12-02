@@ -56,6 +56,7 @@ public class PanelAddIncomeTest {
 		ListenerStub listener = new ListenerStub();
 		panelAddIncome.register(listener);
 		
+		button.get(0).setEnabled(true);
 		button.get(0).doClick();
 		
 		assertEquals(Arrays.asList(new ButtonAddIncomeData(notifierId, date, category, user, amount)), listener.receivedData);

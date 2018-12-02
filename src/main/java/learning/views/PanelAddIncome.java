@@ -3,6 +3,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -56,12 +57,7 @@ public class PanelAddIncome extends JPanel implements INotifier{
 		formattedTextField.setColumns(10);
 		formattedTextField.addKeyListener(errorLabel);
 		
-		buttonAdd.addActionListener(e -> {listeners.stream().forEach(
-				listener -> {
-					listener.notify(new ButtonAddIncomeData(identifier, dateChooser.getDate(), (String) comboBoxCategory.getSelectedItem(), (String) comboBoxUser.getSelectedItem(), formattedTextField.getText().replaceAll(groupSeparator, "")));}); 
-					formattedTextField.setText("");
-					buttonAdd.setEnabled(false);
-					});
+		updateListeners();
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -124,6 +120,15 @@ public class PanelAddIncome extends JPanel implements INotifier{
 					.addContainerGap())
 		);
 		setLayout(groupLayout);
+	}
+
+	private void updateListeners() {
+		buttonAdd.addActionListener(e -> {listeners.stream().forEach(
+				listener -> {
+					listener.notify(new ButtonAddIncomeData(identifier, dateChooser.getDate(), (String) comboBoxCategory.getSelectedItem(), (String) comboBoxUser.getSelectedItem(), formattedTextField.getText().replaceAll(groupSeparator, "")));}); 
+					formattedTextField.setText("");
+					buttonAdd.setEnabled(false);
+					});
 	}
 
 	public void fillComboBoxCategory(List<String> list) {

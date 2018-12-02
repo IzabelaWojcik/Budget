@@ -136,90 +136,6 @@ public class BudgetController implements IListener{
 			throw new IllegalArgumentException("Unexpected identifier: " + notificationData.notifierId);
 		}
 	}
-	
-	private void handlePanelToAddDataToDatabase(NotificationData notificationData, PanelViewTransaction panelViewTransaction, Map<Integer, String> categories, String tablenameTransaction, String tablenameCategory, JLabel lblSum) {
-		ButtonAddTransactionData buttonAdd = (ButtonAddTransactionData) notificationData;
-		int idCategory = 0;
-		List<Transaction> transaction = null;
-		List<Triplet<String, String, String>> datesCategoriesAmounts;
-		
-		for(Entry<Integer, String> e: categories.entrySet()) {
-			if(buttonAdd.category.equals(e.getValue())) {
-				idCategory = e.getKey();	
-			}
-		}
-		if(idCategory != 0) {
-			LocalDate localDate = Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-			databaseWriter.writeExpenditureOrSavingsToDatabase(Double.parseDouble(buttonAdd.amount), localDate, idCategory, getBudgetId(clickedBudgetName), tablenameTransaction);
-			
-			try {
-				transaction = readTransactionForBudgetYearMonth(tablenameTransaction, tablenameCategory);
-			} catch (DatabaseNotInitialized e1) {
-				e1.printStackTrace();
-			}
-			
-			if(localDate.getYear() == Double.parseDouble(clickedYear) && localDate.getMonthValue() == Integer.parseInt(clickedMonth)) {
-				String sum = null;
-				panelViewTransaction.clearPanel();
-				datesCategoriesAmounts = dataToFillPanel(transaction);
-				panelViewTransaction.fillPanel(datesCategoriesAmounts, columnsNameDateCategoryAmount);
-			
-				lblSum.setText("suma = " + sumOfAmount(datesCategoriesAmounts));
-			}
-
-			if(!years.contains(localDate.getYear())) {
-				createYearsButtons();
-			}
-			
-			if(!months.contains(localDate.getMonthValue())) {
-				createMonthsButtons();
-			}
-		}
-	}
-
-	private void handlePanelToAddIncomeToDatabase(NotificationData notificationData) {
-		ButtonAddIncomeData buttonAdd = (ButtonAddIncomeData) notificationData;
-		int idCategory = 0;
-		int idUser = 0;
-		
-		for(Entry<Integer, String> e: incomeCategories.entrySet()) {
-			if(buttonAdd.category.equals(e.getValue())) {
-				idCategory = e.getKey();	
-			}
-		}
-		
-		for(UsersObject uo: userNamesIdsBudgetIds) {
-			if(buttonAdd.user.equals(uo.getUserName())) {
-				idUser = uo.getUserId();
-			}
-		}
-		
-		if(idCategory != 0 && idUser != 0) {
-			LocalDate localDate = Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-			databaseWriter.writeIncomeToDatabase(Double.parseDouble(buttonAdd.amount), Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), idUser, idCategory, getBudgetId(clickedBudgetName));
-			
-			try {
-				income = readIncomeForBudgetYearMonth(INCOME, INCOME_CATEGORY);
-			} catch (DatabaseNotInitialized e1) {
-				e1.printStackTrace();
-			}
-			if(localDate.getYear() == Double.parseDouble(clickedYear) && localDate.getMonthValue() == Integer.parseInt(clickedMonth)) {
-				panelViewIncome.clearPanel();
-				incomeToFillPanel = dataToFillPanelIncome(income);
-				panelViewIncome.fillPanel(incomeToFillPanel, columnsNameUserNameCategoryAmount);
-				
-				lblIncomeSum.setText("suma = " + sumOfAmount(incomeToFillPanel));
-			}
-			
-			if(!years.contains(localDate.getYear())) {
-				createYearsButtons();
-			}
-			
-			if(!months.contains(localDate.getMonthValue())) {
-				createMonthsButtons();
-			}
-		}
-	}
 
 	private void handlePanelWithBudgetNotification(NotificationData notificationData) {
 		ButtonsData buttonsData = (ButtonsData) notificationData;
@@ -327,6 +243,90 @@ public class BudgetController implements IListener{
 		panelToAddIncome.fillComboBoxUser(userNames);
 	}
 
+	private void handlePanelToAddDataToDatabase(NotificationData notificationData, PanelViewTransaction panelViewTransaction, Map<Integer, String> categories, String tablenameTransaction, String tablenameCategory, JLabel lblSum) {
+		ButtonAddTransactionData buttonAdd = (ButtonAddTransactionData) notificationData;
+		int idCategory = 0;
+		List<Transaction> transaction = null;
+		List<Triplet<String, String, String>> datesCategoriesAmounts;
+		
+		for(Entry<Integer, String> e: categories.entrySet()) {
+			if(buttonAdd.category.equals(e.getValue())) {
+				idCategory = e.getKey();	
+			}
+		}
+		if(idCategory != 0) {
+			LocalDate localDate = Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+			databaseWriter.writeExpenditureOrSavingsToDatabase(Double.parseDouble(buttonAdd.amount), localDate, idCategory, getBudgetId(clickedBudgetName), tablenameTransaction);
+			
+			try {
+				transaction = readTransactionForBudgetYearMonth(tablenameTransaction, tablenameCategory);
+			} catch (DatabaseNotInitialized e1) {
+				e1.printStackTrace();
+			}
+			
+			if(localDate.getYear() == Double.parseDouble(clickedYear) && localDate.getMonthValue() == Integer.parseInt(clickedMonth)) {
+				String sum = null;
+				panelViewTransaction.clearPanel();
+				datesCategoriesAmounts = dataToFillPanel(transaction);
+				panelViewTransaction.fillPanel(datesCategoriesAmounts, columnsNameDateCategoryAmount);
+			
+				lblSum.setText("suma = " + sumOfAmount(datesCategoriesAmounts));
+			}
+
+			if(!years.contains(localDate.getYear())) {
+				createYearsButtons();
+			}
+			
+			if(!months.contains(localDate.getMonthValue())) {
+				createMonthsButtons();
+			}
+		}
+	}
+
+	private void handlePanelToAddIncomeToDatabase(NotificationData notificationData) {
+		ButtonAddIncomeData buttonAdd = (ButtonAddIncomeData) notificationData;
+		int idCategory = 0;
+		int idUser = 0;
+		
+		for(Entry<Integer, String> e: incomeCategories.entrySet()) {
+			if(buttonAdd.category.equals(e.getValue())) {
+				idCategory = e.getKey();	
+			}
+		}
+		
+		for(UsersObject uo: userNamesIdsBudgetIds) {
+			if(buttonAdd.user.equals(uo.getUserName())) {
+				idUser = uo.getUserId();
+			}
+		}
+		
+		if(idCategory != 0 && idUser != 0) {
+			LocalDate localDate = Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+			databaseWriter.writeIncomeToDatabase(Double.parseDouble(buttonAdd.amount), Instant.ofEpochMilli(buttonAdd.date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate(), idUser, idCategory, getBudgetId(clickedBudgetName));
+			
+			try {
+				income = readIncomeForBudgetYearMonth(INCOME, INCOME_CATEGORY);
+			} catch (DatabaseNotInitialized e1) {
+				e1.printStackTrace();
+			}
+			if(localDate.getYear() == Double.parseDouble(clickedYear) && localDate.getMonthValue() == Integer.parseInt(clickedMonth)) {
+				panelViewIncome.clearPanel();
+				incomeToFillPanel = dataToFillPanelIncome(income);
+				panelViewIncome.fillPanel(incomeToFillPanel, columnsNameUserNameCategoryAmount);
+				
+				lblIncomeSum.setText("suma = " + sumOfAmount(incomeToFillPanel));
+			}
+			
+			if(!years.contains(localDate.getYear())) {
+				createYearsButtons();
+			}
+			
+			if(!months.contains(localDate.getMonthValue())) {
+				createMonthsButtons();
+			}
+		}
+	}
+	
 	private List<Transaction> readTransactionForBudgetYearMonth(String transactionTablename, String categoryTablename) throws DatabaseNotInitialized {
 		transactions = databaseReader.readConcreteTransactionsWithCategoryNameForConcreteBudget(transactionTablename, categoryTablename, budgetId);
 		

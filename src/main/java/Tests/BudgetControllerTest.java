@@ -95,16 +95,22 @@ public class BudgetControllerTest {
 	
 	@Before
 	public void setup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, DatabaseNotInitialized {
+		lblExpenditureSum = new JLabel();
+		lblSavingsSum = new JLabel();
+		lblIncomeSum = new JLabel();
 		budgetController = new BudgetController(databaseReaderForTest, databaseWriterForTest,
 												panelWithBudget, panelWithYears, panelWithMonths,
 												panelAddExpenditure, panelAddSavings, panelAddIncome,
 												panelExpenditureView, panelSavingsView, panelIncomeView,
 												lblExpenditureSum, lblSavingsSum, lblIncomeSum
 												);
+		
 		setIdentifier(panelWithBudget, 123);
 		setIdentifier(panelWithYears, 124);
 		setIdentifier(panelWithMonths, 125);
 		setIdentifier(panelAddExpenditure, 126);
+		setIdentifier(panelAddSavings, 127);
+		setIdentifier(panelAddIncome, 128);
 		
 		clickedBudgetId = 1;
 		noClickedBudgetId = 2;
@@ -119,9 +125,9 @@ public class BudgetControllerTest {
 		userName3 = "Ania";
 		userName4 = "Kuba";
 		userId1 = 11;
-		userId2 = 11;
-		userId3 = 11;
-		userId4 = 11;
+		userId2 = 12;
+		userId3 = 13;
+		userId4 = 14;
 		
 		amount = 10.0;
 		
