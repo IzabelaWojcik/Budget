@@ -9,8 +9,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 public class CreateNewBudgetDialog extends JDialog {
-
 	private final JPanel contentPanel = new JPanel();
+	
+	private PanelAddUsersToNewBudget panelToAddUsers;
+	private PanelDuesCategoriesInNewBudget panelToChooseDuesCategories;
+	private PanelExpenditureCategoriesInNewBudget panelToChooseExpenditureCategories;
+	private PanelSavingsCategoriesInNewBudget panelToChooseSavingsCategories;
+	private PanelWithTabbedPanes panelWithTabbedPanes;
 
 	/**
 	 * Launch the application.
@@ -29,11 +34,24 @@ public class CreateNewBudgetDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public CreateNewBudgetDialog() {
-		setBounds(100, 100, 600, 510);
+		initialize();
+	}
+	
+	public void initialize() {
+		setBounds(100, 100, 600, 600);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		
+		panelToAddUsers = new PanelAddUsersToNewBudget();
+		panelToChooseDuesCategories = new PanelDuesCategoriesInNewBudget();
+		panelToChooseExpenditureCategories = new PanelExpenditureCategoriesInNewBudget();
+		panelToChooseSavingsCategories = new PanelSavingsCategoriesInNewBudget();
+		
+		panelWithTabbedPanes = new PanelWithTabbedPanes(panelToAddUsers, panelToChooseDuesCategories, panelToChooseExpenditureCategories, panelToChooseSavingsCategories);
+	
+		add(panelWithTabbedPanes);
 	}
 
 }
