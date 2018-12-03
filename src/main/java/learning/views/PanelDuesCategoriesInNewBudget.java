@@ -19,15 +19,12 @@ import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 
 public class PanelDuesCategoriesInNewBudget extends JPanel{
-	private JButton btncancel;
 	private JTextField textFieldCategory1;
 	private JTextField textFieldCategory2;
 	private JTextField textFieldCategory3;
 	private JTextField textFieldCategory4;
 	private JTextField textFieldCategory5;
 	public PanelDuesCategoriesInNewBudget() {
-		
-		JPanel panelForButtons = new JPanel();
 		
 		JPanel panelDues = new JPanel();
 		panelDues.setLocation(new Point(10, 10));
@@ -188,7 +185,7 @@ public class PanelDuesCategoriesInNewBudget extends JPanel{
 		JLabel lblDues = new JLabel("OPŁATY");
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(48)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -198,33 +195,18 @@ public class PanelDuesCategoriesInNewBudget extends JPanel{
 							.addGap(34)
 							.addComponent(panelCustomCategories, GroupLayout.PREFERRED_SIZE, 266, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(56, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap(290, Short.MAX_VALUE)
-					.addComponent(panelForButtons, GroupLayout.PREFERRED_SIZE, 230, GroupLayout.PREFERRED_SIZE)
-					.addGap(36))
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(29)
 					.addComponent(lblDues)
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(panelDues, GroupLayout.PREFERRED_SIZE, 249, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panelCustomCategories, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
-					.addGap(129)
-					.addComponent(panelForButtons, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(25, Short.MAX_VALUE))
+					.addContainerGap(188, Short.MAX_VALUE))
 		);
-		
-		btncancel = new JButton("Anuluj");
-		panelForButtons.add(btncancel);
-		btncancel.setPreferredSize(new Dimension(80, 25));
-		
-		JButton btnFinish = new JButton("Zakończ");
-		btnFinish.setEnabled(false);
-		panelForButtons.add(btnFinish);
-		btnFinish.setPreferredSize(new Dimension(80, 25));
 		setLayout(groupLayout);
 	}
 }

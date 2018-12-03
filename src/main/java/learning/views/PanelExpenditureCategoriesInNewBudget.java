@@ -21,15 +21,12 @@ import javax.swing.UIManager;
 import java.awt.Color;
 
 public class PanelExpenditureCategoriesInNewBudget extends JPanel{
-	private JButton btncancel;
 	private JTextField textFieldCategory1;
 	private JTextField textFieldCategory2;
 	private JTextField textFieldCategory3;
 	private JTextField textFieldCategory4;
 	private JTextField textFieldCategory5;
 	public PanelExpenditureCategoriesInNewBudget() {
-		
-		JPanel panelForButtons = new JPanel();
 		
 		JPanel panelCustomCategories = new JPanel();
 		panelCustomCategories.setBorder(new TitledBorder(null, "Wpisz w\u0142asne kategorie", TitledBorder.LEADING,
@@ -211,7 +208,7 @@ public class PanelExpenditureCategoriesInNewBudget extends JPanel{
 		panelExpenditures.setLayout(gl_panelExpenditures);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(48)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -221,33 +218,18 @@ public class PanelExpenditureCategoriesInNewBudget extends JPanel{
 							.addGap(34)
 							.addComponent(panelCustomCategories, GroupLayout.PREFERRED_SIZE, 266, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(56, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap(303, Short.MAX_VALUE)
-					.addComponent(panelForButtons, GroupLayout.PREFERRED_SIZE, 230, GroupLayout.PREFERRED_SIZE)
-					.addGap(36))
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(29)
 					.addComponent(lblExpenditure)
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(panelCustomCategories, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panelExpenditures, GroupLayout.PREFERRED_SIZE, 352, GroupLayout.PREFERRED_SIZE))
-					.addGap(26)
-					.addComponent(panelForButtons, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(25, Short.MAX_VALUE))
+					.addContainerGap(85, Short.MAX_VALUE))
 		);
-		
-		btncancel = new JButton("Anuluj");
-		panelForButtons.add(btncancel);
-		btncancel.setPreferredSize(new Dimension(80, 25));
-		
-		JButton btnFinish = new JButton("Zakończ");
-		btnFinish.setEnabled(false);
-		panelForButtons.add(btnFinish);
-		btnFinish.setPreferredSize(new Dimension(80, 25));
 		setLayout(groupLayout);
 	}
 }

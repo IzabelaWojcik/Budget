@@ -305,6 +305,10 @@ public class CreateBudgetOptions extends JDialog {
 			panelButton1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 			btnCofnij1 = new JButton("Cofnij");
+			btnCofnij1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
 			btnCofnij1.setEnabled(false);
 			btnCofnij1.setVisible(false);
 			btnCofnij1.setPreferredSize(new Dimension(80, 25));
@@ -502,6 +506,7 @@ public class CreateBudgetOptions extends JDialog {
 		panelButton2.add(btnDalej2);
 
 		btnAnuluj2 = new JButton("Anuluj");
+		
 		btnAnuluj2.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
