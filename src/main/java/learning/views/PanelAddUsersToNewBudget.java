@@ -15,7 +15,6 @@ import javax.swing.JFormattedTextField;
 
 public class PanelAddUsersToNewBudget extends JPanel{
 	private JTextField textFieldBugdetName;
-	private JButton btnNext;
 	private JButton btnCancel;
 	private JFormattedTextField formattedTextField;
 	public PanelAddUsersToNewBudget() {
@@ -38,7 +37,7 @@ public class PanelAddUsersToNewBudget extends JPanel{
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(61)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(labelInfo)
@@ -51,16 +50,16 @@ public class PanelAddUsersToNewBudget extends JPanel{
 								.addComponent(button, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
 								.addComponent(textFieldBugdetName, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(panelForUsers, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addContainerGap(129, Short.MAX_VALUE))
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(254, Short.MAX_VALUE)
-					.addComponent(panelForButtons, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(324, Short.MAX_VALUE)
+					.addComponent(panelForButtons, GroupLayout.PREFERRED_SIZE, 230, GroupLayout.PREFERRED_SIZE)
 					.addGap(36))
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap(36, Short.MAX_VALUE)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap(59, Short.MAX_VALUE)
 					.addComponent(labelInfo)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
@@ -72,24 +71,10 @@ public class PanelAddUsersToNewBudget extends JPanel{
 						.addComponent(button))
 					.addGap(35)
 					.addComponent(panelForUsers, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)
-					.addGap(19)
-					.addComponent(panelForButtons, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-					.addGap(25))
+					.addGap(18)
+					.addComponent(panelForButtons, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+					.addGap(26))
 		);
-		
-		JButton btnPrevious = new JButton("Cofnij");
-		panelForButtons.add(btnPrevious);
-		btnPrevious.setEnabled(false);
-		btnPrevious.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		btnPrevious.setPreferredSize(new Dimension(80, 25));
-		
-		btnNext = new JButton("Dalej");
-		btnNext.setEnabled(false);
-		panelForButtons.add(btnNext);
-		btnNext.setPreferredSize(new Dimension(80, 25));
 		
 		btnCancel = new JButton("Anuluj");
 		panelForButtons.add(btnCancel);
