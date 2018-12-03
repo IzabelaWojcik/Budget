@@ -5,64 +5,50 @@ import javax.swing.JLabel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.FlowLayout;
-import java.awt.Dimension;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JFormattedTextField;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.border.TitledBorder;
 import java.awt.Rectangle;
-import java.awt.Point;
 import javax.swing.JCheckBox;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import java.awt.Color;
 
 public class PanelExpenditureCategoriesInNewBudget extends JPanel{
-	private JTextField textFieldCategory1;
-	private JTextField textFieldCategory2;
-	private JTextField textFieldCategory3;
-	private JTextField textFieldCategory4;
-	private JTextField textFieldCategory5;
+	private List<String> checkedExpenditureCategories;
+	
 	public PanelExpenditureCategoriesInNewBudget() {
 		
 		JPanel panelCustomCategories = new JPanel();
-		panelCustomCategories.setBorder(new TitledBorder(null, "Wpisz w\u0142asne kategorie", TitledBorder.LEADING,
-						TitledBorder.TOP, null, null));
+		panelCustomCategories.setBorder(new TitledBorder(null, "Wpisz w\u0142asne kategorie", TitledBorder.LEADING,						TitledBorder.TOP, null, null));
 		
 		JCheckBox checkBoxCategory1 = new JCheckBox("Kategoria 1:");
 		
-		textFieldCategory1 = new JTextField();
+		JTextField textFieldCategory1 = new JTextField();
 		textFieldCategory1.setEnabled(false);
 		textFieldCategory1.setColumns(10);
 		
 		JCheckBox checkBoxCategory2 = new JCheckBox("Kategoria 2:");
-		checkBoxCategory2.setEnabled(false);
 		
-		textFieldCategory2 = new JTextField();
+		JTextField textFieldCategory2 = new JTextField();
 		textFieldCategory2.setEnabled(false);
 		textFieldCategory2.setColumns(10);
 		
 		JCheckBox checkBoxCategory3 = new JCheckBox("Kategoria 3:");
-		checkBoxCategory3.setEnabled(false);
 		
-		textFieldCategory3 = new JTextField();
+		JTextField textFieldCategory3 = new JTextField();
 		textFieldCategory3.setEnabled(false);
 		textFieldCategory3.setColumns(10);
 		
 		JCheckBox checkBoxCategory4 = new JCheckBox("Kategoria 4:");
-		checkBoxCategory4.setEnabled(false);
 		
-		textFieldCategory4 = new JTextField();
+		JTextField textFieldCategory4 = new JTextField();
 		textFieldCategory4.setEnabled(false);
 		textFieldCategory4.setColumns(10);
 		
 		JCheckBox checkBoxCategory5 = new JCheckBox("Kategoria 5:");
-		checkBoxCategory5.setEnabled(false);
 		
-		textFieldCategory5 = new JTextField();
+		JTextField textFieldCategory5 = new JTextField();
 		textFieldCategory5.setEnabled(false);
 		textFieldCategory5.setColumns(10);
 		GroupLayout gl_panelCustomCategories = new GroupLayout(panelCustomCategories);
@@ -154,6 +140,38 @@ public class PanelExpenditureCategoriesInNewBudget extends JPanel{
 		JCheckBox checkBoxBooksTextBooks = new JCheckBox("Podręczniki/zeszyty");
 		
 		JCheckBox checkBoxMedicines = new JCheckBox("Leki");
+		
+		checkedExpenditureCategories = new ArrayList<>();
+		
+		CheckBoxItemStateListener itemListener = new CheckBoxItemStateListener(checkedExpenditureCategories);
+		
+		checkBoxShopping.addItemListener(itemListener);
+		checkBoxFood.addItemListener(itemListener);
+		checkBoxDomesticDetergents.addItemListener(itemListener);
+		checkBoxFuel.addItemListener(itemListener);
+		checkBoxCommute.addItemListener(itemListener);
+		checkBoxAnimals.addItemListener(itemListener);
+		checkBoxFastFood.addItemListener(itemListener);
+		checkBoxSport.addItemListener(itemListener);
+		checkBoxKultureEntertaiment.addItemListener(itemListener);
+		checkBoxEquipment.addItemListener(itemListener);
+		checkBoxChildren.addItemListener(itemListener);
+		checkBoxBooksTextBooks.addItemListener(itemListener);
+		checkBoxMedicines.addItemListener(itemListener);
+		
+		checkBoxCategory1.addItemListener(new CheckBoxItemListener(textFieldCategory1));
+		checkBoxCategory2.addItemListener(new CheckBoxItemListener(textFieldCategory2));
+		checkBoxCategory3.addItemListener(new CheckBoxItemListener(textFieldCategory3));
+		checkBoxCategory4.addItemListener(new CheckBoxItemListener(textFieldCategory4));
+		checkBoxCategory5.addItemListener(new CheckBoxItemListener(textFieldCategory5));
+		
+		TextFieldKeyListener keyListener = new TextFieldKeyListener(checkedExpenditureCategories);
+		textFieldCategory1.addKeyListener(keyListener);
+		textFieldCategory2.addKeyListener(keyListener);
+		textFieldCategory3.addKeyListener(keyListener);
+		textFieldCategory4.addKeyListener(keyListener);
+		textFieldCategory5.addKeyListener(keyListener);
+		
 		GroupLayout gl_panelExpenditures = new GroupLayout(panelExpenditures);
 		gl_panelExpenditures.setHorizontalGroup(
 			gl_panelExpenditures.createParallelGroup(Alignment.LEADING)
