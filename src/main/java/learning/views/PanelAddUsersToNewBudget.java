@@ -10,12 +10,15 @@ import java.awt.FlowLayout;
 import java.awt.Dimension;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
 
 public class PanelAddUsersToNewBudget extends JPanel{
-	private JTextField textFieldBugdetName;
 	private JFormattedTextField formattedTextField;
+	private JTextField textFieldBugdetName;
+	private List<String> users;
+	
 	public PanelAddUsersToNewBudget() {
 		
 		JLabel labelInfo = new JLabel("Ilość użytkowników gospodarstwa domowego posiadających dochody:");
@@ -67,5 +70,9 @@ public class PanelAddUsersToNewBudget extends JPanel{
 					.addGap(79))
 		);
 		setLayout(groupLayout);
+	}
+	
+	public List<String> getUsers() {
+		return users;
 	}
 }

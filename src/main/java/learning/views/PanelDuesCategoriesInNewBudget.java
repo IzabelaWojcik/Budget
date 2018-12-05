@@ -226,4 +226,8 @@ public class PanelDuesCategoriesInNewBudget extends JPanel{
 		);
 		setLayout(groupLayout);
 	}
+	
+	public List<String> getCheckedDuesCategories() {
+		return checkedDuesCategories;
+	}
 }

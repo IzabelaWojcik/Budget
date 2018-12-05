@@ -250,4 +250,8 @@ public class PanelExpenditureCategoriesInNewBudget extends JPanel{
 		);
 		setLayout(groupLayout);
 	}
+	
+	public List<String> getCheckedExpenditureCategories() {
+		return checkedExpenditureCategories;
+	}
 }

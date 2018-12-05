@@ -224,4 +224,8 @@ public class PanelSavingsCategoriesInNewBudget extends JPanel{
 		);
 		setLayout(groupLayout);
 	}
+	
+	public List<String> getCheckedSavingsCategories() {
+		return checkedSavingsCategories;
+	}
 }
