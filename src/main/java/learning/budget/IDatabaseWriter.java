@@ -1,13 +1,15 @@
 package learning.budget;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public interface IDatabaseWriter {
 	
 	public void writeCategoryMapToDatabase(HashMap<String, String> map, int idBudget, String tablename);
 	
-	public void writeCategoryListTodatabase(ArrayList<String> list, int idBudget, String tablename);
+	public void writeCategoryListTodatabase(List<String> transactionsFromCheckBoxes, int idBudget, String tablename);
+	
+	public void writeUsersListTodatabase(List<String> list, int idBudget, String tablename);
 	
 	public void writeDayOfBeginingNewBudgetMonthToDatabase(int day, int idBudget);
 	

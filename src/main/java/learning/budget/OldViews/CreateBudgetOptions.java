@@ -202,6 +202,7 @@ public class CreateBudgetOptions extends JDialog {
 
 			textFieldHowManyUsersToDisplay = new JTextField();
 			textFieldHowManyUsersToDisplay.addKeyListener(new KeyAdapter() {
+				//TODO
 				@Override
 				public void keyPressed(KeyEvent e) {
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -319,14 +320,15 @@ public class CreateBudgetOptions extends JDialog {
 			btnDalej1.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyPressed(KeyEvent e) {
+					//TODO
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 						boolean budgetNameIsUnique = false;
 						try {
 							budgetNameIsUnique = checkIfBudgetNameIsUniqueName();
 						} catch (DatabaseNotInitialized e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+						//TODO
 						boolean textFieldIsEmpty = textFieldValidator.checkIfTextFieldIsEmpty(textFieldBudgetName);
 						if(!budgetNameIsUnique){
 							JOptionPane.showMessageDialog(null, "Podana nazwa jun istnieje");
@@ -350,7 +352,6 @@ public class CreateBudgetOptions extends JDialog {
 					try {
 						budgetNameIsUnique = checkIfBudgetNameIsUniqueName();
 					} catch (DatabaseNotInitialized e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					boolean textFieldIsEmpty = textFieldValidator.checkIfTextFieldIsEmpty(textFieldBudgetName);
@@ -1621,7 +1622,6 @@ public class CreateBudgetOptions extends JDialog {
 				try {
 					writeDataToDatabase();
 				} catch (DatabaseNotInitialized e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				dispose();
@@ -2072,7 +2072,7 @@ public class CreateBudgetOptions extends JDialog {
 		);
 		panel4.setLayout(gl_panel4);
 	}
-
+//TODO
 	private void createUsers() {
 		String s = textFieldHowManyUsersToDisplay.getText();
 		int num = 0;
@@ -2109,7 +2109,6 @@ public class CreateBudgetOptions extends JDialog {
 						try {
 							userNameIsUnique = databaseReader.readUsersFromDatabasetoHashMap().containsValue(currentField.getText());
 						} catch (DatabaseNotInitialized e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						if(userNameIsUnique){
@@ -2226,6 +2225,7 @@ public class CreateBudgetOptions extends JDialog {
 		}
 	}
 	
+
 	private void setButtonZakonczEnabled() {
 		if (chckbxRemonty.isSelected() || chckbxMeble.isSelected() || chckbxSprzetyElektroniczne.isSelected()
 				|| chckbxWakacje.isSelected() || chckbxPrezenty.isSelected() || chckbxDlaDziecka.isSelected()
@@ -2239,6 +2239,7 @@ public class CreateBudgetOptions extends JDialog {
 		} else
 			btnZakoncz4.setEnabled(false);
 	}
+	
 	
 	private boolean checkIfBudgetNameIsUniqueName() throws DatabaseNotInitialized{
 		budgetName = textFieldBudgetName.getText();

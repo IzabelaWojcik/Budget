@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DatabaseWriter implements IDatabaseWriter {
 	private Statement start = null;
@@ -43,7 +43,15 @@ public class DatabaseWriter implements IDatabaseWriter {
 		}
 	}
 
-	public void writeCategoryListTodatabase(ArrayList<String> list, int idBudget, String tablename) {
+	public void writeCategoryListTodatabase(List<String> list, int idBudget, String tablename) {
+		for (String s : list) {
+			String update = "insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget
+					+ "')";
+			executeUpdate(update);
+		}
+	}
+	
+	public void writeUsersListTodatabase(List<String> list, int idBudget, String tablename) {
 		for (String s : list) {
 			String update = "insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget
 					+ "')";

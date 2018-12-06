@@ -15,7 +15,7 @@ import javax.swing.UIManager;
 import java.awt.Color;
 
 public class PanelSavingsCategoriesInNewBudget extends JPanel{
-	private List<String> checkedSavingsCategories;
+	private List<String> checkedCategories;
 	
 	public PanelSavingsCategoriesInNewBudget() {
 		
@@ -132,9 +132,9 @@ public class PanelSavingsCategoriesInNewBudget extends JPanel{
 		
 		JCheckBox checkBoxCar = new JCheckBox("Samochód");
 		
-		checkedSavingsCategories = new ArrayList<>();
+		checkedCategories = new ArrayList<>();
 		
-		CheckBoxItemStateListener itemListener = new CheckBoxItemStateListener(checkedSavingsCategories);
+		CheckBoxItemStateListener itemListener = new CheckBoxItemStateListener(checkedCategories);
 		
 		checkBoxRenovation.addItemListener(itemListener);
 		checkBoxFurnitures.addItemListener(itemListener);
@@ -151,7 +151,7 @@ public class PanelSavingsCategoriesInNewBudget extends JPanel{
 		checkBoxCategory4.addItemListener(new CheckBoxItemListener(textFieldCategory4));
 		checkBoxCategory5.addItemListener(new CheckBoxItemListener(textFieldCategory5));
 		
-		TextFieldKeyListener keyListener = new TextFieldKeyListener(checkedSavingsCategories);
+		TextFieldKeyListener keyListener = new TextFieldKeyListener(checkedCategories);
 		textFieldCategory1.addKeyListener(keyListener);
 		textFieldCategory2.addKeyListener(keyListener);
 		textFieldCategory3.addKeyListener(keyListener);
@@ -225,7 +225,7 @@ public class PanelSavingsCategoriesInNewBudget extends JPanel{
 		setLayout(groupLayout);
 	}
 	
-	public List<String> getCheckedSavingsCategories() {
-		return checkedSavingsCategories;
+	public List<String> getCheckedCategories() {
+		return checkedCategories;
 	}
 }

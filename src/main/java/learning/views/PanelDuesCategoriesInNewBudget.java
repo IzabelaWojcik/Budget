@@ -15,7 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 
 public class PanelDuesCategoriesInNewBudget extends JPanel{
-	private List<String> checkedDuesCategories;
+	private List<String> checkedCategories;
 	
 	public PanelDuesCategoriesInNewBudget() {
 		
@@ -116,9 +116,9 @@ public class PanelDuesCategoriesInNewBudget extends JPanel{
 		textFieldCategory5.setEnabled(false);
 		textFieldCategory5.setColumns(10);
 		
-		checkedDuesCategories = new ArrayList<>();
+		checkedCategories = new ArrayList<>();
 		
-		CheckBoxItemStateListener itemListener = new CheckBoxItemStateListener(checkedDuesCategories);
+		CheckBoxItemStateListener itemListener = new CheckBoxItemStateListener(checkedCategories);
 		
 		checkBoxRent.addItemListener(itemListener); 
 		checkBoxPower.addItemListener(itemListener);
@@ -135,7 +135,7 @@ public class PanelDuesCategoriesInNewBudget extends JPanel{
 		checkBoxCategory4.addItemListener(new CheckBoxItemListener(textFieldCategory4));
 		checkBoxCategory5.addItemListener(new CheckBoxItemListener(textFieldCategory5));
 		
-		TextFieldKeyListener keyListener = new TextFieldKeyListener(checkedDuesCategories);
+		TextFieldKeyListener keyListener = new TextFieldKeyListener(checkedCategories);
 		textFieldCategory1.addKeyListener(keyListener);
 		textFieldCategory2.addKeyListener(keyListener);
 		textFieldCategory3.addKeyListener(keyListener);
@@ -227,7 +227,7 @@ public class PanelDuesCategoriesInNewBudget extends JPanel{
 		setLayout(groupLayout);
 	}
 	
-	public List<String> getCheckedDuesCategories() {
-		return checkedDuesCategories;
+	public List<String> getCheckedCategories() {
+		return checkedCategories;
 	}
 }

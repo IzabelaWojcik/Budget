@@ -6,16 +6,23 @@ import java.awt.FlowLayout;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import learning.budget.IDatabaseReader;
+import learning.budget.IDatabaseWriter;
+
 import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class CreateNewBudgetDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	
+	private static IDatabaseReader databaseReader;
+	private static IDatabaseWriter databaseWriter;
 	private PanelAddUsersToNewBudget panelToAddUsers;
 	private PanelDuesCategoriesInNewBudget panelToChooseDuesCategories;
 	private PanelExpenditureCategoriesInNewBudget panelToChooseExpenditureCategories;
@@ -25,12 +32,13 @@ public class CreateNewBudgetDialog extends JDialog {
 	private JButton buttonCancel;
 	private JButton buttonFinish;
 
+
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			CreateNewBudgetDialog dialog = new CreateNewBudgetDialog();
+			CreateNewBudgetDialog dialog = new CreateNewBudgetDialog(databaseReader, databaseWriter);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -41,7 +49,11 @@ public class CreateNewBudgetDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public CreateNewBudgetDialog() {
+	public CreateNewBudgetDialog(IDatabaseReader databaseReader, IDatabaseWriter databaseWriter) {
+		this.databaseReader = databaseReader;
+		this.databaseWriter = databaseWriter;
+		
+		setTitle("Utwórz nowy budżet");
 		initialize();
 	}
 	
@@ -88,6 +100,7 @@ public class CreateNewBudgetDialog extends JDialog {
 		buttonFinish.setPreferredSize(new Dimension(80, 25));
 		buttonFinish.setEnabled(false);
 		panelButtons.add(buttonFinish);
+		
 	}
 
 }

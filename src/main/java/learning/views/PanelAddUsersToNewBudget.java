@@ -7,18 +7,16 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
-import java.awt.Dimension;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.event.ActionListener;
 import java.util.List;
-import java.awt.event.ActionEvent;
 import javax.swing.JFormattedTextField;
 
 public class PanelAddUsersToNewBudget extends JPanel{
-	private JFormattedTextField formattedTextField;
+	private JFormattedTextField formattedTextFieldNumberOfUsers;
 	private JTextField textFieldBugdetName;
-	private List<String> users;
-	
+	private List<String> usersNames;
+	private JPanel panelForUsers;
+
 	public PanelAddUsersToNewBudget() {
 		
 		JLabel labelInfo = new JLabel("Ilość użytkowników gospodarstwa domowego posiadających dochody:");
@@ -30,10 +28,10 @@ public class PanelAddUsersToNewBudget extends JPanel{
 		
 		JButton button = new JButton("Dodaj użytkowników");
 		
-		JPanel panelForUsers = new JPanel();
+		panelForUsers = new JPanel();
 		panelForUsers.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		formattedTextField = new JFormattedTextField();
+		formattedTextFieldNumberOfUsers = new JFormattedTextField();
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -44,7 +42,7 @@ public class PanelAddUsersToNewBudget extends JPanel{
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(labelBudgetName, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
-								.addComponent(formattedTextField, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))
+								.addComponent(formattedTextFieldNumberOfUsers, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))
 							.addGap(18)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(button, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
@@ -63,7 +61,7 @@ public class PanelAddUsersToNewBudget extends JPanel{
 						.addComponent(textFieldBugdetName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(formattedTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(formattedTextFieldNumberOfUsers, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(button))
 					.addGap(35)
 					.addComponent(panelForUsers, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE)
@@ -72,7 +70,20 @@ public class PanelAddUsersToNewBudget extends JPanel{
 		setLayout(groupLayout);
 	}
 	
-	public List<String> getUsers() {
-		return users;
+	public List<String> getUsersNames() {
+		return usersNames;
 	}
+	
+	public JFormattedTextField getFormattedTextFieldNumberOfUsers() {
+		return formattedTextFieldNumberOfUsers;
+	}
+
+	public JTextField getTextFieldBugdetName() {
+		return textFieldBugdetName;
+	}
+	
+	public JPanel getPanelForUsers() {
+		return panelForUsers;
+	}
+
 }
