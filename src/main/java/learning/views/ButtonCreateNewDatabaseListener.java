@@ -2,7 +2,6 @@ package learning.views;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -47,37 +46,55 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 		List<String> checkedDues = panelDuesCategoriesInNewBudget.getCheckedCategories();
 		List<String> users = panelAddUsersToNewBudge.getUsersNames();
 		String budgetName = panelAddUsersToNewBudge.getTextFieldBugdetName().getText();
-		
+		String message = "";
 		int idBudget = 0;
 		try {
-			controller.writeBudgetNameToDatabase(budgetName);
 			
-			idBudget = controller.getBudgetIdFromDatabase(budgetName);
+			if(controller.checkIfBudgetNameIsUnique(budgetName) == true)
+			{
+				message += "Taka nazwa budæetu już istnieje \n";
+			}
 			
+			if(panelAddUsersToNewBudge.getTextFieldBugdetName().getText().equals("") || 
+					panelAddUsersToNewBudge.getTextFieldBugdetName().getText().isEmpty() ||
+					panelAddUsersToNewBudge.getTextFieldBugdetName().getText().trim().isEmpty()){
+				
+				message += "Wpisz nazwę budżetu \n";
+			}
+			
+			if(checkedExpenditures.size() == 0 || checkedSavings.size() == 0 || checkedDues.size() == 0) {
+				
+				if(checkedExpenditures.size() == 0) {
+					message += "Wybierz kategorie wydatków \n";
+				}
+				if(checkedSavings.size() == 0) {
+					message += "Wybierz kategorie oszczędności \n";
+				}
+				if(checkedDues.size() == 0) {
+					message += "Wybierz kategorie opłat ";
+				}
+				
+				String numberOfUsers = panelAddUsersToNewBudge.getFormattedTextFieldNumberOfUsers().getText();
+				int numberUsers = Integer.parseInt(numberOfUsers);
+				JOptionPane.showMessageDialog(null, message);
+			}
+			
+			
+			
+			if(idBudget == 999) {
+				databaseWriter.writeBudgetNameToDatabase(budgetName);
+				idBudget = controller.getBudgetIdFromDatabase(budgetName);
+				databaseWriter.writeCategoryListTodatabase(checkedExpenditures, idBudget, EXPENDITURE_CATEGORY);
+				databaseWriter.writeCategoryListTodatabase(checkedSavings, idBudget, SAVINGS_CATEGORY);
+				databaseWriter.writeCategoryListTodatabase(checkedDues, idBudget, DUES_CATEGORY);
+			}
+			
+			
+			//controller.createUsers(panelAddUsersToNewBudge);
 		} catch (BudgetNotFoundException | DatabaseNotInitialized e) {
 			e.printStackTrace();
 		}
 
-		if(checkedExpenditures.size() == 0 || checkedSavings.size() == 0 || checkedDues.size() == 0) {
-			String message = "";
-			if(checkedExpenditures.size() == 0) {
-				message += "Wybierz kategorie wydatków \n";
-			}
-			if(checkedSavings.size() == 0) {
-				message += "Wybierz kategorie oszczędności \n";
-			}
-			if(checkedDues.size() == 0) {
-				message += "Wybierz kategorie opłat ";
-			}
-			
-			JOptionPane.showMessageDialog(null, message);
-		}
-		
-		databaseWriter.writeCategoryListTodatabase(checkedExpenditures, idBudget, EXPENDITURE_CATEGORY);
-		databaseWriter.writeCategoryListTodatabase(checkedSavings, idBudget, SAVINGS_CATEGORY);
-		databaseWriter.writeCategoryListTodatabase(checkedDues, idBudget, DUES_CATEGORY);
-		
-		//controller.createUsers(panelAddUsersToNewBudge);
 	}
 
 }

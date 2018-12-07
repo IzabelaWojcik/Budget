@@ -10,6 +10,7 @@ import java.awt.FlowLayout;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.util.List;
 import javax.swing.JFormattedTextField;
+import java.awt.Color;
 
 public class PanelAddUsersToNewBudget extends JPanel{
 	private JFormattedTextField formattedTextFieldNumberOfUsers;
@@ -53,7 +54,7 @@ public class PanelAddUsersToNewBudget extends JPanel{
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(59, Short.MAX_VALUE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addComponent(labelInfo)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
@@ -85,5 +86,4 @@ public class PanelAddUsersToNewBudget extends JPanel{
 	public JPanel getPanelForUsers() {
 		return panelForUsers;
 	}
-
 }

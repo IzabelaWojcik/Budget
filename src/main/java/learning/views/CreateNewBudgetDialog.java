@@ -93,7 +93,7 @@ public class CreateNewBudgetDialog extends JDialog {
 		buttonCancel.setPreferredSize(new Dimension(80, 25));
 		panelButtons.add(buttonCancel);
 		
-		buttonFinish = new JButton("Zakończ");
+		buttonFinish = new JButton("Dodaj");
 		buttonFinish.setPreferredSize(new Dimension(80, 25));
 		panelButtons.add(buttonFinish);
 		

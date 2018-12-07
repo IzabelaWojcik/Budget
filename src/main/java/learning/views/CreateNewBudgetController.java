@@ -1,5 +1,6 @@
 package learning.views;
 
+import java.awt.HeadlessException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -28,16 +29,7 @@ public class CreateNewBudgetController {
 		this.databaseWriter = databaseWriter;
 	}
 
-	public void writeBudgetNameToDatabase(String budgetName) throws DatabaseNotInitialized{
-		if(checkIfBudgetNameIsUnique(budgetName) == true){
-			databaseWriter.writeBudgetNameToDatabase(budgetName);
-		}
-		else{
-			JOptionPane.showMessageDialog(null, "Taka nazwa budæetu juæ istnieje");
-		}
-	}
-	
-	private boolean checkIfBudgetNameIsUnique(String budgetName) throws DatabaseNotInitialized{
+	public boolean checkIfBudgetNameIsUnique(String budgetName) throws BudgetNotFoundException, DatabaseNotInitialized{
 		HashMap<Integer, String> budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
 		return budgetIdNameMap.containsValue(budgetName);
 	}
@@ -50,7 +42,6 @@ public class CreateNewBudgetController {
 				return entry.getKey();
 			}
 		}
-		
 		throw new BudgetNotFoundException(budgetName);
 	}
 	
