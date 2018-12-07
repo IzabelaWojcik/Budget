@@ -37,6 +37,7 @@ public class DatabaseReader implements IDatabaseReader{
 	
 	private ResultSet getDataFromTable(String tablename) throws SQLException, DatabaseNotInitialized {
 		ResultSet rs;
+
 		try {
 			Statement start = connection.createStatement();
 			String SQL = "Select * from " + "\"" + tablename + "\"";
