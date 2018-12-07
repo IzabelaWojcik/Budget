@@ -10,7 +10,6 @@ import java.awt.FlowLayout;
 import java.text.NumberFormat;
 
 import javax.swing.LayoutStyle.ComponentPlacement;
-import java.util.List;
 import javax.swing.JFormattedTextField;
 import java.awt.Color;
 
@@ -43,7 +42,7 @@ public class PanelAddUsersToNewBudget extends JPanel{
 		JLabel lblError = new JLabel("");
 		lblError.setForeground(Color.RED);
 		
-		AddUsersToNewBudgetListener addUsersToNewBudgetListener = new AddUsersToNewBudgetListener(formattedTextFieldNumberOfUsers, panelForUsers, lblError);
+		CreateTextFieldsForUserNamesListener addUsersToNewBudgetListener = new CreateTextFieldsForUserNamesListener(formattedTextFieldNumberOfUsers, panelForUsers, lblError);
  		button.addActionListener(addUsersToNewBudgetListener);
 		
 		GroupLayout groupLayout = new GroupLayout(this);
