@@ -99,7 +99,7 @@ public class CreateNewBudgetDialog extends JDialog {
 		
 		ButtonCreateNewDatabaseListener buttonCreateNewDatabaseListener = new ButtonCreateNewDatabaseListener(databaseReader,
 				databaseWriter, panelToAddUsers, panelToChooseDuesCategories, 
-				panelToChooseExpenditureCategories, panelToChooseSavingsCategories);
+				panelToChooseExpenditureCategories, panelToChooseSavingsCategories, this);
 		buttonAdd.addActionListener(buttonCreateNewDatabaseListener);
 	}
 }

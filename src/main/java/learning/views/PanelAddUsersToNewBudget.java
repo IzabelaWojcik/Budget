@@ -19,6 +19,7 @@ public class PanelAddUsersToNewBudget extends JPanel{
 	private JPanel panelForUsers;
 	
 	final static NumberFormat integerFieldFormatter = NumberFormat.getIntegerInstance();
+	private JLabel lblError;
 
 	public PanelAddUsersToNewBudget() {
 		
@@ -39,10 +40,10 @@ public class PanelAddUsersToNewBudget extends JPanel{
 		formattedTextFieldNumberOfUsers = new JFormattedTextField(integerFieldFormatter);
 		formattedTextFieldNumberOfUsers.setColumns(10);
 		
-		JLabel lblError = new JLabel("");
+		lblError = new JLabel("");
 		lblError.setForeground(Color.RED);
 		
-		CreateTextFieldsForUserNamesListener addUsersToNewBudgetListener = new CreateTextFieldsForUserNamesListener(formattedTextFieldNumberOfUsers, panelForUsers, lblError);
+		CreateTextFieldsForUsersNamesListener addUsersToNewBudgetListener = new CreateTextFieldsForUsersNamesListener(formattedTextFieldNumberOfUsers, panelForUsers, lblError);
  		button.addActionListener(addUsersToNewBudgetListener);
 		
 		GroupLayout groupLayout = new GroupLayout(this);
@@ -101,5 +102,9 @@ public class PanelAddUsersToNewBudget extends JPanel{
 	
 	public JPanel getPanelForUsers() {
 		return panelForUsers;
+	}
+	
+	public JLabel getErrorLabel() {
+		return lblError;
 	}
 }

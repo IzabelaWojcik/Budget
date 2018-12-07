@@ -202,7 +202,7 @@ public class CreateBudgetOptions extends JDialog {
 
 			textFieldHowManyUsersToDisplay = new JTextField();
 			textFieldHowManyUsersToDisplay.addKeyListener(new KeyAdapter() {
-				//TODO
+			
 				@Override
 				public void keyPressed(KeyEvent e) {
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -215,6 +215,7 @@ public class CreateBudgetOptions extends JDialog {
 			JButton btnHowManyUsersToDiplay = new JButton("Dodaj u\u017Cytkownik\u00F3w");
 			btnHowManyUsersToDiplay.addKeyListener(new KeyAdapter() {
 				@Override
+				//TODO ENTER
 				public void keyPressed(KeyEvent e) {
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 						createUsers();
@@ -320,7 +321,7 @@ public class CreateBudgetOptions extends JDialog {
 			btnDalej1.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyPressed(KeyEvent e) {
-					//TODO
+					
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 						boolean budgetNameIsUnique = false;
 						try {
@@ -328,7 +329,7 @@ public class CreateBudgetOptions extends JDialog {
 						} catch (DatabaseNotInitialized e1) {
 							e1.printStackTrace();
 						}
-						//TODO
+					
 						boolean textFieldIsEmpty = textFieldValidator.checkIfTextFieldIsEmpty(textFieldBudgetName);
 						if(!budgetNameIsUnique){
 							JOptionPane.showMessageDialog(null, "Podana nazwa jun istnieje");
@@ -2072,7 +2073,7 @@ public class CreateBudgetOptions extends JDialog {
 		);
 		panel4.setLayout(gl_panel4);
 	}
-//TODO
+	
 	private void createUsers() {
 		String s = textFieldHowManyUsersToDisplay.getText();
 		int num = 0;

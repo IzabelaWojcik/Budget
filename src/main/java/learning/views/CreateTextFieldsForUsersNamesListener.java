@@ -8,14 +8,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class CreateTextFieldsForUserNamesListener implements ActionListener {
+public class CreateTextFieldsForUsersNamesListener implements ActionListener {
 	private static final int MAX_NUMBER_OF_USERS_IN_BUDGET = 8;
 	
 	private JFormattedTextField formattedTextField;
 	private JPanel panelForUsers;
 	private JLabel errorLabel;
 	
-	public CreateTextFieldsForUserNamesListener(JFormattedTextField formattedTextField, JPanel panelForUsers, JLabel errorMessage) {
+	public CreateTextFieldsForUsersNamesListener(JFormattedTextField formattedTextField, JPanel panelForUsers, JLabel errorMessage) {
 		this.formattedTextField = formattedTextField;
 		this.panelForUsers = panelForUsers;
 		this.errorLabel = errorMessage;
