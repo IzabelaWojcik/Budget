@@ -30,7 +30,7 @@ public class CreateNewBudgetDialog extends JDialog {
 	private PanelWithTabbedPanes panelWithTabbedPanes;
 	private JPanel panelButtons;
 	private JButton buttonCancel;
-	private JButton buttonFinish;
+	private JButton buttonAdd;
 
 	public static void main(String[] args) {
 		IDatabaseReader databaseReader = DatabaseReader.getInstance();
@@ -93,12 +93,13 @@ public class CreateNewBudgetDialog extends JDialog {
 		buttonCancel.setPreferredSize(new Dimension(80, 25));
 		panelButtons.add(buttonCancel);
 		
-		buttonFinish = new JButton("Dodaj");
-		buttonFinish.setPreferredSize(new Dimension(80, 25));
-		panelButtons.add(buttonFinish);
+		buttonAdd = new JButton("Dodaj");
+		buttonAdd.setPreferredSize(new Dimension(80, 25));
+		panelButtons.add(buttonAdd);
 		
-		CreateNewBudgetController controller = new CreateNewBudgetController(databaseReader, databaseWriter);
-		ButtonCreateNewDatabaseListener buttonCreateNewDatabaseListener = new ButtonCreateNewDatabaseListener(controller, databaseReader, databaseWriter, panelToAddUsers, panelToChooseDuesCategories, panelToChooseExpenditureCategories, panelToChooseSavingsCategories);
-		buttonFinish.addActionListener(buttonCreateNewDatabaseListener);
+		ButtonCreateNewDatabaseListener buttonCreateNewDatabaseListener = new ButtonCreateNewDatabaseListener(databaseReader,
+				databaseWriter, panelToAddUsers, panelToChooseDuesCategories, 
+				panelToChooseExpenditureCategories, panelToChooseSavingsCategories);
+		buttonAdd.addActionListener(buttonCreateNewDatabaseListener);
 	}
 }

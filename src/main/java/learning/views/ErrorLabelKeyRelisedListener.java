@@ -25,7 +25,6 @@ public class ErrorLabelKeyRelisedListener extends JLabel implements KeyListener 
 		
 	}
 
-
 	@Override
 	public void keyReleased(KeyEvent evt) {
 		JFormattedTextField field = (JFormattedTextField)evt.getSource();
