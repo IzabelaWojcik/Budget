@@ -14,6 +14,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import com.toedter.calendar.JDateChooser;
 
+import learning.budget.DatabaseNotInitialized;
+
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -56,7 +58,12 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 		formattedTextField.addKeyListener(errorLabel);
 		
 		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {
-				listener.notify(new ButtonAddTransactionData(identifier, dateChooser.getDate(), (String) comboBox.getSelectedItem(), formattedTextField.getText().replaceAll(groupSeparator, "")));});
+				try {
+					listener.notify(new ButtonAddTransactionData(identifier, dateChooser.getDate(), (String) comboBox.getSelectedItem(), formattedTextField.getText().replaceAll(groupSeparator, "")));
+				} catch (DatabaseNotInitialized e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}});
 				formattedTextField.setText("");
 				buttonAdd.setEnabled(false);});
 		

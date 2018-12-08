@@ -152,7 +152,9 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 	}
 
 	public boolean checkIfTextFieldIsEmpty(JTextField textField) {
-		return textField.getText() == null || textField.getText().isEmpty() || textField.getText().trim().isEmpty()
-				|| textField.getText().length() < 3;
+		return textField.getText() == null || 
+				textField.getText().isEmpty() || 
+				textField.getText().trim().isEmpty() || 
+				textField.getText().length() < 3;
 	}
 }

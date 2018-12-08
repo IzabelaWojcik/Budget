@@ -1,12 +1,9 @@
 package Tests;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Field;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -14,29 +11,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import org.javatuples.Triplet;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import Tests.Helpers.TestHelper;
-import Tests.Helpers.PanelForRemove;
 import learning.budget.DatabaseNotInitialized;
-import learning.budget.DatabaseReader;
 import learning.budget.IDatabaseReader;
 import learning.budget.IDatabaseWriter;
 import learning.budget.Transaction;
@@ -51,30 +39,61 @@ import learning.views.PanelViewTransaction;
 import learning.views.PanelWithButtons;
 
 public class BudgetControllerTest {
-	private HashMap<Integer, String> budgetIdToName = new HashMap<Integer, String>() {{put(1, "budzet1"); put(2, "budzet2"); put(3, "budzet3");}};
-	private BudgetController budgetController;
-	private int clickedBudgetId, noClickedBudgetId, categoryId1, categoryId2, transactionId;
-	private JLabel lblExpenditureSum, lblSavingsSum, lblIncomeSum;
-	private double amount;
-	private List<LocalDate> dates;
-	private Map<Integer, String> categories;
-	private List<Transaction> expenditures, savings, income, transactions;
-	private String categoryName1;
-	private String categoryName2;
-	private String userName1;
-	private String userName2;
-	private String userName3;
-	private String userName4;
-	private int userId1;
-	private int userId2;
-	private int userId3;
-	private int userId4;
-	private Date date;
-	private LocalDate localDate;
-	private ArrayList<UsersObject> userNamesIdsBudgetIds;
-	private List<Triplet<String, String, String>> listOfTripletsExpenditure, listOfTripletsSavings, listOfTripletsIncome;
-	private Triplet<String, String, String> columnsName;
+	private static final LocalDate DATE5 = LocalDate.parse("2015-05-15");
+	private static final LocalDate DATE4 = LocalDate.parse("2017-12-01");
+	private static final LocalDate DATE3 = LocalDate.parse("2017-03-17");
+	private static final LocalDate DATE2 = LocalDate.parse("2017-02-14");
+	private static final LocalDate DATE1 = LocalDate.parse("2016-01-01");
+
+	class DBEntry<N, I> {
+		public final N name;
+		public final I id;
+
+		DBEntry(N n, I id) {
+			name = n;
+			this.id = id;
+		}
+	}
+
+	final DBEntry<String, Integer> budget1 = new DBEntry<String, Integer>("budzet1", 1);
+	final DBEntry<String, Integer> budget2 = new DBEntry<String, Integer>("budzet2", 2);
+	final DBEntry<String, Integer> budget3 = new DBEntry<String, Integer>("budzet3", 3);
+
+	final DBEntry<String, Integer> category1 = new DBEntry<String, Integer>("zakupy", 1);
+	final DBEntry<String, Integer> category2 = new DBEntry<String, Integer>("oplaty", 2);
+	final DBEntry<String, Integer> category3 = new DBEntry<String, Integer>("ksiazki", 3);
+
+	final DBEntry<String, Integer> user1 = new DBEntry<String, Integer>("Iza", 1);
+	final DBEntry<String, Integer> user2 = new DBEntry<String, Integer>("Piotr", 2);
+	final DBEntry<String, Integer> user3 = new DBEntry<String, Integer>("Ania", 3);
+	final DBEntry<String, Integer> user4 = new DBEntry<String, Integer>("Kuba", 4);
 	
+	final HashMap<Integer, String> budgetIdToName = new HashMap<Integer, String>() {{put(budget1.id, budget1.name); 
+																				     put(budget2.id, budget2.name); 
+																				     put(budget3.id, budget3.name);}};
+	
+	private final List<LocalDate> DATES = new ArrayList<LocalDate>(){{ add(DATE1); add(DATE2); 
+																	   add(DATE3); add(DATE3);
+																	   add(DATE4); add(DATE5);}};
+
+	private final List<UsersObject> userNamesIdsBudgetIds = new ArrayList<UsersObject>() {
+		{
+			add(new UsersObject(user1.id, user1.name, budget1.id));
+			add(new UsersObject(user2.id, user2.name, budget2.id));
+			add(new UsersObject(user3.id, user3.name, budget1.id));
+			add(new UsersObject(user4.id, user4.name, budget1.id));
+		}
+	};
+
+	final int transactionId = 123;
+	final double amount = 10.0;
+
+	private Map<Integer, String> categories;
+	private List<Transaction> expenditures, savings, income;
+	private List<Triplet<String, String, String>> listOfTripletsExpenditure, listOfTripletsSavings, listOfTripletsIncome;
+	private BudgetController budgetController;
+
+	private JLabel lblExpenditureSum, lblSavingsSum, lblIncomeSum;
 	@Mock
 	IDatabaseReader databaseReaderForTest;
 	@Mock
@@ -106,6 +125,11 @@ public class BudgetControllerTest {
 		lblExpenditureSum = new JLabel();
 		lblSavingsSum = new JLabel();
 		lblIncomeSum = new JLabel();
+
+		when(databaseReaderForTest.readDatesForBudgetFromDatabase(budget1.id)).thenReturn(DATES);
+		when(databaseReaderForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
+		when(databaseReaderForTest.readUsersFromDatabase()).thenReturn(userNamesIdsBudgetIds);
+		
 		budgetController = new BudgetController(databaseReaderForTest, databaseWriterForTest,
 												panelWithBudget, panelWithYears, panelWithMonths,
 												panelAddExpenditure, panelAddSavings, panelAddIncome,
@@ -120,85 +144,41 @@ public class BudgetControllerTest {
 		setIdentifier(panelAddSavings, 127);
 		setIdentifier(panelAddIncome, 128);
 		
-		clickedBudgetId = 1;
-		noClickedBudgetId = 2;
-		categoryId1 = 1; 
-		categoryId2 = 2; 
-		transactionId  = 123;
-		categoryName1 = "Zakupy";
-		categoryName2 = "Opłaty";
-		userName1 = "Iza";
-		userName2 = "Piotr";
-		userName3 = "Ania";
-		userName4 = "Kuba";
-		userId1 = 11;
-		userId2 = 12;
-		userId3 = 13;
-		userId4 = 14;
-		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
-	    String dateInString = "2017-03-01";
-	    date = formatter.parse(dateInString);
-	    
-	    localDate = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-		
-		amount = 10.0;
-		
 		expenditures = new ArrayList<Transaction>(){{
-			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2016-01-01"), clickedBudgetId, categoryName1)); 
-			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2017-02-14"), clickedBudgetId, categoryName1)); 
-			add(new Transaction(transactionId, categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId, categoryName2)); 
+			add(new Transaction(transactionId, category1.id, amount, DATE1, budget1.id, category1.name)); 
+			add(new Transaction(transactionId, category1.id, amount, DATE2, budget1.id, category1.name)); 
+			add(new Transaction(transactionId, category2.id, amount, DATE3, budget1.id, category2.name)); 
 			}};
 			
 		savings = new ArrayList<Transaction>(){{
-			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2017-03-17"), clickedBudgetId, categoryName1)); 
-			add(new Transaction(transactionId, categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId, categoryName2));
-			add(new Transaction(transactionId, categoryId2, amount, LocalDate.parse("2017-12-01"), clickedBudgetId, categoryName2));
+			add(new Transaction(transactionId, category1.id, amount, DATE3, budget1.id, category1.name)); 
+			add(new Transaction(transactionId, category2.id, amount, DATE3, budget1.id, category2.name));
+			add(new Transaction(transactionId, category2.id, amount, DATE4, budget1.id, category2.name));
 			}};
 			
 		income = new ArrayList<Transaction>(){{
-			add(new Transaction(transactionId, categoryId2, amount, LocalDate.parse("2017-03-17"), clickedBudgetId, categoryName2, userId1, userName1));
-			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2017-12-01"), clickedBudgetId, categoryName1, userId1, userName1));
-			add(new Transaction(transactionId, categoryId1, amount, LocalDate.parse("2015-05-15"), clickedBudgetId, categoryName1, userId2, userName2));
-			}};
-			
-		dates = new ArrayList<LocalDate>(){{
-			add(LocalDate.parse("2016-01-01")); 
-			add(LocalDate.parse("2017-02-14")); 
-			add(LocalDate.parse("2017-03-17")); 
-			add(LocalDate.parse("2017-03-17"));
-			add(LocalDate.parse("2017-12-01"));
-			add(LocalDate.parse("2015-05-15"));
+			add(new Transaction(transactionId, category2.id, amount, DATE3, budget1.id, category2.name, user1.id, user1.name));
+			add(new Transaction(transactionId, category1.id, amount, DATE4, budget1.id, category1.name, user1.id, user1.name));
+			add(new Transaction(transactionId, category1.id, amount, DATE5, budget1.id, category1.name, user2.id, user2.name));
 			}};
 			
 		categories = new HashMap<Integer, String>(){{
-			put(categoryId1, categoryName1); 
-			put(categoryId2, categoryName2); 
+			put(category1.id, category1.name); 
+			put(category2.id, category2.name); 
 			}};
 			
-		userNamesIdsBudgetIds = new ArrayList<UsersObject>() {{
-			add(new UsersObject(userId1, userName1, clickedBudgetId));
-			add(new UsersObject(userId2, userName2, noClickedBudgetId));
-			add(new UsersObject(userId3, userName3, clickedBudgetId));
-			add(new UsersObject(userId4, userName4, clickedBudgetId));
-			}};	
-
-			
 		listOfTripletsExpenditure = new ArrayList<Triplet<String, String, String>>(){{
-			add(new Triplet("2017-03-17", categoryName2, String.valueOf(amount))); 
+			add(new Triplet<String, String, String>(DATE3.toString(), category2.name, String.valueOf(amount))); 
 			}};
 			
 		listOfTripletsSavings = new ArrayList<Triplet<String, String, String>>(){{
-			add(new Triplet("2017-03-17", categoryName1, String.valueOf(amount))); 
-			add(new Triplet("2017-03-17", categoryName2, String.valueOf(amount))); 
+			add(new Triplet<String, String, String>(DATE3.toString(), category1.name, String.valueOf(amount))); 
+			add(new Triplet<String, String, String>(DATE3.toString(), category2.name, String.valueOf(amount))); 
 			}};
 
 		listOfTripletsIncome = new ArrayList<Triplet<String, String, String>>(){{
-			add(new Triplet(userName1, categoryName2, String.valueOf(amount))); 
+			add(new Triplet<String, String, String>(user1.name, category2.name, String.valueOf(amount))); 
 			}};
-
-		columnsName = new Triplet<String, String, String>("column1", "column2", "column3");
-			
 	}
 
 	private void setIdentifier(PanelWithButtons panel, int identifier) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -219,112 +199,129 @@ public class BudgetControllerTest {
 		budgetIdField.set(panel, identifier);
 	}
 
-	private void initializeController() throws DatabaseNotInitialized {
-		when(databaseReaderForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
-		budgetController.initializePanelBudget();
+	private Transaction createTransaction(DBEntry<String, Integer> category, DBEntry<String, Integer> user, LocalDate date) {
+		return new Transaction(transactionId, category.id, amount, date, budget1.id, category.name, user.id, user.name);
+	}
+	
+	private Date asDate(LocalDate date) {
+		return Date.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 	}
 	
 	@Test
 	public void initializePanelBudget_RedBudgetsNameFromDatabase_controllerRedBudgetsNameFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
-		initializeController();
-		
 		SortedSet<String> expectedButtonsNames = new TreeSet<String>(budgetIdToName.values());
 		verify(panelWithBudget).createButtons(expectedButtonsNames);
 	}
 	
 	@Test
 	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
-		initializeController();
-
-		when(databaseReaderForTest.readDatesForBudgetFromDatabase(clickedBudgetId)).thenReturn(dates);
-		
-		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
+		budgetController.notify(new ButtonsData(panelWithBudget.identifier, budget1.name));
 		
 		verify(panelWithYears).createButtons(new TreeSet<String>() {{add("2016"); add("2017"); add("2015");}});
 	}
 	
 	@Test
 	public void notify_redMonthsFromDatabase_controllerRedMonthsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
-		initializeController();
 		
-		when(databaseReaderForTest.readDatesForBudgetFromDatabase(clickedBudgetId)).thenReturn(dates);
-		
-		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
-		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
+		budgetController.notify(new ButtonsData(panelWithBudget.identifier, budget1.name));
+		budgetController.notify(new ButtonsData(panelWithYears.identifier, String.valueOf(DATE3.getYear())));
 		
 		verify(panelWithMonths).createButtons(new TreeSet<String>() {{add("2"); add("3"); add("12");}});
 	}
-	
+
+	private List<Transaction> extendTransactions(List<Transaction> transactions, Transaction t){
+		List<Transaction> withNewTransaction = new ArrayList<>(transactions);
+		withNewTransaction.add(t);
+		
+		return withNewTransaction;
+	}
+
 	@Test
 	public void notify_fillPanelsWithCollectedData_controllerCollectsDataAndFillsDependentPanels() throws DatabaseNotInitialized {
-		initializeController();
-		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, clickedBudgetId)).thenReturn(expenditures);
-		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, clickedBudgetId)).thenReturn(savings);
-		when(databaseReaderForTest.readUsersFromDatabase()).thenReturn(userNamesIdsBudgetIds);
-		when(databaseReaderForTest.readIncomeForConcreteBugdetFromDatabase(clickedBudgetId)).thenReturn(income);
+		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, budget1.id)).thenReturn(expenditures);
+		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, budget1.id)).thenReturn(savings);
+		when(databaseReaderForTest.readIncomeForConcreteBugdetFromDatabase(budget1.id)).thenReturn(income);
 		
-		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
-		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
-		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.INCOME_CATEGORY)).thenReturn(categories);
+		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
+		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
+		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.INCOME_CATEGORY)).thenReturn(categories);
 		
-		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
-		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
-		budgetController.notify(new ButtonsData(panelWithMonths.identifier, "3"));
+		budgetController.notify(new ButtonsData(panelWithBudget.identifier, budget1.name));
+		budgetController.notify(new ButtonsData(panelWithYears.identifier, String.valueOf(DATE3.getYear())));
+		budgetController.notify(new ButtonsData(panelWithMonths.identifier, String.valueOf(DATE3.getMonthValue())));
 		
-		verify(panelAddExpenditure).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
-		verify(panelAddSavings).fillComboBox( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
-		verify(panelAddIncome).fillComboBoxCategory( new ArrayList<String>() {{add(categoryName1); add(categoryName2);}});
-		verify(panelAddIncome).fillComboBoxUser(new ArrayList<String>() {{add(userName1); add(userName3); add(userName4);}});
+		verify(panelAddExpenditure).fillComboBox( new ArrayList<String>() {{add(category1.name); add(category2.name);}});
+		verify(panelAddSavings).fillComboBox( new ArrayList<String>() {{add(category1.name); add(category2.name);}});
+		verify(panelAddIncome).fillComboBoxCategory( new ArrayList<String>() {{add(category1.name); add(category2.name);}});
+		verify(panelAddIncome).fillComboBoxUser(new ArrayList<String>() {{add(user1.name); add(user3.name); add(user4.name);}});
 		
-		verify(panelExpenditureView).fillPanel(listOfTripletsExpenditure, budgetController.columnsNameDateCategoryAmount);
-		verify(panelSavingsView).fillPanel(listOfTripletsSavings, budgetController.columnsNameDateCategoryAmount);
-		verify(panelIncomeView).fillPanel(listOfTripletsIncome, budgetController.columnsNameUserNameCategoryAmount);
+		verify(panelExpenditureView).fillPanel(listOfTripletsExpenditure, BudgetController.columnsNameDateCategoryAmount);
+		verify(panelSavingsView).fillPanel(listOfTripletsSavings, BudgetController.columnsNameDateCategoryAmount);
+		verify(panelIncomeView).fillPanel(listOfTripletsIncome, BudgetController.columnsNameUserNameCategoryAmount);
 	}
 	
 	@Test
 	public void notify_AddExpenditureToDatabaseAndRefreshExpenditureView_ControllerAddExpenditureToDatabaseAfterClickingAddButtonAndRefreshExpenditureView() throws DatabaseNotInitialized {
-		initializeController();
-		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, clickedBudgetId)).thenReturn(expenditures);
-		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
+		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, budget1.id)).thenReturn(expenditures);
+		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
 		
-		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
-		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
-		budgetController.notify(new ButtonsData(panelWithMonths.identifier, "3"));
-		budgetController.notify(new ButtonAddTransactionData(panelAddExpenditure.identifier, date, categoryName1, String.valueOf(amount)));
+		budgetController.notify(new ButtonsData(panelWithBudget.identifier, budget1.name));
+		budgetController.notify(new ButtonsData(panelWithYears.identifier, String.valueOf(DATE3.getYear())));
+		budgetController.notify(new ButtonsData(panelWithMonths.identifier, String.valueOf(DATE3.getMonthValue())));
 		
-		verify(databaseWriterForTest).writeExpenditureOrSavingsToDatabase(amount, localDate, categoryId1, clickedBudgetId, budgetController.EXPENDITURE);
-		verify(panelExpenditureView).fillPanel(listOfTripletsExpenditure, budgetController.columnsNameDateCategoryAmount);
+		List<Transaction> withNewTransaction = extendTransactions(expenditures, createTransaction(category1, user1, DATE3));
+		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, budget1.id)).thenReturn(withNewTransaction);
+
+		budgetController.notify(new ButtonAddTransactionData(panelAddExpenditure.identifier, asDate(DATE3), category1.name, String.valueOf(amount)));
+		
+		verify(databaseWriterForTest).writeExpenditureOrSavingsToDatabase(amount, DATE3, category1.id, budget1.id, BudgetController.EXPENDITURE);
+		
+		List<Triplet<String, String, String>> listOfTripletsIncomeWithNewTriplet = new ArrayList<>(listOfTripletsExpenditure);
+		listOfTripletsIncomeWithNewTriplet.add(new Triplet<String, String, String>(DATE3.toString(), category1.name, String.valueOf(amount)));
+		verify(panelExpenditureView).fillPanel(listOfTripletsIncomeWithNewTriplet, BudgetController.columnsNameDateCategoryAmount);
 	}
 	
 	@Test
 	public void notify_AddSavingsToDatabaseAndRefreshSavingsView_ControllerAddSavingsToDatabaseAfterClickingAddButtonAndRefresSavingsView() throws DatabaseNotInitialized {
-		initializeController();
-		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, clickedBudgetId)).thenReturn(savings);
-		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
+		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, budget1.id)).thenReturn(savings);
+		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
 		
-		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
-		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
-		budgetController.notify(new ButtonsData(panelWithMonths.identifier, "3"));
-		budgetController.notify(new ButtonAddTransactionData(panelAddSavings.identifier, date, categoryName1, String.valueOf(amount)));
+		budgetController.notify(new ButtonsData(panelWithBudget.identifier, budget1.name));
+		budgetController.notify(new ButtonsData(panelWithYears.identifier, String.valueOf(DATE3.getYear())));
+		budgetController.notify(new ButtonsData(panelWithMonths.identifier, String.valueOf(DATE3.getMonthValue())));
+
+		List<Transaction> withNewTransaction = extendTransactions(savings, createTransaction(category2, user1, DATE3));
+		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, budget1.id)).thenReturn(withNewTransaction);
+
+		budgetController.notify(new ButtonAddTransactionData(panelAddSavings.identifier, asDate(DATE3), category2.name, String.valueOf(amount)));
 		
-		verify(databaseWriterForTest).writeExpenditureOrSavingsToDatabase(amount, localDate, categoryId1, clickedBudgetId, budgetController.SAVINGS);
-		verify(panelSavingsView).fillPanel(listOfTripletsSavings, budgetController.columnsNameDateCategoryAmount);
+		verify(databaseWriterForTest).writeExpenditureOrSavingsToDatabase(amount, DATE3, category2.id, budget1.id, BudgetController.SAVINGS);
+		verify(panelSavingsView).fillPanel(listOfTripletsSavings, BudgetController.columnsNameDateCategoryAmount);
+
+		List<Triplet<String, String, String>> listOfTripletsIncomeWithNewTriplet = new ArrayList<>(listOfTripletsSavings);
+		listOfTripletsIncomeWithNewTriplet.add(new Triplet<String, String, String>(DATE3.toString(), category2.name, String.valueOf(amount)));
+		verify(panelSavingsView).fillPanel(listOfTripletsIncomeWithNewTriplet, BudgetController.columnsNameDateCategoryAmount);
 	}
 	
 	@Test
 	public void notify_AddIncomeToDatabaseAndRefreshIncomeView_ControllerAddIncomeToDatabaseAfterClickingAddButtonAndRefresIncomeView() throws DatabaseNotInitialized {
-		initializeController(); 
-		when(databaseReaderForTest.readIncomeForConcreteBugdetFromDatabase(clickedBudgetId)).thenReturn(income);
-		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(clickedBudgetId, BudgetController.INCOME_CATEGORY)).thenReturn(categories);
-		when(databaseReaderForTest.readUsersFromDatabase()).thenReturn(userNamesIdsBudgetIds);
+		when(databaseReaderForTest.readIncomeForConcreteBugdetFromDatabase(budget1.id)).thenReturn(income);
+		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.INCOME_CATEGORY)).thenReturn(categories);
 		
-		budgetController.notify(new ButtonsData(panelWithBudget.identifier, "budzet1"));
-		budgetController.notify(new ButtonsData(panelWithYears.identifier, "2017"));
-		budgetController.notify(new ButtonsData(panelWithMonths.identifier, "3"));
-		budgetController.notify(new ButtonAddIncomeData(panelAddIncome.identifier, date, categoryName1, userName1, String.valueOf(amount)));
+		budgetController.notify(new ButtonsData(panelWithBudget.identifier, budget1.name));
+		budgetController.notify(new ButtonsData(panelWithYears.identifier, String.valueOf(DATE3.getYear())));
+		budgetController.notify(new ButtonsData(panelWithMonths.identifier, String.valueOf(DATE3.getMonthValue())));
+
+		List<Transaction> withNewTransaction = extendTransactions(income, createTransaction(category2, user1, DATE3));
+		when(databaseReaderForTest.readIncomeForConcreteBugdetFromDatabase(budget1.id)).thenReturn(withNewTransaction);
 		
-		verify(databaseWriterForTest).writeIncomeToDatabase(amount, localDate, userId1, categoryId1, clickedBudgetId);
-		verify(panelIncomeView).fillPanel(listOfTripletsIncome, budgetController.columnsNameUserNameCategoryAmount);
+		budgetController.notify(new ButtonAddIncomeData(panelAddIncome.identifier, asDate(DATE3), category2.name, user1.name, String.valueOf(amount)));
+		
+		verify(databaseWriterForTest).writeIncomeToDatabase(amount, DATE3, user1.id, category2.id, budget1.id);
+		verify(panelIncomeView).fillPanel(listOfTripletsIncome, BudgetController.columnsNameUserNameCategoryAmount);
+		
+		List<Triplet<String, String, String>> listOfTripletsIncomeWithNewTriplet = new ArrayList<>(listOfTripletsIncome);
+		listOfTripletsIncomeWithNewTriplet.add(new Triplet<String, String, String>(user1.name, category2.name, String.valueOf(amount)));
+		verify(panelIncomeView).fillPanel(listOfTripletsIncomeWithNewTriplet, BudgetController.columnsNameUserNameCategoryAmount);
 	}
-	
 }

@@ -2,10 +2,11 @@ package learning.views;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import learning.budget.DatabaseNotInitialized;
 
 public class PanelWithButtons extends JPanel implements INotifier{
 	public final int identifier;
@@ -13,11 +14,20 @@ public class PanelWithButtons extends JPanel implements INotifier{
 	
 	public PanelWithButtons(int id) { identifier = id; listeners = new HashSet<IListener>();};
 	
-	public void createButtons(SortedSet<String> buttonsNames) {
+	public void createButtons(Set<String> buttonsNames) {
 		removeAll();
-		for(String name: buttonsNames) {
+		for (String name : buttonsNames) {
 			JButton button = new JButton(name);
-			button.addActionListener(e -> {listeners.stream().forEach(listener -> {listener.notify(new ButtonsData(identifier, name));});});
+			button.addActionListener(e -> {
+				listeners.stream().forEach(listener -> {
+					try {
+						listener.notify(new ButtonsData(identifier, name));
+					} catch (DatabaseNotInitialized e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				});
+			});
 			add(button);
 		}
 		revalidate();

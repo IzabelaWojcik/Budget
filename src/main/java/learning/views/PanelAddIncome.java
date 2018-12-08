@@ -3,9 +3,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -15,7 +13,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import com.toedter.calendar.JDateChooser;
-import learning.budget.OldViews.ErrorLabelPropertyChangeListener;
+
+import learning.budget.DatabaseNotInitialized;
 
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -125,7 +124,12 @@ public class PanelAddIncome extends JPanel implements INotifier{
 	private void updateListeners() {
 		buttonAdd.addActionListener(e -> {listeners.stream().forEach(
 				listener -> {
-					listener.notify(new ButtonAddIncomeData(identifier, dateChooser.getDate(), (String) comboBoxCategory.getSelectedItem(), (String) comboBoxUser.getSelectedItem(), formattedTextField.getText().replaceAll(groupSeparator, "")));}); 
+					try {
+						listener.notify(new ButtonAddIncomeData(identifier, dateChooser.getDate(), (String) comboBoxCategory.getSelectedItem(), (String) comboBoxUser.getSelectedItem(), formattedTextField.getText().replaceAll(groupSeparator, "")));
+					} catch (DatabaseNotInitialized e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}}); 
 					formattedTextField.setText("");
 					buttonAdd.setEnabled(false);
 					});

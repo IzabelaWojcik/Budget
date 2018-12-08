@@ -112,7 +112,7 @@ public class DatabaseReader implements IDatabaseReader{
 				int idIncomeCategory = rs.getInt(5);
 				int idBudget = rs.getInt(6);
 				
-				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				LocalDate localDate = sqlDateToLocalDate(sqlDate);
 				
 				usersIncomeObject = new Transaction(idTransaction, idUser, idIncomeCategory, amount, localDate, idBudget);
 				if(!usersIncomeList.contains(usersIncomeObject)) usersIncomeList.add(usersIncomeObject);
@@ -214,7 +214,7 @@ public class DatabaseReader implements IDatabaseReader{
 				double amount = rs.getDouble(2);
 				java.sql.Date sqlDate = rs.getDate(3);
 				
-				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				LocalDate localDate = sqlDateToLocalDate(sqlDate);
 				
 				expenditureObject  = new Transaction(expenditureCategoryId, amount, localDate, budgetId);
 				expenditureObjectList.add(expenditureObject);
@@ -238,7 +238,7 @@ public class DatabaseReader implements IDatabaseReader{
 				double amount = rs.getDouble(2);
 				java.sql.Date sqlDate = rs.getDate(3);
 				
-				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				LocalDate localDate = sqlDateToLocalDate(sqlDate);
 				
 				expenditureObject  = new Transaction(idExpenditure, expenditureCategoryId, amount, localDate, budgetId);
 				expenditureObjectList.add(expenditureObject);
@@ -261,7 +261,7 @@ public class DatabaseReader implements IDatabaseReader{
 				double amount = rs.getDouble(2);
 				java.sql.Date sqlDate = rs.getDate(3);
 				
-				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				LocalDate localDate = sqlDateToLocalDate(sqlDate);
 				
 				savingsObject  = new Transaction(savingsCategoryId, amount, localDate, budgetId);
 				savingsObjectList.add(savingsObject);
@@ -285,7 +285,7 @@ public class DatabaseReader implements IDatabaseReader{
 				double amount = rs.getDouble(2);
 				java.sql.Date sqlDate = rs.getDate(3);
 				
-				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				LocalDate localDate = sqlDateToLocalDate(sqlDate);
 				
 				savingsObject  = new Transaction(savingsId, savingsCategoryId, amount, localDate, budgetId);
 				savingsObjectList.add(savingsObject);
@@ -308,7 +308,7 @@ public class DatabaseReader implements IDatabaseReader{
 				double amount = rs.getDouble(2);
 				java.sql.Date sqlDate = rs.getDate(3);
 				
-				LocalDate localDate = Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+				LocalDate localDate = sqlDateToLocalDate(sqlDate);
 				
 				transaction  = new Transaction(transactionId, categoryId, amount, localDate, budgetId);
 				transactions.add(transaction);
@@ -317,6 +317,10 @@ public class DatabaseReader implements IDatabaseReader{
 			e.printStackTrace();
 		}
 		return transactions;
+	}
+
+	private LocalDate sqlDateToLocalDate(java.sql.Date sqlDate) {
+		return Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 
 	public List<Transaction> readIncomeForConcreteBugdetFromDatabase(int budgetId) throws DatabaseNotInitialized{
