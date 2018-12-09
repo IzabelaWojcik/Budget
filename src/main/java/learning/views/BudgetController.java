@@ -231,12 +231,13 @@ public class BudgetController implements IListener{
 	private void handlePanelToAddIncomeToDatabase(NotificationData notificationData) throws DatabaseNotInitialized {
 		ButtonAddIncomeData buttonAdd = (ButtonAddIncomeData) notificationData;
 		int idCategory = getKey(incomeCategories, buttonAdd.category);
-		int idUser = userNamesIdsBudgetIds.stream(). //FIXME: find better name for this list
-				filter(uo -> buttonAdd.user.equals(uo.getUserName())).
-				map(UsersObject::getUserId).
-				reduce((a, b) -> {
-					throw new IllegalStateException("Multiple elements: " + a + ", " + b); }).
-				get();
+		int idUser = 0;
+		
+		for(UsersObject uo: userNamesIdsBudgetIds) {
+			if(buttonAdd.user.equals(uo.getUserName())) {
+				idUser = uo.getUserId();
+			}
+		}
 		
 		Set<Integer> displayedYears = getYears(budgetId);
 		Set<Integer> displayedMonths = getMonths(budgetId);
