@@ -117,6 +117,7 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 				
 			if(correctBudgetName == true && userCounter == usersNumber && 
 					checkedExpenditures.size() > 0 && checkedSavings.size() > 0 && checkedDues.size() > 0) {
+				
 				databaseWriter.writeBudgetNameToDatabase(budgetName);
 				idBudget = getBudgetIdFromDatabase(budgetName);
 				databaseWriter.writeCategoryListTodatabase(checkedExpenditures, idBudget, EXPENDITURE_CATEGORY);
@@ -124,8 +125,11 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 				databaseWriter.writeCategoryListTodatabase(checkedDues, idBudget, DUES_CATEGORY);
 				dialog.dispose();
 			}
+			
 			else {
+				
 				JOptionPane.showMessageDialog(null, message);
+			
 			}
 			
 		} catch (BudgetNotFoundException | DatabaseNotInitialized e) {

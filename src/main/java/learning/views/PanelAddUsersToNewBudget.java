@@ -7,6 +7,10 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.text.NumberFormat;
 
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -14,6 +18,8 @@ import javax.swing.JFormattedTextField;
 import java.awt.Color;
 
 public class PanelAddUsersToNewBudget extends JPanel{
+	private static final int MAX_NUMBER_OF_USERS_IN_BUDGET = 8;
+	
 	private JFormattedTextField formattedTextFieldNumberOfUsers;
 	private JTextField textFieldBugdetName;
 	private JPanel panelForUsers;
@@ -43,8 +49,34 @@ public class PanelAddUsersToNewBudget extends JPanel{
 		lblError = new JLabel("");
 		lblError.setForeground(Color.RED);
 		
-		CreateTextFieldsForUsersNamesListener addUsersToNewBudgetListener = new CreateTextFieldsForUsersNamesListener(formattedTextFieldNumberOfUsers, panelForUsers, lblError);
- 		button.addActionListener(addUsersToNewBudgetListener);
+ 		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				createTextFieldsForUsers();
+				
+			}
+		});
+ 		
+ 		button.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				createTextFieldsForUsers();
+			}
+		});
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -90,6 +122,48 @@ public class PanelAddUsersToNewBudget extends JPanel{
 					.addGap(123))
 		);
 		setLayout(groupLayout);
+	}
+	
+
+	private void createTextFieldsForUsers() {
+		try {
+			int numberOfUsers = Integer.parseInt(formattedTextFieldNumberOfUsers.getText());
+			panelForUsers.removeAll();
+		
+			JTextField jTextFields[] = new JTextField[numberOfUsers];;
+			JLabel jLabels[] = new JLabel[numberOfUsers];
+		
+			int displayUserNumber = 1;
+		
+			lblError.setText("");
+			
+			for(int i = 0; i < jLabels.length; i++) {
+				jLabels[i] = new JLabel("Użytkownik " + displayUserNumber + ":");
+				jTextFields[i] = new JTextField(10);
+				panelForUsers.add(jLabels[i]);
+				panelForUsers.add(jTextFields[i]);
+				displayUserNumber++;
+			}
+
+			if (numberOfUsers > MAX_NUMBER_OF_USERS_IN_BUDGET) {
+				lblError.setText("Budżet nie może mieć wiecej niż 8 użytkowników");
+				panelForUsers.removeAll();
+			}
+			if (numberOfUsers == 0) {
+				lblError.setText("Wpisz liczbę całkowitą większą od zera");
+				panelForUsers.removeAll();
+			}
+		
+		} catch (NumberFormatException nfe) {
+			lblError.setText("Wpisz liczbę całkowitą");
+			panelForUsers.removeAll();
+		} catch (NegativeArraySizeException excpt) {
+			lblError.setText("Wpisz liczbę całkowitą większą od zera");
+			panelForUsers.removeAll();
+		}
+		
+		panelForUsers.revalidate();
+		panelForUsers.repaint();
 	}
 	
 	public JFormattedTextField getFormattedTextFieldNumberOfUsers() {
