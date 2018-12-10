@@ -20,17 +20,16 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class BudgetViews extends JFrame {
 	private static final int PANEL_WITH_BUDGET_BUTTONS_ID = 1;
 	private static final int PANEL_WITH_YEARS_BUTTONS_ID = 2;
 	private static final int PANEL_WITH_MONTHS_BUTTONS_ID = 3;
-	private static final int PANEL_INCOME_VIEW_ID = 4;
-	private static final int PANEL_EXPENDITURE_VIEW_ID = 5;
-	private static final int PANEL_SAVINGS_VIEW_ID = 6;
-	private static final int PANEL_ADD_INCOME_ID = 7;
-	private static final int PANEL_ADD_EXPENDITURE_ID = 8;
-	private static final int PANEL_ADD_SAVINGS_ID = 9;
+	private static final int PANEL_ADD_INCOME_ID = 4;
+	private static final int PANEL_ADD_EXPENDITURE_ID = 5;
+	private static final int PANEL_ADD_SAVINGS_ID = 6;
 	
 	private JButton btnAddNewMonth;
 	private JPanel contentPane;
@@ -52,10 +51,10 @@ public class BudgetViews extends JFrame {
 	private IDatabaseWriter databaseWriter;
 	private IDatabaseReader databaseReader;
 	private BudgetController budgetController;
-	private NotificationData notificationData;
 	private JScrollPane scrollPaneIncomeView;
 	private JScrollPane scrollPaneExpenditureView;
 	private JScrollPane scrollPaneSavingsView;
+	private CreateNewBudgetDialog newBudgetDialog;
 
 	/**
 	 * Launch the application.
@@ -82,9 +81,9 @@ public class BudgetViews extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public BudgetViews(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized  {
-		databaseReader = _databaseReader;
-		databaseWriter = _databaseWriter;
+	public BudgetViews(IDatabaseReader databaseReader, IDatabaseWriter databaseWriter) throws DatabaseNotInitialized  {
+		this.databaseReader = databaseReader;
+		this.databaseWriter = databaseWriter;
 		
 		panelBudgetButtons = new PanelWithButtons(PANEL_WITH_BUDGET_BUTTONS_ID);
 		panelYearsButtons = new PanelWithButtons(PANEL_WITH_YEARS_BUTTONS_ID);
@@ -107,6 +106,8 @@ public class BudgetViews extends JFrame {
 				panelAddExpenditure, panelAddSavings, panelAddIncome, 
 				panelViewExpenditure, panelViewSavings, panelViewIncome,
 				lblExpenditureSum, lblSavingsSum, lblIncomeSum);
+		
+		newBudgetDialog = new CreateNewBudgetDialog(databaseReader, databaseWriter);
 			
 		initialize();
 	}
@@ -147,6 +148,12 @@ public class BudgetViews extends JFrame {
 		jpanelWithAllContent = new JPanel();
 		
 		btnAddNewMonth = new JButton("Add new month");
+		btnAddNewMonth.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				newBudgetDialog.setModal(true);
+				newBudgetDialog.setVisible(true);
+			}
+		});
 		
 		jpanelForViews = new JPanel();
 		

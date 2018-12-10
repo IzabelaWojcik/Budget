@@ -101,10 +101,10 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 		});
 	}
 
-	public BudgetViews(IDatabaseReader _databaseReader, IDatabaseWriter _databaseWriter) throws DatabaseNotInitialized {
-		super(_databaseReader, _databaseWriter);
-		databaseReader = _databaseReader;
-		databaseWriter = _databaseWriter;
+	public BudgetViews(IDatabaseReader databaseReader, IDatabaseWriter databaseWriter) throws DatabaseNotInitialized {
+		super(databaseReader, databaseWriter);
+		this.databaseReader = databaseReader;
+		this.databaseWriter = databaseWriter;
 		try {
 
 			textFieldValidator = new TextFieldValidator();
@@ -115,7 +115,6 @@ public class BudgetViews extends learning.budget.GenerateComponents{
 			myBudget = new CreateBudgetOptions(databaseReader, databaseWriter);
 			initialize();
 		} catch (DatabaseNotInitialized e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
