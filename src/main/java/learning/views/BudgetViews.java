@@ -22,6 +22,9 @@ import javax.swing.JScrollPane;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JMenu;
 
 public class BudgetViews extends JFrame {
 	private static final int PANEL_WITH_BUDGET_BUTTONS_ID = 1;
@@ -30,8 +33,6 @@ public class BudgetViews extends JFrame {
 	private static final int PANEL_ADD_INCOME_ID = 4;
 	private static final int PANEL_ADD_EXPENDITURE_ID = 5;
 	private static final int PANEL_ADD_SAVINGS_ID = 6;
-	
-	private JButton btnAddNewMonth;
 	private JPanel contentPane;
 	private JPanel jpanelForButtons;
 	private JPanel jpanelWithAllContent;
@@ -55,6 +56,7 @@ public class BudgetViews extends JFrame {
 	private JScrollPane scrollPaneExpenditureView;
 	private JScrollPane scrollPaneSavingsView;
 	private CreateNewBudgetDialog newBudgetDialog;
+	private JMenuItem mntmAddNewMonth;
 
 	/**
 	 * Launch the application.
@@ -115,6 +117,27 @@ public class BudgetViews extends JFrame {
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1045, 880);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("Opcje");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmCreateNewBudget = new JMenuItem("Stwórz nowy budżet");
+		mnNewMenu.add(mntmCreateNewBudget);
+		
+		mntmCreateNewBudget.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                newBudgetDialog.setModal(true);
+                newBudgetDialog.setVisible(true);
+			}
+		});
+		
+		mntmAddNewMonth = new JMenuItem("Dodaj nowy miesiąc");
+		mnNewMenu.add(mntmAddNewMonth);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -131,6 +154,9 @@ public class BudgetViews extends JFrame {
 						.addComponent(panelYearsButtons, GroupLayout.PREFERRED_SIZE, 934, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panelBudgetButtons, GroupLayout.PREFERRED_SIZE, 934, GroupLayout.PREFERRED_SIZE))
 					.addGap(946))
+				.addGroup(Alignment.LEADING, gl_panelForButtons.createSequentialGroup()
+					.addGap(59)
+					.addContainerGap(1710, Short.MAX_VALUE))
 		);
 		gl_panelForButtons.setVerticalGroup(
 			gl_panelForButtons.createParallelGroup(Alignment.LEADING)
@@ -141,19 +167,12 @@ public class BudgetViews extends JFrame {
 					.addComponent(panelYearsButtons, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panelMonthsButtons, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(54, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addContainerGap(16, Short.MAX_VALUE))
 		);
 		jpanelForButtons.setLayout(gl_panelForButtons);
 		
 		jpanelWithAllContent = new JPanel();
-		
-		btnAddNewMonth = new JButton("Add new month");
-		btnAddNewMonth.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				newBudgetDialog.setModal(true);
-				newBudgetDialog.setVisible(true);
-			}
-		});
 		
 		jpanelForViews = new JPanel();
 		
@@ -161,28 +180,21 @@ public class BudgetViews extends JFrame {
 		GroupLayout gl_panelWithAllContent = new GroupLayout(jpanelWithAllContent);
 		gl_panelWithAllContent.setHorizontalGroup(
 			gl_panelWithAllContent.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelWithAllContent.createSequentialGroup()
+				.addGroup(Alignment.TRAILING, gl_panelWithAllContent.createSequentialGroup()
+					.addContainerGap(23, Short.MAX_VALUE)
 					.addGroup(gl_panelWithAllContent.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panelWithAllContent.createSequentialGroup()
-							.addGap(35)
-							.addComponent(btnAddNewMonth))
-						.addGroup(gl_panelWithAllContent.createSequentialGroup()
-							.addGap(26)
-							.addGroup(gl_panelWithAllContent.createParallelGroup(Alignment.LEADING)
-								.addComponent(jpanelForAddingTransactions, GroupLayout.PREFERRED_SIZE, 935, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jpanelForViews, GroupLayout.PREFERRED_SIZE, 947, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(jpanelForAddingTransactions, GroupLayout.PREFERRED_SIZE, 935, GroupLayout.PREFERRED_SIZE)
+						.addComponent(jpanelForViews, GroupLayout.PREFERRED_SIZE, 947, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
 		);
 		gl_panelWithAllContent.setVerticalGroup(
 			gl_panelWithAllContent.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelWithAllContent.createSequentialGroup()
-					.addGap(36)
-					.addComponent(btnAddNewMonth)
-					.addGap(24)
+					.addGap(22)
 					.addComponent(jpanelForViews, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(jpanelForAddingTransactions, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(22, Short.MAX_VALUE))
+					.addContainerGap(57, Short.MAX_VALUE))
 		);
 		
 		GroupLayout gl_panelForAddingTransactions = new GroupLayout(jpanelForAddingTransactions);
@@ -301,11 +313,11 @@ public class BudgetViews extends JFrame {
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addContainerGap(45, Short.MAX_VALUE)
 					.addComponent(jpanelForButtons, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(jpanelWithAllContent, GroupLayout.PREFERRED_SIZE, 612, Short.MAX_VALUE)
+					.addComponent(jpanelWithAllContent, GroupLayout.PREFERRED_SIZE, 560, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
 		
