@@ -213,15 +213,15 @@ public class CreateBudgetOptions extends JDialog {
 			textFieldHowManyUsersToDisplay.setColumns(10);
 
 			JButton btnHowManyUsersToDiplay = new JButton("Dodaj u\u017Cytkownik\u00F3w");
-			btnHowManyUsersToDiplay.addKeyListener(new KeyAdapter() {
-				@Override
-				//TODO ENTER
-				public void keyPressed(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						createUsers();
-					}
-				}
-			});
+//			btnHowManyUsersToDiplay.addKeyListener(new KeyAdapter() {
+//				@Override
+//				//TODO ENTER
+//				public void keyPressed(KeyEvent e) {
+//					if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+//						createUsers();
+//					}
+//				}
+//			});
 			btnHowManyUsersToDiplay.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					createUsers();

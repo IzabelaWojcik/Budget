@@ -97,9 +97,9 @@ public class BudgetViews extends JFrame {
 		panelAddExpenditure = new PanelAddTransaction(PANEL_ADD_EXPENDITURE_ID);
 		panelAddSavings = new PanelAddTransaction(PANEL_ADD_SAVINGS_ID);
 		
-		lblIncomeSum = new JLabel("New label");
-		lblExpenditureSum = new JLabel("New label");
-		lblSavingsSum = new JLabel("New label");
+		lblIncomeSum = new JLabel("");
+		lblExpenditureSum = new JLabel("");
+		lblSavingsSum = new JLabel("");
 		
 		budgetController = new BudgetController(databaseReader, databaseWriter,
 				panelBudgetButtons, panelYearsButtons, panelMonthsButtons,
@@ -210,11 +210,11 @@ public class BudgetViews extends JFrame {
 		
 		jpanelForAddingTransactions.setLayout(gl_panelForAddingTransactions);
 		
-		JLabel lblIncome = new JLabel("Income:");
+		JLabel lblIncome = new JLabel("Dochód:");
 		
-		JLabel lblExpenditure = new JLabel("Expenditure:");
+		JLabel lblExpenditure = new JLabel("Wydatki:");
 		
-		JLabel lblSavings = new JLabel("Savings:");
+		JLabel lblSavings = new JLabel("Oszczędności:");
 		
 		scrollPaneIncomeView = new JScrollPane();
 		scrollPaneIncomeView.setPreferredSize(new Dimension(210, 20));
