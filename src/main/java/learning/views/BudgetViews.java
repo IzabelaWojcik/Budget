@@ -16,15 +16,13 @@ import learning.budget.IDatabaseWriter;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
+import javax.swing.JButton;
 
 public class BudgetViews extends JFrame {
 	private static final int PANEL_WITH_BUDGET_BUTTONS_ID = 1;
@@ -49,14 +47,15 @@ public class BudgetViews extends JFrame {
 	private PanelAddTransaction panelAddExpenditure, panelAddSavings;
 	private PanelAddIncome panelAddIncome;
 	private PanelViewTransaction panelViewIncome, panelViewExpenditure, panelViewSavings;
-	private IDatabaseWriter databaseWriter;
-	private IDatabaseReader databaseReader;
+	//private IDatabaseWriter databaseWriter;
+	//private IDatabaseReader databaseReader;
 	private BudgetController budgetController;
 	private JScrollPane scrollPaneIncomeView;
 	private JScrollPane scrollPaneExpenditureView;
 	private JScrollPane scrollPaneSavingsView;
 	private CreateNewBudgetDialog newBudgetDialog;
-	private JMenuItem mntmAddNewMonth;
+	private AddNewMonthDialog addNewMonthDialog;
+	private JButton btnNewMonth;
 
 	/**
 	 * Launch the application.
@@ -84,8 +83,6 @@ public class BudgetViews extends JFrame {
 	 * Create the frame.
 	 */
 	public BudgetViews(IDatabaseReader databaseReader, IDatabaseWriter databaseWriter) throws DatabaseNotInitialized  {
-		this.databaseReader = databaseReader;
-		this.databaseWriter = databaseWriter;
 		
 		panelBudgetButtons = new PanelWithButtons(PANEL_WITH_BUDGET_BUTTONS_ID);
 		panelYearsButtons = new PanelWithButtons(PANEL_WITH_YEARS_BUTTONS_ID);
@@ -103,13 +100,17 @@ public class BudgetViews extends JFrame {
 		lblExpenditureSum = new JLabel("");
 		lblSavingsSum = new JLabel("");
 		
+		btnNewMonth = new JButton("Dodaj nowy miesiąc");
+		btnNewMonth.setEnabled(false);
+		
 		budgetController = new BudgetController(databaseReader, databaseWriter,
 				panelBudgetButtons, panelYearsButtons, panelMonthsButtons,
 				panelAddExpenditure, panelAddSavings, panelAddIncome, 
 				panelViewExpenditure, panelViewSavings, panelViewIncome,
-				lblExpenditureSum, lblSavingsSum, lblIncomeSum);
+				lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnNewMonth);
 		
 		newBudgetDialog = new CreateNewBudgetDialog(databaseReader, databaseWriter);
+		addNewMonthDialog = new AddNewMonthDialog();
 			
 		initialize();
 	}
@@ -127,36 +128,29 @@ public class BudgetViews extends JFrame {
 		JMenuItem mntmCreateNewBudget = new JMenuItem("Stwórz nowy budżet");
 		mnNewMenu.add(mntmCreateNewBudget);
 		
-		mntmCreateNewBudget.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-                newBudgetDialog.setModal(true);
-                newBudgetDialog.setVisible(true);
-			}
-		});
+		SetModalListener setNewBudgetModalListener = new SetModalListener(newBudgetDialog);
+		mntmCreateNewBudget.addActionListener(setNewBudgetModalListener);
 		
-		mntmAddNewMonth = new JMenuItem("Dodaj nowy miesiąc");
-		mnNewMenu.add(mntmAddNewMonth);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		jpanelForButtons = new JPanel();
 		
+		SetModalListener setNewMonthModalListener = new SetModalListener(addNewMonthDialog);
+		btnNewMonth.addActionListener(setNewMonthModalListener);
+		
 		GroupLayout gl_panelForButtons = new GroupLayout(jpanelForButtons);
 		gl_panelForButtons.setHorizontalGroup(
-			gl_panelForButtons.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panelForButtons.createSequentialGroup()
+			gl_panelForButtons.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panelForButtons.createSequentialGroup()
 					.addContainerGap(38, Short.MAX_VALUE)
 					.addGroup(gl_panelForButtons.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnNewMonth)
 						.addComponent(panelMonthsButtons, GroupLayout.PREFERRED_SIZE, 934, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panelYearsButtons, GroupLayout.PREFERRED_SIZE, 934, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panelBudgetButtons, GroupLayout.PREFERRED_SIZE, 934, GroupLayout.PREFERRED_SIZE))
 					.addGap(946))
-				.addGroup(Alignment.LEADING, gl_panelForButtons.createSequentialGroup()
-					.addGap(59)
-					.addContainerGap(1710, Short.MAX_VALUE))
 		);
 		gl_panelForButtons.setVerticalGroup(
 			gl_panelForButtons.createParallelGroup(Alignment.LEADING)
@@ -168,6 +162,7 @@ public class BudgetViews extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panelMonthsButtons, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnNewMonth)
 					.addContainerGap(16, Short.MAX_VALUE))
 		);
 		jpanelForButtons.setLayout(gl_panelForButtons);

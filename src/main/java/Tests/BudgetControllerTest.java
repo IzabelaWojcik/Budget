@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import org.javatuples.Triplet;
@@ -92,6 +93,7 @@ public class BudgetControllerTest {
 	private List<Transaction> expenditures, savings, income;
 	private List<Triplet<String, String, String>> listOfTripletsExpenditure, listOfTripletsSavings, listOfTripletsIncome;
 	private BudgetController budgetController;
+	private JButton btnAddNewMonth;
 
 	private JLabel lblExpenditureSum, lblSavingsSum, lblIncomeSum;
 	@Mock
@@ -125,6 +127,7 @@ public class BudgetControllerTest {
 		lblExpenditureSum = new JLabel();
 		lblSavingsSum = new JLabel();
 		lblIncomeSum = new JLabel();
+		btnAddNewMonth = new JButton();
 
 		when(databaseReaderForTest.readDatesForBudgetFromDatabase(budget1.id)).thenReturn(DATES);
 		when(databaseReaderForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
@@ -134,7 +137,7 @@ public class BudgetControllerTest {
 												panelWithBudget, panelWithYears, panelWithMonths,
 												panelAddExpenditure, panelAddSavings, panelAddIncome,
 												panelExpenditureView, panelSavingsView, panelIncomeView,
-												lblExpenditureSum, lblSavingsSum, lblIncomeSum
+												lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnAddNewMonth
 												);
 		
 		setIdentifier(panelWithBudget, 123);

@@ -14,6 +14,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import org.javatuples.Triplet;
@@ -40,6 +41,7 @@ public class BudgetController implements IListener{
 	private PanelAddIncome panelToAddIncome;
 	private PanelViewTransaction panelViewExpenditure, panelViewSavings, panelViewIncome;
 	private JLabel lblExpenditureSum, lblSavingsSum, lblIncomeSum;
+	private JButton btnAddNewMonth;
 	
 	private IDatabaseReader databaseReader;
 	private IDatabaseWriter databaseWriter;
@@ -58,7 +60,7 @@ public class BudgetController implements IListener{
 							PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, 
 							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddIncome panelAddIncome,
 							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelIncomeView,
-							JLabel labelExpenditureSum, JLabel labelSavingsSum, JLabel labelIncomeSum) throws DatabaseNotInitialized 
+							JLabel labelExpenditureSum, JLabel labelSavingsSum, JLabel labelIncomeSum, JButton buttonAddNewMonth) throws DatabaseNotInitialized 
 	{
 		panelWithBudget = panelBudget;
 		panelWithYears = panelYears;
@@ -72,6 +74,7 @@ public class BudgetController implements IListener{
 		lblExpenditureSum = labelExpenditureSum;
 		lblSavingsSum = labelSavingsSum;
 		lblIncomeSum = labelIncomeSum;
+		btnAddNewMonth = buttonAddNewMonth;
 		
 		this.databaseReader = databaseReader;
 		this.databaseWriter = databasewriter;
@@ -140,6 +143,11 @@ public class BudgetController implements IListener{
 		panelViewSavings.clearPanel();
 		panelViewIncome.clearPanel();
 		
+		panelToAddExpenditure.setVisible(false);
+		panelToAddSavings.setVisible(false);
+		panelToAddIncome.setVisible(false);
+		btnAddNewMonth.setEnabled(false);
+		
 		createYearsButtons();
 	}
 	
@@ -150,6 +158,11 @@ public class BudgetController implements IListener{
 		panelViewExpenditure.clearPanel();
 		panelViewSavings.clearPanel();
 		panelViewIncome.clearPanel();
+		
+		panelToAddExpenditure.setVisible(false);
+		panelToAddSavings.setVisible(false);
+		panelToAddIncome.setVisible(false);
+		btnAddNewMonth.setEnabled(false);
 		
 		createMonthsButtons();
 	}
@@ -166,6 +179,7 @@ public class BudgetController implements IListener{
 		panelToAddExpenditure.setVisible(true);
 		panelToAddSavings.setVisible(true);
 		panelToAddIncome.setVisible(true);
+		btnAddNewMonth.setEnabled(true);
 		
 		expenditureCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, EXPENDITURE_CATEGORY);
 		savingsCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, SAVINGS_CATEGORY);

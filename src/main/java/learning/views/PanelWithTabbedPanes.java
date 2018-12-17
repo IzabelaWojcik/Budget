@@ -1,8 +1,5 @@
 package learning.views;
 
-import java.awt.Dimension;
-
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -11,27 +8,17 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
 public class PanelWithTabbedPanes extends JPanel{
-	private PanelAddUsersToNewBudget panelToAddUsers;
-	private PanelDuesCategoriesInNewBudget panelToChooseDuesCategories;
-	private PanelExpenditureCategoriesInNewBudget panelToChooseExpenditureCategories;
-	private PanelSavingsCategoriesInNewBudget panelToChooseSavingsCategories;
 	
 	public PanelWithTabbedPanes(PanelAddUsersToNewBudget panelToAddUsers,
 			PanelDuesCategoriesInNewBudget panelToChooseDuesCategories,
 			PanelExpenditureCategoriesInNewBudget panelToChooseExpenditureCategories,
 			PanelSavingsCategoriesInNewBudget panelToChooseSavingsCategories) {
 		
-		this.panelToAddUsers = panelToAddUsers;
-		this.panelToChooseDuesCategories = panelToChooseDuesCategories;
-		this.panelToChooseExpenditureCategories = panelToChooseExpenditureCategories;
-		this.panelToChooseSavingsCategories = panelToChooseSavingsCategories;
-		
 		JTabbedPane tabbedPane = new JTabbedPane();
 
 		tabbedPane.addTab("Użytkownicy", panelToAddUsers);
 		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
-		JComponent panel2 = panelToChooseDuesCategories;
 		tabbedPane.addTab("Opłaty", panelToChooseDuesCategories);
 		tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 
@@ -57,6 +44,5 @@ public class PanelWithTabbedPanes extends JPanel{
 		);
 		setLayout(groupLayout);
 	}
-	
 	
 }
