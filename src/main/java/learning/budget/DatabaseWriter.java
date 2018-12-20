@@ -27,7 +27,8 @@ public class DatabaseWriter implements IDatabaseWriter {
 		try {
 			//TODO where put start.close(); 
 			start = connection.createStatement();
-			if(start == null)
+		//	if(start == null)
+         //       System.out.println("not tu sien ie zainiacjaislowal");
 			start.executeUpdate(update);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -91,5 +92,6 @@ public class DatabaseWriter implements IDatabaseWriter {
 		String update = "insert into " + "\"" + tablename + "\"" + "values(" + amount + "," + "\'" + date + "\'" + ","
 				+ idCategory + "," + idBudget + ")";
 		executeUpdate(update);
+		System.out.println(amount+ " " +date+" " +idCategory+" " +idBudget+" " +tablename);
 	}
 }

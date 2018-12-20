@@ -265,7 +265,6 @@ public class BudgetController implements IListener{
 
 			panelViewIncome.clearPanel();
 			panelViewIncome.fillPanel(incomeToFillPanel, columnsNameUserNameCategoryAmount);
-			
 			lblIncomeSum.setText("suma = " + sumOfAmount(incomeToFillPanel));
 		}
 		
