@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface IDatabaseWriter {
 	
+	public void writeBudgetIdYearMonthToDatabase(int idBudget, int year, int month);
+	
 	public void writeCategoryMapToDatabase(HashMap<String, String> map, int idBudget, String tablename);
 	
 	public void writeCategoryListTodatabase(List<String> transactionsFromCheckBoxes, int idBudget, String tablename);

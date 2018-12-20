@@ -7,19 +7,27 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import com.toedter.calendar.JDateChooser;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
 
+import learning.budget.DatabaseConnection;
+import learning.budget.DatabaseReader;
+import learning.budget.DatabaseWriter;
+import learning.budget.IDatabaseWriter;
+
 public class AddNewMonthDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	private static int budgetId;
 
 	public static void main(String[] args) {
+		IDatabaseWriter databaseWriter = DatabaseWriter.getInstance();
+		DatabaseWriter.setConnection(DatabaseConnection.getInstance());
+		
 		try {
-			AddNewMonthDialog dialog = new AddNewMonthDialog();
+			AddNewMonthDialog dialog = new AddNewMonthDialog(databaseWriter, budgetId);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -27,7 +35,7 @@ public class AddNewMonthDialog extends JDialog {
 		}
 	}
 
-	public AddNewMonthDialog() {
+	public AddNewMonthDialog(IDatabaseWriter databaseWriter, int budgetId) {
 		setTitle("Dodaj nowy miesiąc");
 		setBounds(100, 100, 282, 131);
 		getContentPane().setLayout(new BorderLayout());
@@ -62,15 +70,21 @@ public class AddNewMonthDialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("Anuluj");
-				okButton.setActionCommand("Anuluj");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				JButton btnCancel = new JButton("Anuluj");
+				btnCancel.setActionCommand("Anuluj");
+				buttonPane.add(btnCancel);
+				getRootPane().setDefaultButton(btnCancel);
+				
+				ButtonCancelListener buttonCancelListener = new ButtonCancelListener(this);
+				btnCancel.addActionListener(buttonCancelListener);
 			}
 			{
-				JButton cancelButton = new JButton("Dodaj");
-				cancelButton.setActionCommand("Dodaj");
-				buttonPane.add(cancelButton);
+				JButton btnAdd = new JButton("Dodaj");
+				btnAdd.setActionCommand("Dodaj");
+				buttonPane.add(btnAdd);
+				
+				ButtonAddNewMonthListener buttonAddNewMonthListener = new ButtonAddNewMonthListener(budgetId, yearChooser, monthChooser, databaseWriter);
+				btnAdd.addActionListener(buttonAddNewMonthListener);
 			}
 		}
 	}

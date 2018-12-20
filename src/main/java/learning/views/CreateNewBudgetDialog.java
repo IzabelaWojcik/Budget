@@ -15,10 +15,6 @@ import learning.budget.IDatabaseWriter;
 
 import javax.swing.JButton;
 import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.ActionEvent;
 
 public class CreateNewBudgetDialog extends JDialog {
 	private final JPanel contentPanel = new JPanel();
@@ -75,20 +71,8 @@ public class CreateNewBudgetDialog extends JDialog {
 		
 		buttonCancel = new JButton("Anuluj");
 		
-		buttonCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CreateNewBudgetDialog.this.dispose();
-			}
-		});
-		
-		buttonCancel.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					CreateNewBudgetDialog.this.dispose();
-				}
-			}
-		});
+		ButtonCancelListener buttonCancelListener = new ButtonCancelListener(this);
+		buttonCancel.addActionListener(buttonCancelListener);
 		
 		buttonCancel.setPreferredSize(new Dimension(80, 25));
 		panelButtons.add(buttonCancel);

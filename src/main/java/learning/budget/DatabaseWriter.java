@@ -28,14 +28,20 @@ public class DatabaseWriter implements IDatabaseWriter {
 			//TODO where put start.close(); 
 			start = connection.createStatement();
 			if(start == null)
-				System.out.println("not tu sien ie zainiacjaislowal");
 			start.executeUpdate(update);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public void writeBudgetIdYearMonthToDatabase(int idBudget, int year, int month){
+		String tablename = "Years_and_months";
+		String update = "insert into " + "\"" + tablename + "\"" + "values('" + idBudget  + "," + year + "," + month + "')";
+		executeUpdate(update);
+	}
+
 	public void writeCategoryMapToDatabase(HashMap<String, String> map, int idBudget, String tablename) {
+		
 		for (String s : map.values()) {
 			String update = "insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget
 					+ "')";

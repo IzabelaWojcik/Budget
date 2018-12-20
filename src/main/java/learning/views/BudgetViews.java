@@ -1,6 +1,8 @@
 package learning.views;
 
 import java.awt.EventQueue;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -18,6 +20,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+
+import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -110,7 +114,8 @@ public class BudgetViews extends JFrame {
 				lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnNewMonth);
 		
 		newBudgetDialog = new CreateNewBudgetDialog(databaseReader, databaseWriter);
-		addNewMonthDialog = new AddNewMonthDialog();
+		//FIXME
+		//addNewMonthDialog = new AddNewMonthDialog(databaseWriter, budgetId);
 			
 		initialize();
 	}

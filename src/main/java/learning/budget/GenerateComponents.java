@@ -48,7 +48,6 @@ public class GenerateComponents {
 	private JButton jButtonWithMonthName;
 	private List<Pair<Integer, String>> expenditureCategoryNameIdBudgetPairList;
 	private List<UsersObject> usersObjectList;
-	//FIXME do i use it and that name is bad
 	public static int id;
 	private List<Triplet<Integer, Integer, String>> categoryNameBudgetIdTripletList;
 
@@ -74,7 +73,7 @@ public class GenerateComponents {
 	public String getYearAndMonth() {
 		return yearAndMonth;
 	}
-//FIXME DO i use it?
+
 	public int  getId() {
 		return id;
 	}
@@ -108,7 +107,7 @@ public class GenerateComponents {
 			public void actionPerformed(ActionEvent e) {
 				panelBudget.setVisible(false);
 				panelBudgetEmpty.setVisible(true);
-				//FIXME DO i use it?
+				
 				id = budgetId;
 				
 				List<Container> components = Arrays.asList(lblInform, panelWithYears, panelWithMonths, panelUsersIncome, panelOtherIncomeView, panelExpenditureView, panelSavingsView);
