@@ -92,6 +92,5 @@ public class DatabaseWriter implements IDatabaseWriter {
 		String update = "insert into " + "\"" + tablename + "\"" + "values(" + amount + "," + "\'" + date + "\'" + ","
 				+ idCategory + "," + idBudget + ")";
 		executeUpdate(update);
-		System.out.println(amount+ " " +date+" " +idCategory+" " +idBudget+" " +tablename);
 	}
 }
