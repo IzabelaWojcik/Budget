@@ -27,8 +27,8 @@ public class DatabaseWriter implements IDatabaseWriter {
 		try {
 			//TODO where put start.close(); 
 			start = connection.createStatement();
-		//	if(start == null)
-         //       System.out.println("not tu sien ie zainiacjaislowal");
+			if(start == null)
+                System.out.println("not tu sien ie zainiacjaislowal");
 			start.executeUpdate(update);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -37,7 +37,7 @@ public class DatabaseWriter implements IDatabaseWriter {
 	
 	public void writeBudgetIdYearMonthToDatabase(int idBudget, int year, int month){
 		String tablename = "Years_and_months";
-		String update = "insert into " + "\"" + tablename + "\"" + "values('" + idBudget  + "," + year + "," + month + "')";
+		String update = "insert into " + "\"" + tablename + "\"" + "values(" + idBudget + "," + year + "," + month + ")";
 		executeUpdate(update);
 	}
 

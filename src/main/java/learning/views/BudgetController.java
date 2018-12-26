@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import org.javatuples.Triplet;
 
+import learning.budget.BudgetDate;
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.IDatabaseReader;
 import learning.budget.IDatabaseWriter;
@@ -35,11 +37,11 @@ public class BudgetController implements IListener{
 	public static final Triplet<String, String, String> columnsNameDateCategoryAmount = new Triplet<String, String, String>("Date:", "Category:", "Amount:");
 	public static final Triplet<String, String, String> columnsNameUserNameCategoryAmount = new Triplet<String, String, String>("User:", "Category:", "Amount:");
 	
-	
 	private PanelWithButtons panelWithBudget, panelWithYears, panelWithMonths;
 	private PanelAddTransaction panelToAddExpenditure, panelToAddSavings;
 	private PanelAddIncome panelToAddIncome;
 	private PanelViewTransaction panelViewExpenditure, panelViewSavings, panelViewIncome;
+	private AddNewYearMonthDialog addNewMonthDialog;
 	private JLabel lblExpenditureSum, lblSavingsSum, lblIncomeSum;
 	private JButton btnAddNewMonth;
 	
@@ -60,7 +62,8 @@ public class BudgetController implements IListener{
 							PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, 
 							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddIncome panelAddIncome,
 							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelIncomeView,
-							JLabel labelExpenditureSum, JLabel labelSavingsSum, JLabel labelIncomeSum, JButton buttonAddNewMonth) throws DatabaseNotInitialized 
+							JLabel labelExpenditureSum, JLabel labelSavingsSum, JLabel labelIncomeSum, JButton buttonAddNewMonth,
+							AddNewYearMonthDialog addNewMonthJDialog) throws DatabaseNotInitialized 
 	{
 		panelWithBudget = panelBudget;
 		panelWithYears = panelYears;
@@ -75,6 +78,7 @@ public class BudgetController implements IListener{
 		lblSavingsSum = labelSavingsSum;
 		lblIncomeSum = labelIncomeSum;
 		btnAddNewMonth = buttonAddNewMonth;
+		addNewMonthDialog = addNewMonthJDialog;
 		
 		this.databaseReader = databaseReader;
 		this.databaseWriter = databasewriter;
@@ -85,6 +89,7 @@ public class BudgetController implements IListener{
 		panelToAddExpenditure.register(this);
 		panelToAddSavings.register(this);
 		panelToAddIncome.register(this);
+		addNewMonthDialog.register(this);
 		
 		budgetIdToName = databaseReader.readBudgetIdNameFromDatabase();
 		SortedSet<String> names = new TreeSet<String>(budgetIdToName.values());
@@ -120,6 +125,9 @@ public class BudgetController implements IListener{
 		}
 		else if(notificationData.notifierId == panelToAddIncome.identifier) {
 			handlePanelToAddIncomeToDatabase(notificationData);
+		}
+		else if(notificationData.notifierId == addNewMonthDialog.identifier) {
+			handleDialogToAddNewMonth(notificationData);
 		}
 		else
 		{
@@ -274,6 +282,29 @@ public class BudgetController implements IListener{
 
 		if(!displayedMonths.contains(localDate.getMonthValue())) {
 			createMonthsButtons();
+		}
+	}
+	
+	private void handleDialogToAddNewMonth(NotificationData notificationData) throws DatabaseNotInitialized {
+		ButtonAddNewMonthData buttonAdd = (ButtonAddNewMonthData) notificationData;
+		List<BudgetDate> datesInBudget = databaseReader.readYearsAndMonthsForConcreteBudgetFromDatabase(budgetId);
+		
+		if(datesInBudget.isEmpty()) {
+			databaseWriter.writeBudgetIdYearMonthToDatabase(budgetId, buttonAdd.year, buttonAdd.month);
+			buttonAdd.dialog.dispose();
+		}
+		
+		else {
+			BudgetDate bd = new BudgetDate(budgetId, buttonAdd.year, buttonAdd.month);
+			if(datesInBudget.contains(bd))
+			{
+				JOptionPane.showMessageDialog(null, "Taki miesiąc już istnieje dla " + buttonAdd.year);
+			}
+			else
+			{
+				databaseWriter.writeBudgetIdYearMonthToDatabase(budgetId, buttonAdd.year, buttonAdd.month);
+				buttonAdd.dialog.dispose();
+			}
 		}
 	}
 	

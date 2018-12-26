@@ -13,8 +13,8 @@ import javafx.util.Pair;
 
 public interface IDatabaseReader {
 
-	public int readDateOfBegginingNewBudgetMonthFromDatabase(int budgetId) throws DatabaseNotInitialized;
-
+	public List<BudgetDate> readYearsAndMonthsForConcreteBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized;
+	
 	public List<UsersObject> readUsersFromDatabase() throws DatabaseNotInitialized;
 
 	public HashMap<Integer, String> readUsersFromDatabasetoHashMap() throws DatabaseNotInitialized;

@@ -51,17 +51,26 @@ public class DatabaseReader implements IDatabaseReader{
 		return rs;
 	}
 	
-	public int readDateOfBegginingNewBudgetMonthFromDatabase(int budgetId) throws DatabaseNotInitialized{
-		String tablename = "Budget_options";
-		int date = 0;
+	public List<BudgetDate> readYearsAndMonthsForConcreteBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized{
+		String tablename = "Years_and_months";
+		List<BudgetDate> budgetDates = new ArrayList<BudgetDate>();
 		try{
 			ResultSet rs = getDataFromTable(tablename);
-			int idBudget = rs.getInt(3);
-			if(budgetId == idBudget) date = rs.getInt(2);
+			while(rs.next()){
+				int idBudget = rs.getInt(2);
+				int year = rs.getInt(3);
+				int month = rs.getInt(4);
+				
+				if(budgetId == idBudget) {
+					BudgetDate budgetDateObject = new BudgetDate(budgetId, year, month);
+					budgetDates.add(budgetDateObject);
+				}
+			}
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-		return date;
+		
+		return budgetDates;
 	}
 	
 	public List<UsersObject> readUsersFromDatabase() throws DatabaseNotInitialized{

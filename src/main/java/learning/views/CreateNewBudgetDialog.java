@@ -24,6 +24,8 @@ public class CreateNewBudgetDialog extends JDialog {
 	private PanelExpenditureCategoriesInNewBudget panelToChooseExpenditureCategories;
 	private PanelSavingsCategoriesInNewBudget panelToChooseSavingsCategories;
 	private PanelWithTabbedPanes panelWithTabbedPanes;
+	private static PanelWithButtons panelWithBudgetButtons;
+	private static int panelWithBudgetButtonsIdentifier;
 	private JPanel panelButtons;
 	private JButton buttonCancel;
 	private JButton buttonAdd;
@@ -57,10 +59,14 @@ public class CreateNewBudgetDialog extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		
+		//FIXME remowve main and object initialization from here
 		panelToAddUsers = new PanelAddUsersToNewBudget();
 		panelToChooseDuesCategories = new PanelDuesCategoriesInNewBudget();
 		panelToChooseExpenditureCategories = new PanelExpenditureCategoriesInNewBudget();
 		panelToChooseSavingsCategories = new PanelSavingsCategoriesInNewBudget();
+		
+		//FIXME it is here for refreshinb panel but that doesnt work
+		panelWithBudgetButtons = new PanelWithButtons(panelWithBudgetButtonsIdentifier);
 		
 		panelWithTabbedPanes = new PanelWithTabbedPanes(panelToAddUsers, panelToChooseDuesCategories, panelToChooseExpenditureCategories, panelToChooseSavingsCategories);
 	
@@ -83,7 +89,7 @@ public class CreateNewBudgetDialog extends JDialog {
 		
 		ButtonCreateNewDatabaseListener buttonCreateNewDatabaseListener = new ButtonCreateNewDatabaseListener(databaseReader,
 				databaseWriter, panelToAddUsers, panelToChooseDuesCategories, 
-				panelToChooseExpenditureCategories, panelToChooseSavingsCategories, this);
+				panelToChooseExpenditureCategories, panelToChooseSavingsCategories, panelWithBudgetButtons, this);
 		buttonAdd.addActionListener(buttonCreateNewDatabaseListener);
 	}
 }

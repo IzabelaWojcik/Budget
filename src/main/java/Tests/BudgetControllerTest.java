@@ -34,6 +34,7 @@ import learning.views.BudgetController;
 import learning.views.ButtonAddIncomeData;
 import learning.views.ButtonAddTransactionData;
 import learning.views.ButtonsData;
+import learning.views.AddNewYearMonthDialog;
 import learning.views.PanelAddIncome;
 import learning.views.PanelAddTransaction;
 import learning.views.PanelViewTransaction;
@@ -118,6 +119,8 @@ public class BudgetControllerTest {
 	PanelViewTransaction panelSavingsView;
 	@Mock
 	PanelViewTransaction panelIncomeView;
+	@Mock
+	AddNewYearMonthDialog addNewMonthJDialog;
 	
 	@Rule
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -137,7 +140,8 @@ public class BudgetControllerTest {
 												panelWithBudget, panelWithYears, panelWithMonths,
 												panelAddExpenditure, panelAddSavings, panelAddIncome,
 												panelExpenditureView, panelSavingsView, panelIncomeView,
-												lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnAddNewMonth
+												lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnAddNewMonth, 
+												addNewMonthJDialog
 												);
 		
 		setIdentifier(panelWithBudget, 123);

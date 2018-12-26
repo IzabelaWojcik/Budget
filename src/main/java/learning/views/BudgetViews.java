@@ -35,6 +35,7 @@ public class BudgetViews extends JFrame {
 	private static final int PANEL_ADD_INCOME_ID = 4;
 	private static final int PANEL_ADD_EXPENDITURE_ID = 5;
 	private static final int PANEL_ADD_SAVINGS_ID = 6;
+	private static final int DIALOG_ADD_NEW_MONTH_ID = 7;
 	private JPanel contentPane;
 	private JPanel jpanelForButtons;
 	private JPanel jpanelWithAllContent;
@@ -46,19 +47,17 @@ public class BudgetViews extends JFrame {
 	private JLabel lblIncomeSum;
 	private JLabel lblExpenditureSum;
 	private JLabel lblSavingsSum;
+	private AddNewYearMonthDialog addNewMonthDialog;
 	
 	private PanelWithButtons panelBudgetButtons, panelYearsButtons, panelMonthsButtons;
 	private PanelAddTransaction panelAddExpenditure, panelAddSavings;
 	private PanelAddIncome panelAddIncome;
 	private PanelViewTransaction panelViewIncome, panelViewExpenditure, panelViewSavings;
-	//private IDatabaseWriter databaseWriter;
-	//private IDatabaseReader databaseReader;
 	private BudgetController budgetController;
 	private JScrollPane scrollPaneIncomeView;
 	private JScrollPane scrollPaneExpenditureView;
 	private JScrollPane scrollPaneSavingsView;
 	private CreateNewBudgetDialog newBudgetDialog;
-	private AddNewMonthDialog addNewMonthDialog;
 	private JButton btnNewMonth;
 
 	/**
@@ -107,16 +106,15 @@ public class BudgetViews extends JFrame {
 		btnNewMonth = new JButton("Dodaj nowy miesiąc");
 		btnNewMonth.setEnabled(false);
 		
+		newBudgetDialog = new CreateNewBudgetDialog(databaseReader, databaseWriter);
+		addNewMonthDialog = new AddNewYearMonthDialog(DIALOG_ADD_NEW_MONTH_ID);
+		
 		budgetController = new BudgetController(databaseReader, databaseWriter,
 				panelBudgetButtons, panelYearsButtons, panelMonthsButtons,
 				panelAddExpenditure, panelAddSavings, panelAddIncome, 
 				panelViewExpenditure, panelViewSavings, panelViewIncome,
-				lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnNewMonth);
+				lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnNewMonth, addNewMonthDialog);
 		
-		newBudgetDialog = new CreateNewBudgetDialog(databaseReader, databaseWriter);
-		//FIXME
-		//addNewMonthDialog = new AddNewMonthDialog(databaseWriter, budgetId);
-			
 		initialize();
 	}
 

@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 
 import javax.swing.JOptionPane;
@@ -25,7 +27,8 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 	private PanelAddUsersToNewBudget panelAddUsersToNewBudge;
 	private PanelDuesCategoriesInNewBudget panelDuesCategoriesInNewBudget;
 	private PanelExpenditureCategoriesInNewBudget panelExpenditureCategoriesInNewBudget;
-	private PanelSavingsCategoriesInNewBudget PanelSavingsCategoriesInNewBudget;
+	private PanelSavingsCategoriesInNewBudget panelSavingsCategoriesInNewBudget;
+	private PanelWithButtons panelWithBudgetButtons;
 	private String message;
 	
 	private CreateNewBudgetDialog dialog;
@@ -34,21 +37,25 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 			IDatabaseWriter databaseWriter, PanelAddUsersToNewBudget panelAddUsersToNewBudget,
 			PanelDuesCategoriesInNewBudget panelDuesCategoriesInNewBudget,
 			PanelExpenditureCategoriesInNewBudget panelExpenditureCategoriesInNewBudget,
-			PanelSavingsCategoriesInNewBudget PanelSavingsCategoriesInNewBudget,
+			PanelSavingsCategoriesInNewBudget panelSavingsCategoriesInNewBudget,
+			PanelWithButtons panelWithBudgetButtons,
 			CreateNewBudgetDialog dialog) {
 		this.databaseReader = databaseReader;
 		this.databaseWriter = databaseWriter;
 		this.panelAddUsersToNewBudge = panelAddUsersToNewBudget;
 		this.panelDuesCategoriesInNewBudget = panelDuesCategoriesInNewBudget;
 		this.panelExpenditureCategoriesInNewBudget = panelExpenditureCategoriesInNewBudget;
-		this.PanelSavingsCategoriesInNewBudget = PanelSavingsCategoriesInNewBudget;
+		this.panelSavingsCategoriesInNewBudget = panelSavingsCategoriesInNewBudget;
+		this.panelWithBudgetButtons = panelWithBudgetButtons;
 		this.dialog = dialog;
+		
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		List<String> checkedExpenditures = panelExpenditureCategoriesInNewBudget.getCheckedCategories();
-		List<String> checkedSavings = PanelSavingsCategoriesInNewBudget.getCheckedCategories();
+		List<String> checkedSavings = panelSavingsCategoriesInNewBudget.getCheckedCategories();
 		List<String> checkedDues = panelDuesCategoriesInNewBudget.getCheckedCategories();
 		List<String> usersNames = new ArrayList<String>();
 		
@@ -97,6 +104,9 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 			databaseWriter.writeCategoryListTodatabase(checkedExpenditures, idBudget, EXPENDITURE_CATEGORY);
 			databaseWriter.writeCategoryListTodatabase(checkedSavings, idBudget, SAVINGS_CATEGORY);
 			databaseWriter.writeCategoryListTodatabase(checkedDues, idBudget, DUES_CATEGORY);
+			
+			refreshBudgetButtons();
+			
 			dialog.dispose();
 		}
 		
@@ -105,6 +115,12 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 			JOptionPane.showMessageDialog(null, message);
 		
 		}
+	}
+
+	private void refreshBudgetButtons() throws DatabaseNotInitialized {
+		HashMap<Integer, String> budgetIdToName = databaseReader.readBudgetIdNameFromDatabase();
+		SortedSet<String> buttonsNames = new TreeSet<String>(budgetIdToName.values());
+		panelWithBudgetButtons.createButtons(buttonsNames);
 	}
 
 	private void checkIfCategoriesAreChoosen(List<String> checkedExpenditures, List<String> checkedSavings,
