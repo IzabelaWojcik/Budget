@@ -52,7 +52,7 @@ public class BudgetController implements IListener{
 	private Integer clickedYear;
 	private Integer clickedMonth;
 
-	private final Map<Integer, String> budgetIdToName;
+	private Map<Integer, String> budgetIdToName;
 	private Map<Integer, String> expenditureCategories;
 	private Map<Integer, String> savingsCategories;
 	private Map<Integer, String> incomeCategories;
@@ -91,11 +91,9 @@ public class BudgetController implements IListener{
 		panelToAddIncome.register(this);
 		addNewMonthDialog.register(this);
 		
-		budgetIdToName = databaseReader.readBudgetIdNameFromDatabase();
-		SortedSet<String> names = new TreeSet<String>(budgetIdToName.values());
-		panelWithBudget.createButtons(names);
+		createBudgetButtons();
 	}
-	
+
 	private <K, V> K getKey(Map<K, V> map, V value) {
 		for (Entry<K, V> e: map.entrySet()) {
 			if(e.getValue().equals(value)) {
@@ -386,6 +384,12 @@ public class BudgetController implements IListener{
 				.collect(Collectors.toSet());
 		
 		return years;
+	}
+	
+	private void createBudgetButtons() throws DatabaseNotInitialized {
+		budgetIdToName = databaseReader.readBudgetIdNameFromDatabase();
+		SortedSet<String> names = new TreeSet<String>(budgetIdToName.values());
+		panelWithBudget.createButtons(names);
 	}
 	
 	private void createYearsButtons() throws DatabaseNotInitialized {
