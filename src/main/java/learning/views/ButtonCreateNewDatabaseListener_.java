@@ -17,7 +17,7 @@ import learning.budget.DatabaseNotInitialized;
 import learning.budget.IDatabaseReader;
 import learning.budget.IDatabaseWriter;
 
-public class ButtonCreateNewDatabaseListener implements ActionListener {
+public class ButtonCreateNewDatabaseListener_ implements ActionListener {
 	public static final String DUES_CATEGORY = "Dues_category";
 	public static final String SAVINGS_CATEGORY = "Savings_category";
 	public static final String EXPENDITURE_CATEGORY = "Expenditure_category";
@@ -31,15 +31,15 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 	private PanelWithButtons panelWithBudgetButtons;
 	private String message;
 	
-	private CreateNewBudgetDialog dialog;
+	private CreateNewBudgetDialog_111111 dialog;
 
-	public ButtonCreateNewDatabaseListener(IDatabaseReader databaseReader,
+	public ButtonCreateNewDatabaseListener_(IDatabaseReader databaseReader,
 			IDatabaseWriter databaseWriter, PanelAddUsersToNewBudget panelAddUsersToNewBudget,
 			PanelDuesCategoriesInNewBudget panelDuesCategoriesInNewBudget,
 			PanelExpenditureCategoriesInNewBudget panelExpenditureCategoriesInNewBudget,
 			PanelSavingsCategoriesInNewBudget panelSavingsCategoriesInNewBudget,
 			PanelWithButtons panelWithBudgetButtons,
-			CreateNewBudgetDialog dialog) {
+			CreateNewBudgetDialog_111111 dialog) {
 		this.databaseReader = databaseReader;
 		this.databaseWriter = databaseWriter;
 		this.panelAddUsersToNewBudge = panelAddUsersToNewBudget;
@@ -75,7 +75,7 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 			}
 			
 			filledBudgetName = checkIfBudgetNameFieldIsntEmpty();
-			userCounter = checkIfUserNamesFieldsAreFilled(usersNames, userCounter, usersNumber);
+			userCounter = checkIfUserNamesFieldsAreFilled(usersNames, usersNumber);
 			checkIfCategoriesAreChoosen(checkedExpenditures, checkedSavings, checkedDues);
 				
 			createNewBudget(checkedExpenditures, checkedSavings, checkedDues, budgetName, userCounter, filledBudgetName,
@@ -136,7 +136,8 @@ public class ButtonCreateNewDatabaseListener implements ActionListener {
 		}
 	}
 
-	private int checkIfUserNamesFieldsAreFilled(List<String> usersNames, int userCounter, int usersNumber) {
+	private int checkIfUserNamesFieldsAreFilled(List<String> usersNames, int usersNumber) {
+		int userCounter = 0;
 		if(usersNumber > 0) {
 			List<JTextField> textFields = new ArrayList<>();
 			Component[] components = panelAddUsersToNewBudge.getPanelForUsers().getComponents();

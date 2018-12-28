@@ -36,6 +36,8 @@ public class BudgetViews extends JFrame {
 	private static final int PANEL_ADD_EXPENDITURE_ID = 5;
 	private static final int PANEL_ADD_SAVINGS_ID = 6;
 	private static final int DIALOG_ADD_NEW_MONTH_ID = 7;
+	private static final int DIALOG_CREATE_NEW_BUDGET_ID = 8;
+	
 	private JPanel contentPane;
 	private JPanel jpanelForButtons;
 	private JPanel jpanelWithAllContent;
@@ -57,7 +59,7 @@ public class BudgetViews extends JFrame {
 	private JScrollPane scrollPaneIncomeView;
 	private JScrollPane scrollPaneExpenditureView;
 	private JScrollPane scrollPaneSavingsView;
-	private CreateNewBudgetDialog newBudgetDialog;
+	private CreateNewBudgetDialog createNewBudgetDialog;
 	private JButton btnNewMonth;
 
 	/**
@@ -106,14 +108,15 @@ public class BudgetViews extends JFrame {
 		btnNewMonth = new JButton("Dodaj nowy miesiąc");
 		btnNewMonth.setEnabled(false);
 		
-		newBudgetDialog = new CreateNewBudgetDialog(databaseReader, databaseWriter);
+		createNewBudgetDialog = new CreateNewBudgetDialog(DIALOG_CREATE_NEW_BUDGET_ID);
 		addNewMonthDialog = new AddNewYearMonthDialog(DIALOG_ADD_NEW_MONTH_ID);
 		
 		budgetController = new BudgetController(databaseReader, databaseWriter,
 				panelBudgetButtons, panelYearsButtons, panelMonthsButtons,
 				panelAddExpenditure, panelAddSavings, panelAddIncome, 
 				panelViewExpenditure, panelViewSavings, panelViewIncome,
-				lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnNewMonth, addNewMonthDialog);
+				lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnNewMonth,
+				addNewMonthDialog, createNewBudgetDialog);
 		
 		initialize();
 	}
@@ -131,7 +134,7 @@ public class BudgetViews extends JFrame {
 		JMenuItem mntmCreateNewBudget = new JMenuItem("Stwórz nowy budżet");
 		mnNewMenu.add(mntmCreateNewBudget);
 		
-		SetModalListener setNewBudgetModalListener = new SetModalListener(newBudgetDialog);
+		SetModalListener setNewBudgetModalListener = new SetModalListener(createNewBudgetDialog);
 		mntmCreateNewBudget.addActionListener(setNewBudgetModalListener);
 		
 		contentPane = new JPanel();

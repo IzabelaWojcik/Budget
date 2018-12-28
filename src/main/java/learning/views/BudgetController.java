@@ -42,6 +42,7 @@ public class BudgetController implements IListener{
 	private PanelAddIncome panelToAddIncome;
 	private PanelViewTransaction panelViewExpenditure, panelViewSavings, panelViewIncome;
 	private AddNewYearMonthDialog addNewMonthDialog;
+	private CreateNewBudgetDialog createBudgetDialog;
 	private JLabel lblExpenditureSum, lblSavingsSum, lblIncomeSum;
 	private JButton btnAddNewMonth;
 	
@@ -63,7 +64,7 @@ public class BudgetController implements IListener{
 							PanelAddTransaction panelAddExpenditure, PanelAddTransaction panelAddSavings, PanelAddIncome panelAddIncome,
 							PanelViewTransaction panelExpenditureView, PanelViewTransaction panelSavingsView, PanelViewTransaction panelIncomeView,
 							JLabel labelExpenditureSum, JLabel labelSavingsSum, JLabel labelIncomeSum, JButton buttonAddNewMonth,
-							AddNewYearMonthDialog addNewMonthJDialog) throws DatabaseNotInitialized 
+							AddNewYearMonthDialog addNewMonthJDialog, CreateNewBudgetDialog createNewBudgetDialog) throws DatabaseNotInitialized 
 	{
 		panelWithBudget = panelBudget;
 		panelWithYears = panelYears;
@@ -79,6 +80,7 @@ public class BudgetController implements IListener{
 		lblIncomeSum = labelIncomeSum;
 		btnAddNewMonth = buttonAddNewMonth;
 		addNewMonthDialog = addNewMonthJDialog;
+		createBudgetDialog = createNewBudgetDialog;
 		
 		this.databaseReader = databaseReader;
 		this.databaseWriter = databasewriter;
@@ -126,6 +128,9 @@ public class BudgetController implements IListener{
 		}
 		else if(notificationData.notifierId == addNewMonthDialog.identifier) {
 			handleDialogToAddNewMonth(notificationData);
+		}
+		else if(notificationData.notifierId == createBudgetDialog.identifier) {
+			handleDialogToCreateNewBudge(notificationData);
 		}
 		else
 		{
@@ -305,6 +310,19 @@ public class BudgetController implements IListener{
 			}
 		}
 	}
+	
+	private void handleDialogToCreateNewBudge(NotificationData notificationData) {
+		ButtonCreateNewBudgetData buttonCreate = (ButtonCreateNewBudgetData) notificationData;
+//TODO
+		List<String> checkedExpenditures = buttonCreate.expenditureCategories;
+		List<String> checkedSavings = buttonCreate.savingsCategories;
+		List<String> checkedDues = buttonCreate.duesCategories;
+		List<String> usersNames = buttonCreate.usersNames;
+		String budgetName = buttonCreate.budgetName;
+		
+		System.out.println("ppp");
+	}
+	
 	
 	private List<Transaction> readTransactionForBudgetYearMonth(String transactionTablename, String categoryTablename) throws DatabaseNotInitialized {
 		List<Transaction> transactions = databaseReader.readConcreteTransactionsWithCategoryNameForConcreteBudget(transactionTablename, categoryTablename, budgetId);
