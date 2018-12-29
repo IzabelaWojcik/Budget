@@ -58,7 +58,8 @@ public class DatabaseWriter implements IDatabaseWriter {
 		}
 	}
 	
-	public void writeUsersListTodatabase(List<String> list, int idBudget, String tablename) {
+	public void writeUsersListTodatabase(List<String> list, int idBudget) {
+		String tablename = "Users";
 		for (String s : list) {
 			String update = "insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget
 					+ "')";

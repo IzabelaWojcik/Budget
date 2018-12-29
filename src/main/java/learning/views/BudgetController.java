@@ -326,7 +326,6 @@ public class BudgetController implements IListener{
 			databaseWriter.writeBudgetIdYearMonthToDatabase(budgetId, buttonAdd.year, buttonAdd.month);
 			buttonAdd.dialog.dispose();
 			createYearsButtons();
-			createMonthsButtons();
 		}
 		
 		else {
@@ -378,6 +377,7 @@ public class BudgetController implements IListener{
 			databaseWriter.writeBudgetNameToDatabase(budgetName);
 			idBudget = getBudgetIdFromDatabase(budgetName);
 			
+			databaseWriter.writeUsersListTodatabase(users, idBudget);
 			databaseWriter.writeCategoryListTodatabase(expenditureCategories, idBudget, EXPENDITURE_CATEGORY);
 			databaseWriter.writeCategoryListTodatabase(savingsCategories, idBudget, SAVINGS_CATEGORY);
 			databaseWriter.writeCategoryListTodatabase(duesCategories, idBudget, DUES_CATEGORY);

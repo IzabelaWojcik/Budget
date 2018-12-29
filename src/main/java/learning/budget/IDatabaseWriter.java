@@ -11,7 +11,7 @@ public interface IDatabaseWriter {
 	
 	public void writeCategoryListTodatabase(List<String> transactionsFromCheckBoxes, int idBudget, String tablename);
 	
-	public void writeUsersListTodatabase(List<String> list, int idBudget, String tablename);
+	public void writeUsersListTodatabase(List<String> list, int idBudget);
 	
 	public void writeDayOfBeginingNewBudgetMonthToDatabase(int day, int idBudget);
 	
