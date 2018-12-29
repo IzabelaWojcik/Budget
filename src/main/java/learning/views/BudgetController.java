@@ -168,6 +168,12 @@ public class BudgetController implements IListener{
 		btnAddNewMonth.setEnabled(false);
 		
 		createYearsButtons();
+		Set<Integer> years = getYears(budgetId);
+		if(years.size() == 0) {
+			btnAddNewMonth.setEnabled(true);
+		}else {
+			btnAddNewMonth.setEnabled(false);
+		}
 	}
 	
 	private void handlePanelWithYearsNotification(NotificationData notificationData) throws DatabaseNotInitialized {
@@ -321,7 +327,6 @@ public class BudgetController implements IListener{
 	
 	private void handleDialogToCreateNewBudge(NotificationData notificationData) throws BudgetNotFoundException, DatabaseNotInitialized {
 		ButtonCreateNewBudgetData buttonCreate = (ButtonCreateNewBudgetData) notificationData;
-//TODO
 		List<String> checkedExpenditures = buttonCreate.expenditureCategories;
 		List<String> checkedSavings = buttonCreate.savingsCategories;
 		List<String> checkedDues = buttonCreate.duesCategories;
