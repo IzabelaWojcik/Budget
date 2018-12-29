@@ -263,6 +263,15 @@ public class BudgetController implements IListener{
 		if(!displayedMonths.contains(localDate.getMonthValue())) {
 			createMonthsButtons();
 		}
+		
+		List<BudgetDate> datesInBudget = databaseReader.readYearsAndMonthsForConcreteBudgetFromDatabase(budgetId);
+		BudgetDate bd = new BudgetDate(budgetId, localDate.getYear(), localDate.getMonthValue());
+		if(!datesInBudget.contains(bd))
+		{
+			databaseWriter.writeBudgetIdYearMonthToDatabase(budgetId, localDate.getYear(),localDate.getMonthValue());
+			createYearsButtons();
+			createMonthsButtons();
+		}
 	}
 
 	private void handlePanelToAddIncomeToDatabase(NotificationData notificationData) throws DatabaseNotInitialized {
@@ -298,6 +307,15 @@ public class BudgetController implements IListener{
 		if(!displayedMonths.contains(localDate.getMonthValue())) {
 			createMonthsButtons();
 		}
+	
+		List<BudgetDate> datesInBudget = databaseReader.readYearsAndMonthsForConcreteBudgetFromDatabase(budgetId);
+		BudgetDate bd = new BudgetDate(budgetId, localDate.getYear(), localDate.getMonthValue());
+		if(!datesInBudget.contains(bd))
+		{
+			databaseWriter.writeBudgetIdYearMonthToDatabase(budgetId, localDate.getYear(),localDate.getMonthValue());
+			createYearsButtons();
+			createMonthsButtons();
+		}
 	}
 	
 	private void handleDialogToAddNewMonth(NotificationData notificationData) throws DatabaseNotInitialized {
@@ -307,6 +325,8 @@ public class BudgetController implements IListener{
 		if(datesInBudget.isEmpty()) {
 			databaseWriter.writeBudgetIdYearMonthToDatabase(budgetId, buttonAdd.year, buttonAdd.month);
 			buttonAdd.dialog.dispose();
+			createYearsButtons();
+			createMonthsButtons();
 		}
 		
 		else {
@@ -319,6 +339,8 @@ public class BudgetController implements IListener{
 			{
 				databaseWriter.writeBudgetIdYearMonthToDatabase(budgetId, buttonAdd.year, buttonAdd.month);
 				buttonAdd.dialog.dispose();
+				createYearsButtons();
+				createMonthsButtons();
 			}
 		}
 	}
@@ -492,7 +514,7 @@ public class BudgetController implements IListener{
 		Set<Integer> years = dates.stream()
 				.map(BudgetDate::getYear)
 				.collect(Collectors.toSet());
-
+		
 		return years;
 	}
 	
