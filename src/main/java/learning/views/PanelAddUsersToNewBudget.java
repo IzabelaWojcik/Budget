@@ -23,8 +23,9 @@ public class PanelAddUsersToNewBudget extends JPanel{
 	private JPanel panelForUsers;
 	private List<String> users = new ArrayList<>();
 	
-	private JLabel lblError;
+	private JLabel lblErrorForUsersTextFields;
 	private JButton addToDatabaseButton;
+	private JLabel lblErrorForBudgetNameTextField;
 
 	public PanelAddUsersToNewBudget(JButton addToDatabaseButton) {
 		this.addToDatabaseButton = addToDatabaseButton;
@@ -34,8 +35,13 @@ public class PanelAddUsersToNewBudget extends JPanel{
 		
 		JLabel labelBudgetName = new JLabel("Nazwa nowego budżetu:");
 		
+		lblErrorForBudgetNameTextField = new JLabel("");
+		lblErrorForBudgetNameTextField.setForeground(Color.RED);
+		
 		textFieldBugdetName = new JTextField();
 		textFieldBugdetName.setColumns(10);
+		BudgetNameTextFieldListener k = new BudgetNameTextFieldListener(lblErrorForBudgetNameTextField);
+		textFieldBugdetName.addKeyListener(k);
 		
 		JButton button = new JButton("Dodaj użytkowników");
 		
@@ -46,11 +52,11 @@ public class PanelAddUsersToNewBudget extends JPanel{
 		formattedTextFieldNumberOfUsers = new JFormattedTextField(integerFieldFormatter);
 		formattedTextFieldNumberOfUsers.setColumns(10);
 		
-		lblError = new JLabel("");
-		lblError.setForeground(Color.RED);
+		lblErrorForUsersTextFields = new JLabel("");
+		lblErrorForUsersTextFields.setForeground(Color.RED);
 
-		CreateUsersListener createUsersListener = new CreateUsersListener(users, lblError, this.addToDatabaseButton);
-		CreateTextFieldsForUsersListener createTextFieldsForUsersListener = new CreateTextFieldsForUsersListener(panelForUsers, formattedTextFieldNumberOfUsers, lblError, createUsersListener);
+		CreateUsersListener createUsersListener = new CreateUsersListener(users, lblErrorForUsersTextFields, this.addToDatabaseButton);
+		CreateTextFieldsForUsersListener createTextFieldsForUsersListener = new CreateTextFieldsForUsersListener(panelForUsers, formattedTextFieldNumberOfUsers, lblErrorForUsersTextFields, createUsersListener);
  		
 		button.addActionListener(createTextFieldsForUsersListener);
  		
@@ -68,13 +74,15 @@ public class PanelAddUsersToNewBudget extends JPanel{
 							.addGap(18)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(button, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textFieldBugdetName, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(textFieldBugdetName, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(lblErrorForBudgetNameTextField))))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(panelForUsers, GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblError, GroupLayout.PREFERRED_SIZE, 282, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(18, GroupLayout.PREFERRED_SIZE))
+							.addComponent(lblErrorForUsersTextFields, GroupLayout.PREFERRED_SIZE, 282, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(32, GroupLayout.PREFERRED_SIZE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -84,16 +92,15 @@ public class PanelAddUsersToNewBudget extends JPanel{
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(labelBudgetName)
-						.addComponent(textFieldBugdetName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textFieldBugdetName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblErrorForBudgetNameTextField))
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(formattedTextFieldNumberOfUsers, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(button))
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblError)
-							.addGap(30))
+						.addComponent(lblErrorForUsersTextFields)
 						.addComponent(panelForUsers, GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE))
 					.addGap(123))
 		);
@@ -113,12 +120,10 @@ public class PanelAddUsersToNewBudget extends JPanel{
 	}
 	
 	public JLabel getErrorLabel() {
-		return lblError;
+		return lblErrorForUsersTextFields;
 	}
 	
 	public List<String> getUsers(){
 		return users;
 	}
-	
-
 }

@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -321,9 +322,23 @@ public class BudgetController implements IListener{
 		List<String> usersNames = buttonCreate.usersNames;
 		String budgetName = buttonCreate.budgetName;
 		
+		boolean filledBudgetName = false;
+		
+		//if(checkIfBudgetNameIsUnique(budgetName) == true)
+		//{
+			//message += "Taka nazwa budżetu już istnieje \n";
+		//	filledBudgetName = false;
+		//}
+		//filledBudgetName = checkIfBudgetNameFieldIsntEmpty();
+		//createNewBudget(checkedExpenditures, checkedSavings, checkedDues, budgetName, userCounter, filledBudgetName,
+		//		usersNumber);
 		System.out.println("ppp");
 	}
 	
+	private boolean checkIfBudgetNameIsUnique(String budgetName) throws BudgetNotFoundException, DatabaseNotInitialized{
+		HashMap<Integer, String> budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
+		return budgetIdNameMap.containsValue(budgetName);
+	}
 	
 	private List<Transaction> readTransactionForBudgetYearMonth(String transactionTablename, String categoryTablename) throws DatabaseNotInitialized {
 		List<Transaction> transactions = databaseReader.readConcreteTransactionsWithCategoryNameForConcreteBudget(transactionTablename, categoryTablename, budgetId);
