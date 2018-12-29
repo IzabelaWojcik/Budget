@@ -206,7 +206,7 @@ public class BudgetController implements IListener{
 		
 		expenditureCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, EXPENDITURE_CATEGORY);
 		savingsCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, SAVINGS_CATEGORY);
-		incomeCategories = databaseReader.readCategoriesForBudgetFromDatabase(budgetId, INCOME_CATEGORY);
+		incomeCategories = databaseReader.readIncomeCategory();
 		
 		userNamesIdsBudgetIds = databaseReader.readUsersFromDatabase();
 		List<String> userNames = userNamesIdsBudgetIds.stream()

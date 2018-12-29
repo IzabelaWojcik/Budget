@@ -180,6 +180,22 @@ public class DatabaseReader implements IDatabaseReader{
 		return categoryNameIdBudgetIdTripletList;
 	}
 	
+	public Map<Integer, String> readIncomeCategory() throws DatabaseNotInitialized{
+		String tablename = "Income_category";
+		Map<Integer, String>  categoryIdToName = new HashMap<Integer, String>();
+		try{
+			ResultSet rs = getDataFromTable(tablename);
+			while(rs.next()){
+				int idCategory = rs.getInt(1);
+				String categoryName = rs.getString(2);
+				categoryIdToName.put(idCategory, categoryName);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return categoryIdToName;
+	}
+	
 	public HashMap<Integer, String> readBudgetIdNameFromDatabase() throws DatabaseNotInitialized{
 		String tablename = "Budget_name";
 		HashMap<Integer, String> budgetInNameMap = new HashMap<Integer, String>();

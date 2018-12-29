@@ -50,4 +50,6 @@ public interface IDatabaseReader {
 	public SortedSet<String> readBudgetNameFromDatabase() throws DatabaseNotInitialized;
 	
 	public List<Transaction> readIncomeForConcreteBugdetFromDatabase(int budgetId) throws DatabaseNotInitialized;
+
+	public Map<Integer, String> readIncomeCategory() throws DatabaseNotInitialized;
 }
