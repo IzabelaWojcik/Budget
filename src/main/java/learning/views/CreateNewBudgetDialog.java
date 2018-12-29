@@ -32,7 +32,27 @@ public class CreateNewBudgetDialog extends JDialog implements INotifier{
 		setBounds(100, 100, 600, 600);
 		getContentPane().setLayout(new BorderLayout());
 		
-		panelToAddUsers = new PanelAddUsersToNewBudget();
+		buttonAdd = new JButton("Dodaj");
+		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {
+			try {
+				listener.notify(
+						new ButtonCreateNewBudgetData(identifier, 
+								panelToChooseExpenditureCategories.getCheckedCategories(),
+								panelToChooseSavingsCategories.getCheckedCategories(), 
+								panelToChooseDuesCategories.getCheckedCategories(), 
+								panelToAddUsers.getUsers(), 
+								panelToAddUsers.getTextFieldBugdetName().getText(),
+								this));
+			} catch (DatabaseNotInitialized e1) {
+				e1.printStackTrace();
+			}});
+		});
+		
+		buttonAdd.addActionListener(e -> {
+			
+		});
+		
+		panelToAddUsers = new PanelAddUsersToNewBudget(buttonAdd);
 		panelToChooseDuesCategories = new PanelDuesCategoriesInNewBudget();
 		panelToChooseExpenditureCategories = new PanelExpenditureCategoriesInNewBudget();
 		panelToChooseSavingsCategories = new PanelSavingsCategoriesInNewBudget();
@@ -50,21 +70,6 @@ public class CreateNewBudgetDialog extends JDialog implements INotifier{
 		
 		buttonCancel.setPreferredSize(new Dimension(80, 25));
 		panelButtons.add(buttonCancel);
-		
-		buttonAdd = new JButton("Dodaj");
-		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {
-			try {
-				listener.notify(new ButtonCreateNewBudgetData(identifier, 
-						panelToChooseExpenditureCategories.getCheckedCategories(),
-						panelToChooseSavingsCategories.getCheckedCategories(), 
-						panelToChooseDuesCategories.getCheckedCategories(), 
-						panelToAddUsers.getUsers(), 
-						panelToAddUsers.getTextFieldBugdetName().getText(),
-						this));
-			} catch (DatabaseNotInitialized e1) {
-				e1.printStackTrace();
-			}});
-		});
 	
 		buttonAdd.setPreferredSize(new Dimension(80, 25));
 		panelButtons.add(buttonAdd);

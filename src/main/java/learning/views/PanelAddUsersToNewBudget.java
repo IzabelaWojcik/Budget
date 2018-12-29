@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -15,15 +16,19 @@ import javax.swing.JFormattedTextField;
 import java.awt.Color;
 
 public class PanelAddUsersToNewBudget extends JPanel{
+	final static NumberFormat integerFieldFormatter = NumberFormat.getIntegerInstance();
+
 	private JFormattedTextField formattedTextFieldNumberOfUsers;
 	private JTextField textFieldBugdetName;
 	private JPanel panelForUsers;
-	private List<String> users;
+	private List<String> users = new ArrayList<>();
 	
-	final static NumberFormat integerFieldFormatter = NumberFormat.getIntegerInstance();
 	private JLabel lblError;
+	private JButton addToDatabaseButton;
 
-	public PanelAddUsersToNewBudget() {
+	public PanelAddUsersToNewBudget(JButton addToDatabaseButton) {
+		this.addToDatabaseButton = addToDatabaseButton;
+		this.addToDatabaseButton.setEnabled(false);
 		
 		JLabel labelInfo = new JLabel("Ilość użytkowników gospodarstwa domowego posiadających dochody:");
 		
@@ -43,12 +48,11 @@ public class PanelAddUsersToNewBudget extends JPanel{
 		
 		lblError = new JLabel("");
 		lblError.setForeground(Color.RED);
-		
-		CreateTextFieldsForUsersListener createTextFieldsForUsersListener = new CreateTextFieldsForUsersListener(panelForUsers, formattedTextFieldNumberOfUsers, lblError);
-		CreateUsersListener createUsersListener = new CreateUsersListener(panelForUsers, users, lblError);
+
+		CreateUsersListener createUsersListener = new CreateUsersListener(users, lblError, this.addToDatabaseButton);
+		CreateTextFieldsForUsersListener createTextFieldsForUsersListener = new CreateTextFieldsForUsersListener(panelForUsers, formattedTextFieldNumberOfUsers, lblError, createUsersListener);
  		
 		button.addActionListener(createTextFieldsForUsersListener);
-		button.addActionListener(createUsersListener);
  		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(

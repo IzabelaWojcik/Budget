@@ -1,46 +1,47 @@
 package learning.views;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import javax.swing.JFormattedTextField;
+import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
 
-public class CreateUsersListener implements PropertyChangeListener, ActionListener {
+public class CreateUsersListener implements DocumentListener {
 	private List<String> usersNames;
 	private Map<Object, String> textFieldsToValues;
 	private JLabel errorLabel;
-	private JPanel panelForUsers;
+	private JButton addToDatabaseButton;
 	
-	public CreateUsersListener(JPanel panelForUsers, List<String> usersNames, JLabel errorLabel) {
+	public CreateUsersListener(List<String> usersNames, JLabel errorLabel, JButton addUsersButton) {
 		this.usersNames = usersNames;
 		this.errorLabel = errorLabel;
-		this.panelForUsers = panelForUsers;
+		this.addToDatabaseButton = addUsersButton;
+		this.textFieldsToValues = new HashMap<Object, String>();
 	}
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String userName = (String)evt.getNewValue();
-		if(checkIfTextFieldIsEmpty(userName)) {
-			textFieldsToValues.put(evt.getSource(), userName);
+	public void handleFieldEdit(Object source, String userName) {
+		
+		if(!checkIfTextFieldIsEmpty(userName)) {
+			textFieldsToValues.put(source, userName);
+		}
+		else {
+			textFieldsToValues.put(source, null);
 		}
 		
 		if(!textFieldsToValues.values().contains(null)) {
 			usersNames.clear();
 			usersNames.addAll(textFieldsToValues.values());
 			errorLabel.setText("");
+			addToDatabaseButton.setEnabled(true);
 		}
 		else {
 			errorLabel.setText("Wpisz imiona użytkowników, ilość znaków > 3");
+			addToDatabaseButton.setEnabled(false);
 		}
 	}
 	
@@ -51,25 +52,36 @@ public class CreateUsersListener implements PropertyChangeListener, ActionListen
 				userName.length() < 3;
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		List<JFormattedTextField> textFields = getFormattedTextFields(panelForUsers);
+	public void updateTextFields(List<JTextField> fields) {
+		textFieldsToValues.clear();
 		
-		for(JFormattedTextField field : textFields) {
-			field.addPropertyChangeListener(this);
-			textFieldsToValues.put(field, null);
+		for(JTextField field : fields) {
+			field.getDocument().addDocumentListener(this);
+			textFieldsToValues.put(field.getDocument(), null);
 		}
 	}
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		update(e);
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		update(e);
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		update(e);
+	}
 	
-	private List<JFormattedTextField> getFormattedTextFields(JPanel panel) {
-		Component[] components = panel.getComponents();
-		
-		Stream<Component> componentsStream = Arrays.stream(components);
-		List<JFormattedTextField> formattedTextFields = componentsStream
-				.filter(c -> c.getClass().equals(JFormattedTextField.class))
-				.map(c -> (JFormattedTextField) c)
-				.collect(Collectors.toList());
-		
-		return formattedTextFields;
+	private void update(DocumentEvent e) {
+		try {
+			String userName = e.getDocument().getText(0, e.getDocument().getLength());
+			handleFieldEdit(e.getDocument(), userName);
+		} catch (BadLocationException e1) {
+			e1.printStackTrace();
+		}
 	}
 }

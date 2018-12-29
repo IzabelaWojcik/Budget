@@ -92,6 +92,7 @@ public class BudgetController implements IListener{
 		panelToAddSavings.register(this);
 		panelToAddIncome.register(this);
 		addNewMonthDialog.register(this);
+		createBudgetDialog.register(this);
 		
 		createBudgetButtons();
 	}
@@ -291,7 +292,7 @@ public class BudgetController implements IListener{
 	private void handleDialogToAddNewMonth(NotificationData notificationData) throws DatabaseNotInitialized {
 		ButtonAddNewMonthData buttonAdd = (ButtonAddNewMonthData) notificationData;
 		List<BudgetDate> datesInBudget = databaseReader.readYearsAndMonthsForConcreteBudgetFromDatabase(budgetId);
-		
+	
 		if(datesInBudget.isEmpty()) {
 			databaseWriter.writeBudgetIdYearMonthToDatabase(budgetId, buttonAdd.year, buttonAdd.month);
 			buttonAdd.dialog.dispose();

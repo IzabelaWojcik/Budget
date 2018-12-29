@@ -2,6 +2,7 @@ package learning.views;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -15,18 +16,18 @@ public class CreateTextFieldsForUsersListener implements ActionListener {
 	private JFormattedTextField formattedTextFieldNumberOfUsers;
 	private JLabel lblError;
 	private Integer numberOfUsers;
-	
-	public Integer getNumberOfUsers() {
-		return numberOfUsers;
-	}
+
+	private CreateUsersListener createUsersListener;
 	
 	public CreateTextFieldsForUsersListener(JPanel panelForUsers, 
 			JFormattedTextField formattedTextFieldNumberOfUsers, 
-			JLabel lblError) {
+			JLabel lblError,
+			CreateUsersListener createUsersListener) {
 		this.panelForUsers = panelForUsers;
 		this.formattedTextFieldNumberOfUsers = formattedTextFieldNumberOfUsers;
 		this.lblError = lblError;
 		this.numberOfUsers = new Integer(0);
+		this.createUsersListener = createUsersListener;
 	}
 
 	@Override
@@ -47,16 +48,19 @@ public class CreateTextFieldsForUsersListener implements ActionListener {
 			}
 
 			panelForUsers.removeAll();
-			JTextField jTextField = new JTextField();
-			JLabel jLabel = new JLabel();
 
+			ArrayList<JTextField> fields = new ArrayList<>();
 			for(int i = 0; i < numberOfUsers; i++) {
-				jLabel = new JLabel("Użytkownik " + (i + 1) + ":");
-				jTextField = new JTextField(10);
+				JLabel jLabel = new JLabel("Użytkownik " + (i + 1) + ":");
+				JTextField jTextField = new JTextField(10);
 				panelForUsers.add(jLabel);
 				panelForUsers.add(jTextField);
+
+				fields.add(jTextField);
 			}
-		
+
+			createUsersListener.updateTextFields(fields);
+
 		} catch (NumberFormatException nfe) {
 			lblError.setText("Wpisz liczbę całkowitą");
 			panelForUsers.removeAll();
