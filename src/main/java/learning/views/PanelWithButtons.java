@@ -22,7 +22,7 @@ public class PanelWithButtons extends JPanel implements INotifier{
 				listeners.stream().forEach(listener -> {
 					try {
 						listener.notify(new ButtonsData(identifier, name));
-					} catch (DatabaseNotInitialized e1) {
+					} catch (DatabaseNotInitialized | BudgetNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}

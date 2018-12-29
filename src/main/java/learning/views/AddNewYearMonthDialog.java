@@ -39,7 +39,7 @@ public class AddNewYearMonthDialog extends JDialog implements INotifier{
 			try {
 				int month = monthChooser.getMonth() + 1;
 				listener.notify(new ButtonAddNewMonthData(identifier, yearChooser.getYear(), month, this));
-			} catch (DatabaseNotInitialized e1) {
+			} catch (DatabaseNotInitialized | BudgetNotFoundException e1) {
 				e1.printStackTrace();
 			}});
 		});

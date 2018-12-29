@@ -43,7 +43,7 @@ public class CreateNewBudgetDialog extends JDialog implements INotifier{
 								panelToAddUsers.getUsers(), 
 								panelToAddUsers.getTextFieldBugdetName().getText(),
 								this));
-			} catch (DatabaseNotInitialized e1) {
+			} catch (DatabaseNotInitialized | BudgetNotFoundException e1) {
 				e1.printStackTrace();
 			}});
 		});

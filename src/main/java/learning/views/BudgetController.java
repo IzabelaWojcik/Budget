@@ -16,10 +16,13 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.javatuples.Triplet;
+
+import com.sun.org.apache.regexp.internal.CharacterArrayCharacterIterator;
 
 import learning.budget.BudgetDate;
 import learning.budget.DatabaseNotInitialized;
@@ -32,8 +35,10 @@ public class BudgetController implements IListener{
 	public static final String INCOME = "Income";
 	public static final String SAVINGS = "Savings";
 	public static final String EXPENDITURE = "Expenditure";
+	public static final String DUES = "Dues";
 	public static final String INCOME_CATEGORY = "Income_category";
 	public static final String SAVINGS_CATEGORY = "Savings_category";
+	public static final String DUES_CATEGORY = "Dues_category";
 	public static final String EXPENDITURE_CATEGORY = "Expenditure_category";
 	public static final Triplet<String, String, String> columnsNameDateCategoryAmount = new Triplet<String, String, String>("Date:", "Category:", "Amount:");
 	public static final Triplet<String, String, String> columnsNameUserNameCategoryAmount = new Triplet<String, String, String>("User:", "Category:", "Amount:");
@@ -59,6 +64,7 @@ public class BudgetController implements IListener{
 	private Map<Integer, String> savingsCategories;
 	private Map<Integer, String> incomeCategories;
 	private List<UsersObject> userNamesIdsBudgetIds;
+	private String message;
 	
 	public BudgetController(IDatabaseReader databaseReader, IDatabaseWriter databasewriter,
 							PanelWithButtons panelBudget, PanelWithButtons panelYears, PanelWithButtons panelMonths, 
@@ -109,7 +115,7 @@ public class BudgetController implements IListener{
 	}
 	
 	@Override
-	public void notify(NotificationData notificationData) throws DatabaseNotInitialized {
+	public void notify(NotificationData notificationData) throws DatabaseNotInitialized, BudgetNotFoundException {
 		if(notificationData.notifierId == panelWithBudget.identifier) {
 			handlePanelWithBudgetNotification(notificationData);
 		}
@@ -313,7 +319,7 @@ public class BudgetController implements IListener{
 		}
 	}
 	
-	private void handleDialogToCreateNewBudge(NotificationData notificationData) {
+	private void handleDialogToCreateNewBudge(NotificationData notificationData) throws BudgetNotFoundException, DatabaseNotInitialized {
 		ButtonCreateNewBudgetData buttonCreate = (ButtonCreateNewBudgetData) notificationData;
 //TODO
 		List<String> checkedExpenditures = buttonCreate.expenditureCategories;
@@ -322,22 +328,95 @@ public class BudgetController implements IListener{
 		List<String> usersNames = buttonCreate.usersNames;
 		String budgetName = buttonCreate.budgetName;
 		
+		message = "";
+		
 		boolean filledBudgetName = false;
 		
-		//if(checkIfBudgetNameIsUnique(budgetName) == true)
-		//{
-			//message += "Taka nazwa budżetu już istnieje \n";
-		//	filledBudgetName = false;
-		//}
-		//filledBudgetName = checkIfBudgetNameFieldIsntEmpty();
-		//createNewBudget(checkedExpenditures, checkedSavings, checkedDues, budgetName, userCounter, filledBudgetName,
-		//		usersNumber);
-		System.out.println("ppp");
+		if(checkIfBudgetNameIsUnique(budgetName) == true)
+		{
+			message += "Taka nazwa budżetu już istnieje \n";
+		}
+		
+		filledBudgetName = checkIfBudgetNameIsntEmpty(budgetName);
+		checkIfUserListIsField(usersNames);
+		checkIfCategoriesAreChoosen(checkedExpenditures, checkedSavings, checkedDues);
+			
+		createNewBudget(checkedExpenditures, checkedSavings, checkedDues, usersNames, budgetName, filledBudgetName, buttonCreate.dialog);
+	}
+	
+	private void createNewBudget(List<String> expenditureCategories, List<String> savingsCategories,
+			List<String> duesCategories, List<String> users, String budgetName, boolean filledBudgetName, JDialog dialog)
+			throws BudgetNotFoundException, DatabaseNotInitialized {
+		int idBudget;
+		if(filledBudgetName && users.size() > 0 && expenditureCategories.size() > 0 &&
+				savingsCategories.size() > 0 && duesCategories.size() > 0) {
+			
+			databaseWriter.writeBudgetNameToDatabase(budgetName);
+			idBudget = getBudgetIdFromDatabase(budgetName);
+			
+			databaseWriter.writeCategoryListTodatabase(expenditureCategories, idBudget, EXPENDITURE_CATEGORY);
+			databaseWriter.writeCategoryListTodatabase(savingsCategories, idBudget, SAVINGS_CATEGORY);
+			databaseWriter.writeCategoryListTodatabase(duesCategories, idBudget, DUES_CATEGORY);
+			
+			createBudgetButtons();
+			
+			dialog.dispose();
+		}
+		
+		else {
+			
+			JOptionPane.showMessageDialog(null, message);
+		
+		}
+	}
+	
+	private int getBudgetIdFromDatabase(String budgetName) throws BudgetNotFoundException, DatabaseNotInitialized{
+		HashMap<Integer, String> budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
+
+		for(Entry<Integer, String> entry: budgetIdNameMap.entrySet()){
+			if(budgetName.equals(entry.getValue())){
+				return entry.getKey();
+			}
+		}
+		throw new BudgetNotFoundException(budgetName);
 	}
 	
 	private boolean checkIfBudgetNameIsUnique(String budgetName) throws BudgetNotFoundException, DatabaseNotInitialized{
 		HashMap<Integer, String> budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
 		return budgetIdNameMap.containsValue(budgetName);
+	}
+	
+	private boolean checkIfBudgetNameIsntEmpty(String budgetName) {
+		boolean filledBudgetName;
+		if(budgetName.equals("") || 
+				budgetName.isEmpty() ||
+				budgetName.trim().isEmpty()){
+				message += "Wpisz nazwę budżetu \n";
+				filledBudgetName = false;
+		}
+		else {
+			filledBudgetName = true;
+		}
+		return filledBudgetName;
+	}
+	
+	private void checkIfCategoriesAreChoosen(List<String> expenditureCategories, List<String> savingsCategories,
+			List<String> duesCategories) {
+		if(expenditureCategories.size() == 0) {
+			message += "Wybierz kategorie wydatków \n";
+		}
+		if(savingsCategories.size() == 0) {
+			message += "Wybierz kategorie oszczędności \n";
+		}
+		if(duesCategories.size() == 0) {
+			message += "Wybierz kategorie opłat \n";
+		}
+	}
+	
+	private void checkIfUserListIsField(List<String> users) {
+		if(users.size() == 0) {
+			message += "Wpisz użytkowników \n";
+		}
 	}
 	
 	private List<Transaction> readTransactionForBudgetYearMonth(String transactionTablename, String categoryTablename) throws DatabaseNotInitialized {

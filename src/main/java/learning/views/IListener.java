@@ -4,6 +4,6 @@ import learning.budget.DatabaseNotInitialized;
 
 public interface IListener {
 	
-	void notify(NotificationData notificationData) throws DatabaseNotInitialized;
+	void notify(NotificationData notificationData) throws DatabaseNotInitialized, BudgetNotFoundException;
 	
 }

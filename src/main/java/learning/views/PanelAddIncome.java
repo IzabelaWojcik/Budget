@@ -126,7 +126,7 @@ public class PanelAddIncome extends JPanel implements INotifier{
 				listener -> {
 					try {
 						listener.notify(new ButtonAddIncomeData(identifier, dateChooser.getDate(), (String) comboBoxCategory.getSelectedItem(), (String) comboBoxUser.getSelectedItem(), formattedTextField.getText().replaceAll(groupSeparator, "")));
-					} catch (DatabaseNotInitialized e1) {
+					} catch (DatabaseNotInitialized | BudgetNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}}); 

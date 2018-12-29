@@ -60,7 +60,7 @@ public class PanelAddTransaction extends JPanel implements INotifier{
 		buttonAdd.addActionListener(e -> {listeners.stream().forEach(listener -> {
 				try {
 					listener.notify(new ButtonAddTransactionData(identifier, dateChooser.getDate(), (String) comboBox.getSelectedItem(), formattedTextField.getText().replaceAll(groupSeparator, "")));
-				} catch (DatabaseNotInitialized e1) {
+				} catch (DatabaseNotInitialized | BudgetNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}});
