@@ -22,8 +22,6 @@ import javax.swing.JOptionPane;
 
 import org.javatuples.Triplet;
 
-import com.sun.org.apache.regexp.internal.CharacterArrayCharacterIterator;
-
 import learning.budget.BudgetDate;
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.IDatabaseReader;
@@ -490,22 +488,23 @@ public class BudgetController implements IListener{
 	}
 	
 	private Set<Integer> getYears(int budgetId) throws DatabaseNotInitialized {
-		List<LocalDate> dates = databaseReader.readDatesForBudgetFromDatabase(budgetId);
+		List<BudgetDate> dates = databaseReader.readYearsAndMonthsForConcreteBudgetFromDatabase(budgetId);
 		Set<Integer> years = dates.stream()
-				.map(LocalDate::getYear)
+				.map(BudgetDate::getYear)
 				.collect(Collectors.toSet());
 
 		return years;
 	}
 	
 	private Set<Integer> getMonths(int budgetId) throws DatabaseNotInitialized {
-		List<LocalDate> dates = databaseReader.readDatesForBudgetFromDatabase(budgetId);
-		Set<Integer> years = dates.stream()
-				.filter(t -> t.getYear() == clickedYear)
-				.map(LocalDate::getMonthValue)
+		List<BudgetDate> dates = databaseReader.readYearsAndMonthsForConcreteBudgetFromDatabase(budgetId);
+		
+		Set<Integer> months = dates.stream()
+				.filter(d -> d.getYear() == clickedYear)
+				.map(BudgetDate::getMonth)
 				.collect(Collectors.toSet());
 		
-		return years;
+		return months;
 	}
 	
 	private void createBudgetButtons() throws DatabaseNotInitialized {
