@@ -47,10 +47,6 @@ public class CreateNewBudgetDialog extends JDialog implements INotifier{
 				e1.printStackTrace();
 			}});
 		});
-		//TODO
-		buttonAdd.addActionListener(e -> {
-			
-		});
 		
 		panelToAddUsers = new PanelAddUsersToNewBudget(buttonAdd);
 		panelToChooseDuesCategories = new PanelDuesCategoriesInNewBudget();

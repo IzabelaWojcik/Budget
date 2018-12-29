@@ -331,24 +331,23 @@ public class BudgetController implements IListener{
 		message = "";
 		
 		boolean filledBudgetName = false;
+		boolean uniqueBudgetName = false;
 		
-		if(checkIfBudgetNameIsUnique(budgetName) == true)
-		{
-			message += "Taka nazwa budżetu już istnieje \n";
-		}
-		
+		uniqueBudgetName = checkIfBudgetNameIsUnique(budgetName);
 		filledBudgetName = checkIfBudgetNameIsntEmpty(budgetName);
 		checkIfUserListIsField(usersNames);
 		checkIfCategoriesAreChoosen(checkedExpenditures, checkedSavings, checkedDues);
 			
-		createNewBudget(checkedExpenditures, checkedSavings, checkedDues, usersNames, budgetName, filledBudgetName, buttonCreate.dialog);
+		createNewBudget(checkedExpenditures, checkedSavings, checkedDues, usersNames, budgetName, filledBudgetName,
+				uniqueBudgetName, buttonCreate.dialog);
 	}
 	
 	private void createNewBudget(List<String> expenditureCategories, List<String> savingsCategories,
-			List<String> duesCategories, List<String> users, String budgetName, boolean filledBudgetName, JDialog dialog)
+			List<String> duesCategories, List<String> users, String budgetName, boolean filledBudgetName, 
+			boolean uniqueBudgetName, JDialog dialog)
 			throws BudgetNotFoundException, DatabaseNotInitialized {
 		int idBudget;
-		if(filledBudgetName && users.size() > 0 && expenditureCategories.size() > 0 &&
+		if(filledBudgetName && uniqueBudgetName && users.size() > 0 && expenditureCategories.size() > 0 &&
 				savingsCategories.size() > 0 && duesCategories.size() > 0) {
 			
 			databaseWriter.writeBudgetNameToDatabase(budgetName);
@@ -383,7 +382,12 @@ public class BudgetController implements IListener{
 	
 	private boolean checkIfBudgetNameIsUnique(String budgetName) throws BudgetNotFoundException, DatabaseNotInitialized{
 		HashMap<Integer, String> budgetIdNameMap = databaseReader.readBudgetIdNameFromDatabase();
-		return budgetIdNameMap.containsValue(budgetName);
+		if(budgetIdNameMap.containsValue(budgetName))
+		{
+			message += "Taka nazwa budżetu już istnieje \n";
+			return false;
+		}
+		return true;
 	}
 	
 	private boolean checkIfBudgetNameIsntEmpty(String budgetName) {
