@@ -548,7 +548,7 @@ public class BudgetController implements IListener{
 	private void createMonthsButtons() throws DatabaseNotInitialized {
 		SortedSet<Integer> months = new TreeSet<>(getMonths(budgetId)).descendingSet();
 		Set<String> asStrings = months.stream().
-				map(year -> year.toString()).
+				map(month -> month.toString()).
 				collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		panelWithMonths.clearPanel();

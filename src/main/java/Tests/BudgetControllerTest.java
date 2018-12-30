@@ -25,15 +25,18 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import learning.budget.BudgetDate;
 import learning.budget.DatabaseNotInitialized;
 import learning.budget.IDatabaseReader;
 import learning.budget.IDatabaseWriter;
 import learning.budget.Transaction;
 import learning.budget.UsersObject;
 import learning.views.BudgetController;
+import learning.views.BudgetNotFoundException;
 import learning.views.ButtonAddIncomeData;
 import learning.views.ButtonAddTransactionData;
 import learning.views.ButtonsData;
+import learning.views.CreateNewBudgetDialog;
 import learning.views.AddNewYearMonthDialog;
 import learning.views.PanelAddIncome;
 import learning.views.PanelAddTransaction;
@@ -46,6 +49,15 @@ public class BudgetControllerTest {
 	private static final LocalDate DATE3 = LocalDate.parse("2017-03-17");
 	private static final LocalDate DATE2 = LocalDate.parse("2017-02-14");
 	private static final LocalDate DATE1 = LocalDate.parse("2016-01-01");
+	
+	private static final int year1 = 2015;
+	private static final int year2 = 2016;
+	private static final int year3 = 2017;
+	private static final int month1 = 1;
+	private static final int month2 = 2;
+	private static final int month3 = 3;
+	private static final int month4 = 5;
+	private static final int month5 = 12;
 
 	class DBEntry<N, I> {
 		public final N name;
@@ -61,6 +73,12 @@ public class BudgetControllerTest {
 	final DBEntry<String, Integer> budget2 = new DBEntry<String, Integer>("budzet2", 2);
 	final DBEntry<String, Integer> budget3 = new DBEntry<String, Integer>("budzet3", 3);
 
+	final BudgetDate budgetDate1 = new BudgetDate(budget1.id, year1, month4);
+	final BudgetDate budgetDate2 = new BudgetDate(budget1.id, year3, month5);
+	final BudgetDate budgetDate3 = new BudgetDate(budget1.id, year3, month3);
+	final BudgetDate budgetDate4 = new BudgetDate(budget1.id, year3, month2);
+	final BudgetDate budgetDate5 = new BudgetDate(budget1.id, year2, month1);
+	
 	final DBEntry<String, Integer> category1 = new DBEntry<String, Integer>("zakupy", 1);
 	final DBEntry<String, Integer> category2 = new DBEntry<String, Integer>("oplaty", 2);
 	final DBEntry<String, Integer> category3 = new DBEntry<String, Integer>("ksiazki", 3);
@@ -78,6 +96,14 @@ public class BudgetControllerTest {
 																	   add(DATE3); add(DATE3);
 																	   add(DATE4); add(DATE5);}};
 
+	private final List<BudgetDate> budgetDates = new ArrayList<BudgetDate>() {{
+		add(budgetDate1); 
+		add(budgetDate2);
+		add(budgetDate3);
+		add(budgetDate4);
+		add(budgetDate5);
+	}};
+	
 	private final List<UsersObject> userNamesIdsBudgetIds = new ArrayList<UsersObject>() {
 		{
 			add(new UsersObject(user1.id, user1.name, budget1.id));
@@ -121,6 +147,8 @@ public class BudgetControllerTest {
 	PanelViewTransaction panelIncomeView;
 	@Mock
 	AddNewYearMonthDialog addNewMonthJDialog;
+	@Mock
+	CreateNewBudgetDialog createNewBudgetDialog;
 	
 	@Rule
 	public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -132,16 +160,17 @@ public class BudgetControllerTest {
 		lblIncomeSum = new JLabel();
 		btnAddNewMonth = new JButton();
 
-		when(databaseReaderForTest.readDatesForBudgetFromDatabase(budget1.id)).thenReturn(DATES);
+		//when(databaseReaderForTest.readDatesForBudgetFromDatabase(budget1.id)).thenReturn(DATES);
 		when(databaseReaderForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
 		when(databaseReaderForTest.readUsersFromDatabase()).thenReturn(userNamesIdsBudgetIds);
+		when(databaseReaderForTest.readYearsAndMonthsForConcreteBudgetFromDatabase(budget1.id)).thenReturn(budgetDates);
 		
 		budgetController = new BudgetController(databaseReaderForTest, databaseWriterForTest,
 												panelWithBudget, panelWithYears, panelWithMonths,
 												panelAddExpenditure, panelAddSavings, panelAddIncome,
 												panelExpenditureView, panelSavingsView, panelIncomeView,
 												lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnAddNewMonth, 
-												addNewMonthJDialog
+												addNewMonthJDialog, createNewBudgetDialog
 												);
 		
 		setIdentifier(panelWithBudget, 123);
@@ -150,6 +179,8 @@ public class BudgetControllerTest {
 		setIdentifier(panelAddExpenditure, 126);
 		setIdentifier(panelAddSavings, 127);
 		setIdentifier(panelAddIncome, 128);
+		setIdentifier(addNewMonthJDialog, 129);
+		setIdentifier(createNewBudgetDialog, 130);
 		
 		expenditures = new ArrayList<Transaction>(){{
 			add(new Transaction(transactionId, category1.id, amount, DATE1, budget1.id, category1.name)); 
@@ -206,6 +237,18 @@ public class BudgetControllerTest {
 		budgetIdField.set(panel, identifier);
 	}
 
+	private void setIdentifier(AddNewYearMonthDialog dialog, int identifier) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field budgetIdField = AddNewYearMonthDialog.class.getField("identifier");
+		budgetIdField.setAccessible(true);
+		budgetIdField.set(dialog, identifier);
+	}
+	
+	private void setIdentifier(CreateNewBudgetDialog dialog, int identifier) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field budgetIdField = CreateNewBudgetDialog.class.getField("identifier");
+		budgetIdField.setAccessible(true);
+		budgetIdField.set(dialog, identifier);
+	}
+	
 	private Transaction createTransaction(DBEntry<String, Integer> category, DBEntry<String, Integer> user, LocalDate date) {
 		return new Transaction(transactionId, category.id, amount, date, budget1.id, category.name, user.id, user.name);
 	}
@@ -221,14 +264,14 @@ public class BudgetControllerTest {
 	}
 	
 	@Test
-	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
+	public void notify_redYearsFromDatabase_controllerRedYearsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized, BudgetNotFoundException {
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, budget1.name));
 		
 		verify(panelWithYears).createButtons(new TreeSet<String>() {{add("2016"); add("2017"); add("2015");}});
 	}
 	
 	@Test
-	public void notify_redMonthsFromDatabase_controllerRedMonthsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized {
+	public void notify_redMonthsFromDatabase_controllerRedMonthsFromDatabaseAndCreateButtons() throws DatabaseNotInitialized, BudgetNotFoundException {
 		
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, budget1.name));
 		budgetController.notify(new ButtonsData(panelWithYears.identifier, String.valueOf(DATE3.getYear())));
@@ -244,14 +287,14 @@ public class BudgetControllerTest {
 	}
 
 	@Test
-	public void notify_fillPanelsWithCollectedData_controllerCollectsDataAndFillsDependentPanels() throws DatabaseNotInitialized {
+	public void notify_fillPanelsWithCollectedData_controllerCollectsDataAndFillsDependentPanels() throws DatabaseNotInitialized, BudgetNotFoundException {
 		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, budget1.id)).thenReturn(expenditures);
 		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, budget1.id)).thenReturn(savings);
 		when(databaseReaderForTest.readIncomeForConcreteBugdetFromDatabase(budget1.id)).thenReturn(income);
 		
 		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
 		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
-		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.INCOME_CATEGORY)).thenReturn(categories);
+		when(databaseReaderForTest.readIncomeCategory()).thenReturn(categories);
 		
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, budget1.name));
 		budgetController.notify(new ButtonsData(panelWithYears.identifier, String.valueOf(DATE3.getYear())));
@@ -268,7 +311,7 @@ public class BudgetControllerTest {
 	}
 	
 	@Test
-	public void notify_AddExpenditureToDatabaseAndRefreshExpenditureView_ControllerAddExpenditureToDatabaseAfterClickingAddButtonAndRefreshExpenditureView() throws DatabaseNotInitialized {
+	public void notify_AddExpenditureToDatabaseAndRefreshExpenditureView_ControllerAddExpenditureToDatabaseAfterClickingAddButtonAndRefreshExpenditureView() throws DatabaseNotInitialized, BudgetNotFoundException {
 		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.EXPENDITURE, BudgetController.EXPENDITURE_CATEGORY, budget1.id)).thenReturn(expenditures);
 		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.EXPENDITURE_CATEGORY)).thenReturn(categories);
 		
@@ -289,7 +332,7 @@ public class BudgetControllerTest {
 	}
 	
 	@Test
-	public void notify_AddSavingsToDatabaseAndRefreshSavingsView_ControllerAddSavingsToDatabaseAfterClickingAddButtonAndRefresSavingsView() throws DatabaseNotInitialized {
+	public void notify_AddSavingsToDatabaseAndRefreshSavingsView_ControllerAddSavingsToDatabaseAfterClickingAddButtonAndRefresSavingsView() throws DatabaseNotInitialized, BudgetNotFoundException {
 		when(databaseReaderForTest.readConcreteTransactionsWithCategoryNameForConcreteBudget(BudgetController.SAVINGS, BudgetController.SAVINGS_CATEGORY, budget1.id)).thenReturn(savings);
 		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.SAVINGS_CATEGORY)).thenReturn(categories);
 		
@@ -311,9 +354,9 @@ public class BudgetControllerTest {
 	}
 	
 	@Test
-	public void notify_AddIncomeToDatabaseAndRefreshIncomeView_ControllerAddIncomeToDatabaseAfterClickingAddButtonAndRefresIncomeView() throws DatabaseNotInitialized {
+	public void notify_AddIncomeToDatabaseAndRefreshIncomeView_ControllerAddIncomeToDatabaseAfterClickingAddButtonAndRefresIncomeView() throws DatabaseNotInitialized, BudgetNotFoundException {
 		when(databaseReaderForTest.readIncomeForConcreteBugdetFromDatabase(budget1.id)).thenReturn(income);
-		when(databaseReaderForTest.readCategoriesForBudgetFromDatabase(budget1.id, BudgetController.INCOME_CATEGORY)).thenReturn(categories);
+		when(databaseReaderForTest.readIncomeCategory()).thenReturn(categories);
 		
 		budgetController.notify(new ButtonsData(panelWithBudget.identifier, budget1.name));
 		budgetController.notify(new ButtonsData(panelWithYears.identifier, String.valueOf(DATE3.getYear())));
