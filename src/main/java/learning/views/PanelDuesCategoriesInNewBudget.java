@@ -7,7 +7,10 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.swing.border.TitledBorder;
 import java.awt.Rectangle;
 import java.awt.Point;
@@ -135,12 +138,14 @@ public class PanelDuesCategoriesInNewBudget extends JPanel{
 		checkBoxCategory4.addItemListener(new CheckBoxItemListener(textFieldCategory4));
 		checkBoxCategory5.addItemListener(new CheckBoxItemListener(textFieldCategory5));
 		
-		TextFieldKeyListener keyListener = new TextFieldKeyListener(checkedCategories);
-		textFieldCategory1.addKeyListener(keyListener);
-		textFieldCategory2.addKeyListener(keyListener);
-		textFieldCategory3.addKeyListener(keyListener);
-		textFieldCategory4.addKeyListener(keyListener);
-		textFieldCategory5.addKeyListener(keyListener);
+		Map<Object, String> textFieldsToValues = new HashMap<>();
+		CategoryTextFieldListener categoryTextFieldListener = new CategoryTextFieldListener(checkedCategories, textFieldsToValues);
+		
+		textFieldCategory1.getDocument().addDocumentListener(categoryTextFieldListener);
+		textFieldCategory2.getDocument().addDocumentListener(categoryTextFieldListener);
+		textFieldCategory3.getDocument().addDocumentListener(categoryTextFieldListener);
+		textFieldCategory4.getDocument().addDocumentListener(categoryTextFieldListener);
+		textFieldCategory5.getDocument().addDocumentListener(categoryTextFieldListener);
 		
 		GroupLayout gl_panelCustomCategories = new GroupLayout(panelCustomCategories);
 		gl_panelCustomCategories.setHorizontalGroup(
