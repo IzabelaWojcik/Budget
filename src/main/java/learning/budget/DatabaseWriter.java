@@ -88,7 +88,7 @@ public class DatabaseWriter implements IDatabaseWriter {
 		executeUpdate(update);
 	}
 
-	public void writeExpenditureOrSavingsToDatabase(double amount, LocalDate localDate, int idCategory, int idBudget, String tablename) {
+	public void writeTransactionToDatabase(double amount, LocalDate localDate, int idCategory, int idBudget, String tablename) {
 		java.sql.Date date = java.sql.Date.valueOf(localDate);
 		String update = "insert into " + "\"" + tablename + "\"" + "values(" + amount + "," + "\'" + date + "\'" + ","
 				+ idCategory + "," + idBudget + ")";

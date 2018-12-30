@@ -122,7 +122,7 @@ public class BudgetControllerTest {
 	private BudgetController budgetController;
 	private JButton btnAddNewMonth;
 
-	private JLabel lblExpenditureSum, lblSavingsSum, lblIncomeSum;
+	private JLabel lblExpenditureSum, lblSavingsSum, lblIncomeSum, lblDuesSum;
 	@Mock
 	IDatabaseReader databaseReaderForTest;
 	@Mock
@@ -139,6 +139,10 @@ public class BudgetControllerTest {
 	PanelAddTransaction panelAddSavings;
 	@Mock
 	PanelAddIncome panelAddIncome;
+	@Mock
+	PanelAddTransaction panelAddDues;
+	@Mock
+	PanelViewTransaction panelDuesView;
 	@Mock
 	PanelViewTransaction panelExpenditureView;
 	@Mock
@@ -158,19 +162,19 @@ public class BudgetControllerTest {
 		lblExpenditureSum = new JLabel();
 		lblSavingsSum = new JLabel();
 		lblIncomeSum = new JLabel();
+		lblDuesSum = new JLabel();
 		btnAddNewMonth = new JButton();
 
-		//when(databaseReaderForTest.readDatesForBudgetFromDatabase(budget1.id)).thenReturn(DATES);
 		when(databaseReaderForTest.readBudgetIdNameFromDatabase()).thenReturn(budgetIdToName);
 		when(databaseReaderForTest.readUsersFromDatabase()).thenReturn(userNamesIdsBudgetIds);
 		when(databaseReaderForTest.readYearsAndMonthsForConcreteBudgetFromDatabase(budget1.id)).thenReturn(budgetDates);
 		
 		budgetController = new BudgetController(databaseReaderForTest, databaseWriterForTest,
 												panelWithBudget, panelWithYears, panelWithMonths,
-												panelAddExpenditure, panelAddSavings, panelAddIncome,
-												panelExpenditureView, panelSavingsView, panelIncomeView,
-												lblExpenditureSum, lblSavingsSum, lblIncomeSum, btnAddNewMonth, 
-												addNewMonthJDialog, createNewBudgetDialog
+												panelAddExpenditure, panelAddSavings, panelAddIncome, panelAddDues,
+												panelExpenditureView, panelSavingsView, panelIncomeView, panelDuesView, 
+												lblExpenditureSum, lblSavingsSum, lblIncomeSum, lblDuesSum,
+												btnAddNewMonth, addNewMonthJDialog, createNewBudgetDialog
 												);
 		
 		setIdentifier(panelWithBudget, 123);
@@ -324,7 +328,7 @@ public class BudgetControllerTest {
 
 		budgetController.notify(new ButtonAddTransactionData(panelAddExpenditure.identifier, asDate(DATE3), category1.name, String.valueOf(amount)));
 		
-		verify(databaseWriterForTest).writeExpenditureOrSavingsToDatabase(amount, DATE3, category1.id, budget1.id, BudgetController.EXPENDITURE);
+		verify(databaseWriterForTest).writeTransactionToDatabase(amount, DATE3, category1.id, budget1.id, BudgetController.EXPENDITURE);
 		
 		List<Triplet<String, String, String>> listOfTripletsIncomeWithNewTriplet = new ArrayList<>(listOfTripletsExpenditure);
 		listOfTripletsIncomeWithNewTriplet.add(new Triplet<String, String, String>(DATE3.toString(), category1.name, String.valueOf(amount)));
@@ -345,7 +349,7 @@ public class BudgetControllerTest {
 
 		budgetController.notify(new ButtonAddTransactionData(panelAddSavings.identifier, asDate(DATE3), category2.name, String.valueOf(amount)));
 		
-		verify(databaseWriterForTest).writeExpenditureOrSavingsToDatabase(amount, DATE3, category2.id, budget1.id, BudgetController.SAVINGS);
+		verify(databaseWriterForTest).writeTransactionToDatabase(amount, DATE3, category2.id, budget1.id, BudgetController.SAVINGS);
 		verify(panelSavingsView).fillPanel(listOfTripletsSavings, BudgetController.columnsNameDateCategoryAmount);
 
 		List<Triplet<String, String, String>> listOfTripletsIncomeWithNewTriplet = new ArrayList<>(listOfTripletsSavings);

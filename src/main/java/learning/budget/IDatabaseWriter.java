@@ -19,6 +19,6 @@ public interface IDatabaseWriter {
 	
 	public void writeIncomeToDatabase(double amount, LocalDate date, int idUser, int idIncomeCategory, int idBudget);
 	
-	public void writeExpenditureOrSavingsToDatabase(double amount, LocalDate localDate, int idCategory, int idBudget, String tablename);
+	public void writeTransactionToDatabase(double amount, LocalDate localDate, int idCategory, int idBudget, String tablename);
 
 }

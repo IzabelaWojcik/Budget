@@ -128,7 +128,7 @@ public class ButtonAction extends GenerateComponents {
 							throw new NullPointerException("database not init");
 						}
 						
-						databaseWriter.writeExpenditureOrSavingsToDatabase(amount, localDate, idCategory, idBudget, tablename);
+						databaseWriter.writeTransactionToDatabase(amount, localDate, idCategory, idBudget, tablename);
 						txFieldAmount.setText("");
 						cbCategory.setSelectedIndex(-1);
 
