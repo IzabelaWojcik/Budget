@@ -97,6 +97,7 @@ public class BudgetViews extends JFrame {
 		panelViewIncome = new PanelViewTransaction();
 		panelViewExpenditure = new PanelViewTransaction();
 		panelViewSavings = new PanelViewTransaction();
+		panelViewSavings.setPreferredSize(new Dimension(206, 188));
 		panelViewDues = new PanelViewTransaction();
 		
 		panelAddIncome = new PanelAddIncome(PANEL_ADD_INCOME_ID);
@@ -104,10 +105,10 @@ public class BudgetViews extends JFrame {
 		panelAddSavings = new PanelAddTransaction(PANEL_ADD_SAVINGS_ID);
 		panelAddDues = new PanelAddTransaction(PANEL_ADD_DUES_ID);
 		
-		lblIncomeSum = new JLabel("dddd");
-		lblExpenditureSum = new JLabel("xxx");
-		lblSavingsSum = new JLabel("sss");
-		lblDuesSum = new JLabel("ddd");
+		lblIncomeSum = new JLabel("");
+		lblExpenditureSum = new JLabel("");
+		lblSavingsSum = new JLabel("");
+		lblDuesSum = new JLabel("");
 		
 		btnNewMonth = new JButton("Dodaj nowy miesiąc");
 		btnNewMonth.setEnabled(false);
@@ -269,11 +270,9 @@ public class BudgetViews extends JFrame {
 						.addComponent(scrollPaneExpenditureView, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE))
 					.addGap(56)
 					.addGroup(gl_panelForViews.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panelForViews.createSequentialGroup()
-							.addGap(43)
-							.addComponent(lblSavingsSum))
 						.addComponent(lblSavings)
-						.addComponent(scrollPaneSavingsView, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE))
+						.addComponent(scrollPaneSavingsView, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSavingsSum))
 					.addGap(58)
 					.addGroup(gl_panelForViews.createParallelGroup(Alignment.LEADING)
 						.addComponent(scrollPaneDues, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
@@ -294,22 +293,21 @@ public class BudgetViews extends JFrame {
 					.addGroup(gl_panelForViews.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panelForViews.createSequentialGroup()
 							.addGroup(gl_panelForViews.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_panelForViews.createSequentialGroup()
-									.addGroup(gl_panelForViews.createParallelGroup(Alignment.TRAILING)
-										.addComponent(scrollPaneExpenditureView, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE)
-										.addComponent(scrollPaneIncomeView, GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_panelForViews.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblSavingsSum)
-										.addGroup(gl_panelForViews.createParallelGroup(Alignment.BASELINE)
-											.addComponent(lblIncomeSum)
-											.addComponent(lblExpenditureSum))))
-								.addComponent(scrollPaneSavingsView, GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))
+								.addComponent(scrollPaneExpenditureView, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollPaneIncomeView, GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panelForViews.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblIncomeSum)
+								.addComponent(lblExpenditureSum))
 							.addGap(192))
 						.addGroup(gl_panelForViews.createSequentialGroup()
-							.addComponent(scrollPaneDues, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_panelForViews.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(scrollPaneSavingsView, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(scrollPaneDues, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblDuesSum)
+							.addGroup(gl_panelForViews.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblDuesSum)
+								.addComponent(lblSavingsSum))
 							.addContainerGap())))
 		);
 		
