@@ -13,8 +13,6 @@ public interface IDatabaseWriter {
 	
 	public void writeUsersListTodatabase(List<String> list, int idBudget);
 	
-	public void writeDayOfBeginingNewBudgetMonthToDatabase(int day, int idBudget);
-	
 	public void writeBudgetNameToDatabase(String name);
 	
 	public void writeIncomeToDatabase(double amount, LocalDate date, int idUser, int idIncomeCategory, int idBudget);

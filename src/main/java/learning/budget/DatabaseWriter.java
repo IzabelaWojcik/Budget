@@ -37,22 +37,24 @@ public class DatabaseWriter implements IDatabaseWriter {
 	
 	public void writeBudgetIdYearMonthToDatabase(int idBudget, int year, int month){
 		String tablename = "Years_and_months";
-		String update = "insert into " + "\"" + tablename + "\"" + "values(" + idBudget + "," + year + "," + month + ")";
+		String columns = "(id_budget, year, month)";
+		String update = "insert into " + "\"" + tablename + "\"" + columns + "values(" + idBudget + "," + year + "," + month + ")";
 		executeUpdate(update);
 	}
 
 	public void writeCategoryMapToDatabase(HashMap<String, String> map, int idBudget, String tablename) {
-		
+		String columns = "(name, id_budget)";
 		for (String s : map.values()) {
-			String update = "insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget
+			String update = "insert into " + "\"" + tablename + "\"" + columns + "values('" + s + "\'" + "," + "\'" + idBudget
 					+ "')";
 			executeUpdate(update);
 		}
 	}
 
 	public void writeCategoryListTodatabase(List<String> list, int idBudget, String tablename) {
+		String columns = "(name, id_budget)";
 		for (String s : list) {
-			String update = "insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget
+			String update = "insert into " + "\"" + tablename + "\"" + columns + "values('" + s + "\'" + "," + "\'" + idBudget
 					+ "')";
 			executeUpdate(update);
 		}
@@ -60,37 +62,34 @@ public class DatabaseWriter implements IDatabaseWriter {
 	
 	public void writeUsersListTodatabase(List<String> list, int idBudget) {
 		String tablename = "Users";
+		String columns = "(name, id_budget)";
 		for (String s : list) {
-			String update = "insert into " + "\"" + tablename + "\"" + "values('" + s + "\'" + "," + "\'" + idBudget
+			String update = "insert into " + "\"" + tablename + "\"" + columns + "values('" + s + "\'" + "," + "\'" + idBudget
 					+ "')";
 			executeUpdate(update);
 		}
 	}
 
-	public void writeDayOfBeginingNewBudgetMonthToDatabase(int day, int idBudget) {
-		String tablename = "Budget_options";
-		String update = "insert into " + "\"" + tablename + "\"" + "values('" + day + "\'" + "," + "\'" + idBudget
-				+ "')";
-		executeUpdate(update);
-	}
-
 	public void writeBudgetNameToDatabase(String name) {
 		String tablename = "Budget_name";
-		String update = "insert into " + "\"" + tablename + "\"" + "values('" + name + "')";
+		String columns = "(name)";
+		String update = "insert into " + "\"" + tablename + "\"" + columns + "values('" + name + "')";
 		executeUpdate(update);
 	}
 
 	public void writeIncomeToDatabase(double amount, LocalDate localDate, int idUser, int idIncomeCategory, int idBudget) {
 		String tablename = "Income";
+		String columns = "(amount, date, id_user, id_income_category, id_budget)";
 		java.sql.Date date =java.sql.Date.valueOf(localDate);
-		String update = "insert into " + "\"" + tablename + "\"" + "values(" + amount + "," + "\'" + date + "\'" + ","
+		String update = "insert into " + "\"" + tablename + "\"" + columns + "values(" + amount + "," + "\'" + date + "\'" + ","
 				+ idUser + "," + idIncomeCategory + "," + idBudget + ")";
 		executeUpdate(update);
 	}
 
 	public void writeTransactionToDatabase(double amount, LocalDate localDate, int idCategory, int idBudget, String tablename) {
 		java.sql.Date date = java.sql.Date.valueOf(localDate);
-		String update = "insert into " + "\"" + tablename + "\"" + "values(" + amount + "," + "\'" + date + "\'" + ","
+		String columns = "(amount, date, id_category, id_budget)";
+		String update = "insert into " + "\"" + tablename + "\"" + columns + "values(" + amount + "," + "\'" + date + "\'" + ","
 				+ idCategory + "," + idBudget + ")";
 		executeUpdate(update);
 	}

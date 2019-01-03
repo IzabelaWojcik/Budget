@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DatabaseConnection{
-	private final static String conectionUrl = "jdbc:sqlserver://localhost:1433;" + 
-			"databasename=Budget;integratedSecurity=true;";
+	private final static String conectionUrl = "jdbc:sqlite:C:\\sqlite\\sqlite-tools-win32-x86-3260000\\budget.db";
+
 	private static Connection con = null;
 	
 	private DatabaseConnection() {}
@@ -19,7 +19,7 @@ public class DatabaseConnection{
 	
 	private static Connection connectionWithDB(){
 		try{
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			Class.forName("org.sqlite.JDBC");
 			con = DriverManager.getConnection(conectionUrl);
 		}catch(Exception e){
 			e.printStackTrace();
