@@ -116,12 +116,12 @@ public class DatabaseReader implements IDatabaseReader{
 			while (rs.next()) {
 				int idTransaction = rs.getInt(1);
 				double amount = rs.getDouble(2);
-				java.sql.Date sqlDate = rs.getDate(3);
+				String date = rs.getString(3);
 				int idUser = rs.getInt(4);
 				int idIncomeCategory = rs.getInt(5);
 				int idBudget = rs.getInt(6);
 				
-				LocalDate localDate = sqlDateToLocalDate(sqlDate);
+				LocalDate localDate = LocalDate.parse(date);
 				
 				usersIncomeObject = new Transaction(idTransaction, idUser, idIncomeCategory, amount, localDate, idBudget);
 				if(!usersIncomeList.contains(usersIncomeObject)) usersIncomeList.add(usersIncomeObject);
@@ -331,9 +331,9 @@ public class DatabaseReader implements IDatabaseReader{
 				int categoryId = rs.getInt(4);
 				int budgetId = rs.getInt(5);
 				double amount = rs.getDouble(2);
-				java.sql.Date sqlDate = rs.getDate(3);
+				String date = rs.getString(3);
 				
-				LocalDate localDate = sqlDateToLocalDate(sqlDate);
+				LocalDate localDate = LocalDate.parse(date);
 				
 				transaction  = new Transaction(transactionId, categoryId, amount, localDate, budgetId);
 				transactions.add(transaction);
