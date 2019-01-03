@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DatabaseConnection{
-	private final static String conectionUrl = "jdbc:sqlite:C:\\sqlite\\sqlite-tools-win32-x86-3260000\\budget.db";
+	private final static String conectionUrl = "jdbc:sqlite:budget.db";
 
 	private static Connection con = null;
 	

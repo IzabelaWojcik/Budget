@@ -7,9 +7,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.border.TitledBorder;
 import java.awt.Rectangle;
@@ -19,6 +17,7 @@ import javax.swing.SwingConstants;
 
 public class PanelDuesCategoriesInNewBudget extends JPanel{
 	private List<String> checkedCategories;
+	private CategoryTextFieldListener categoryTextFieldListener = new CategoryTextFieldListener();
 	
 	public PanelDuesCategoriesInNewBudget() {
 		
@@ -138,9 +137,6 @@ public class PanelDuesCategoriesInNewBudget extends JPanel{
 		checkBoxCategory4.addItemListener(new CheckBoxItemListener(textFieldCategory4));
 		checkBoxCategory5.addItemListener(new CheckBoxItemListener(textFieldCategory5));
 		
-		Map<Object, String> textFieldsToValues = new HashMap<>();
-		CategoryTextFieldListener categoryTextFieldListener = new CategoryTextFieldListener(checkedCategories, textFieldsToValues);
-		
 		textFieldCategory1.getDocument().addDocumentListener(categoryTextFieldListener);
 		textFieldCategory2.getDocument().addDocumentListener(categoryTextFieldListener);
 		textFieldCategory3.getDocument().addDocumentListener(categoryTextFieldListener);
@@ -233,6 +229,9 @@ public class PanelDuesCategoriesInNewBudget extends JPanel{
 	}
 	
 	public List<String> getCheckedCategories() {
-		return checkedCategories;
+		List<String> categories = categoryTextFieldListener.getValues();
+		categories.addAll(checkedCategories);
+		
+		return categories;
 	}
 }
