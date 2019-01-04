@@ -4,21 +4,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.javatuples.Triplet;
-
-import javafx.util.Pair;
 
 public class DatabaseReader implements IDatabaseReader{
 	private static IDatabaseReader databaseReader; 
@@ -42,9 +35,6 @@ public class DatabaseReader implements IDatabaseReader{
 			Statement start = connection.createStatement();
 			String SQL = "Select * from " + "\"" + tablename + "\"";
 			rs = start.executeQuery(SQL);
-			// TODO check if create statment must be used twice,
-			// TODO st.close();???
-			start = connection.createStatement();
 		} catch (NullPointerException e) {
 			throw new DatabaseNotInitialized();
 		}
@@ -91,22 +81,6 @@ public class DatabaseReader implements IDatabaseReader{
 		return userList;
 	}
 
-	public HashMap<Integer, String> readUsersFromDatabasetoHashMap() throws DatabaseNotInitialized {
-		HashMap<Integer, String> usersFromDatabaseMap = new HashMap<Integer, String>();
-		String tablename = "Users";
-		try {
-			ResultSet rs = getDataFromTable(tablename);
-			while (rs.next()) {
-				int key = rs.getInt(1);
-				String value = rs.getString(2);
-				usersFromDatabaseMap.put(key, value);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return usersFromDatabaseMap;
-	}
-	
 	public ArrayList<Transaction> readIncomefromDatabase() throws DatabaseNotInitialized {
 		String tablename = "Income";
 		ArrayList<Transaction> usersIncomeList= new ArrayList<Transaction>();
@@ -145,22 +119,6 @@ public class DatabaseReader implements IDatabaseReader{
 			e.printStackTrace();
 		}
 		return categoryMap;
-	}
-	
-	public List<Pair<Integer, String>> readCategoryNameWithBudgetIdFromDatabase(String tablename) throws DatabaseNotInitialized{
-		List<Pair<Integer, String>>  categoryBudgetIdPair = new ArrayList<>();
-		try{
-			ResultSet rs = getDataFromTable(tablename);
-			while(rs.next()){
-				int idBudget = rs.getInt(3);
-				String categoryName = rs.getString(2);
-				Pair<Integer, String> pair= new Pair<>(idBudget, categoryName);
-				categoryBudgetIdPair.add(pair);	
-			}
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		return categoryBudgetIdPair;
 	}
 	
 	public List<Triplet<Integer, Integer, String>> readCategoryNameCategoryIdAndBudgetIdFromDatabase(String tablename) throws DatabaseNotInitialized{
@@ -212,115 +170,6 @@ public class DatabaseReader implements IDatabaseReader{
 		return budgetInNameMap;
 	}
 	
-	public SortedSet<String> readBudgetNameFromDatabase() throws DatabaseNotInitialized{
-		String tablename = "Budget_name";
-		SortedSet<String> budgetNames = new TreeSet<String>();
-		try {
-			ResultSet rs = getDataFromTable(tablename);
-			while (rs.next()) {
-				String names = rs.getString(2);
-				budgetNames.add(names);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return budgetNames;
-	}
-
-	public ArrayList<Transaction> readExpenditureFromDatabase() throws DatabaseNotInitialized{
-		String tablename = "Expenditure";
-		ArrayList<Transaction> expenditureObjectList = new ArrayList<Transaction>();
-		Transaction expenditureObject = null;
-		try{
-			ResultSet rs = getDataFromTable(tablename);
-			while(rs.next()){
-				int expenditureCategoryId = rs.getInt(4);
-				int budgetId = rs.getInt(5);
-				double amount = rs.getDouble(2);
-				java.sql.Date sqlDate = rs.getDate(3);
-				
-				LocalDate localDate = sqlDateToLocalDate(sqlDate);
-				
-				expenditureObject  = new Transaction(expenditureCategoryId, amount, localDate, budgetId);
-				expenditureObjectList.add(expenditureObject);
-			}
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return expenditureObjectList;
-	}
-	
-	public ArrayList<Transaction> readExpenditureWithItsIdFromDatabase() throws DatabaseNotInitialized{
-		String tablename = "Expenditure";
-		ArrayList<Transaction> expenditureObjectList = new ArrayList<Transaction>();
-		Transaction expenditureObject = null;
-		try{
-			ResultSet rs = getDataFromTable(tablename);
-			while(rs.next()){
-				int idExpenditure = rs.getInt(1);
-				int expenditureCategoryId = rs.getInt(4);
-				int budgetId = rs.getInt(5);
-				double amount = rs.getDouble(2);
-				java.sql.Date sqlDate = rs.getDate(3);
-				
-				LocalDate localDate = sqlDateToLocalDate(sqlDate);
-				
-				expenditureObject  = new Transaction(idExpenditure, expenditureCategoryId, amount, localDate, budgetId);
-				expenditureObjectList.add(expenditureObject);
-			}
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return expenditureObjectList;
-	}
-	
-	public ArrayList<Transaction> readSavingsFromDatabase() throws DatabaseNotInitialized{
-		String tablename = "Savings";
-		ArrayList<Transaction> savingsObjectList = new ArrayList<Transaction>();
-		Transaction savingsObject = null;
-		try{
-			ResultSet rs = getDataFromTable(tablename);
-			while(rs.next()){
-				int savingsCategoryId = rs.getInt(4);
-				int budgetId = rs.getInt(5);
-				double amount = rs.getDouble(2);
-				java.sql.Date sqlDate = rs.getDate(3);
-				
-				LocalDate localDate = sqlDateToLocalDate(sqlDate);
-				
-				savingsObject  = new Transaction(savingsCategoryId, amount, localDate, budgetId);
-				savingsObjectList.add(savingsObject);
-			}
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return savingsObjectList;
-	}
-	
-	public ArrayList<Transaction> readSavingsWithItsIdFromDatabase() throws DatabaseNotInitialized{
-		String tablename = "Savings";
-		ArrayList<Transaction> savingsObjectList = new ArrayList<Transaction>();
-		Transaction savingsObject = null;
-		try{
-			ResultSet rs = getDataFromTable(tablename);
-			while(rs.next()){
-				int savingsId = rs.getInt(1);
-				int savingsCategoryId = rs.getInt(4);
-				int budgetId = rs.getInt(5);
-				double amount = rs.getDouble(2);
-				java.sql.Date sqlDate = rs.getDate(3);
-				
-				LocalDate localDate = sqlDateToLocalDate(sqlDate);
-				
-				savingsObject  = new Transaction(savingsId, savingsCategoryId, amount, localDate, budgetId);
-				savingsObjectList.add(savingsObject);
-			}
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return savingsObjectList;
-	}
-
 	public List<Transaction> readConcreteTransactionsForAllBudgetsFromDatabase(String tablename) throws DatabaseNotInitialized{
 		ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 		Transaction transaction = null;
@@ -343,10 +192,22 @@ public class DatabaseReader implements IDatabaseReader{
 		}
 		return transactions;
 	}
-
-	private LocalDate sqlDateToLocalDate(java.sql.Date sqlDate) {
-		return Instant.ofEpochMilli(sqlDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-	}
+	
+    public HashMap<Integer, String> readUsersFromDatabasetoHashMap() throws DatabaseNotInitialized {
+        HashMap<Integer, String> usersFromDatabaseMap = new HashMap<Integer, String>();
+        String tablename = "Users";
+        try {
+            ResultSet rs = getDataFromTable(tablename);
+            while (rs.next()) {
+                int key = rs.getInt(1);
+                String value = rs.getString(2);
+                usersFromDatabaseMap.put(key, value);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return usersFromDatabaseMap;
+    }
 
 	public List<Transaction> readIncomeForConcreteBugdetFromDatabase(int budgetId) throws DatabaseNotInitialized{
 		List<Transaction> incomes = readIncomefromDatabase();
@@ -377,23 +238,6 @@ public class DatabaseReader implements IDatabaseReader{
 			}
 		}
 		return transactionsForConcreteBudget;
-	}
-	
-	public List<Transaction> readAllTransactionsForConcreteBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized {
-		List<Transaction> savings = readSavingsFromDatabase();
-		List<Transaction> income = readIncomefromDatabase();
-		List<Transaction> expenditure = readExpenditureFromDatabase();
-		Stream<Transaction> transactions = Stream.concat(Stream.concat(savings.stream(), income.stream()), expenditure.stream());
-		
-		return transactions.filter(t -> t.getBudgetId() == budgetId).collect(Collectors.toList());
-	}
-	
-	public List<LocalDate> readDatesForBudgetFromDatabase(int budgetId) throws DatabaseNotInitialized {
-		List<Transaction> transactions = readAllTransactionsForConcreteBudgetFromDatabase(budgetId);
-		return transactions.stream()
-							.map(Transaction::getDate)
-							.distinct()
-							.collect(Collectors.toList());
 	}
 	
 	public Map<Integer, String> readCategoriesForBudgetFromDatabase(int budgetId, String categoryTablename) throws DatabaseNotInitialized {
