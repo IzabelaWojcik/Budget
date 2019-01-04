@@ -6,10 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.swing.JButton;
 
@@ -19,11 +16,7 @@ import org.junit.Test;
 import Tests.Helpers.TestHelper;
 import Tests.Stub.ListenerStub;
 import learning.views.ButtonAddIncomeData;
-import learning.views.ButtonAddTransactionData;
-import learning.views.ButtonsData;
 import learning.views.PanelAddIncome;
-import learning.views.PanelAddTransaction;
-import learning.views.PanelWithButtons;
 
 public class PanelAddIncomeTest {
 	PanelAddIncome panelAddIncome;
@@ -36,7 +29,6 @@ public class PanelAddIncomeTest {
 	
 	@Before
 	public void setup() throws ParseException {
-		int clickedBudgetId = 1;
 		int identifier = 1;
 		notifierId = 1;
 		dateString = "15-10-2018";

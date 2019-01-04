@@ -92,10 +92,6 @@ public class BudgetControllerTest {
 																				     put(budget2.id, budget2.name); 
 																				     put(budget3.id, budget3.name);}};
 	
-	private final List<LocalDate> DATES = new ArrayList<LocalDate>(){{ add(DATE1); add(DATE2); 
-																	   add(DATE3); add(DATE3);
-																	   add(DATE4); add(DATE5);}};
-
 	private final List<BudgetDate> budgetDates = new ArrayList<BudgetDate>() {{
 		add(budgetDate1); 
 		add(budgetDate2);

@@ -26,7 +26,7 @@ public class TestHelperTest {
 	
 	private class Panel extends JPanel {
 		public JDateChooser dateChooser; 
-		public JComboBox comboBox;
+		public JComboBox<String> comboBox;
 		public JButton buttonAdd;
 		public JFormattedTextField formattedTextField;
 		

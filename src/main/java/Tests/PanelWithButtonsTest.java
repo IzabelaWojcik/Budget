@@ -4,13 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.JButton;
 
-import org.javatuples.Pair;
 import org.junit.Test;
 
 import Tests.Helpers.TestHelper;

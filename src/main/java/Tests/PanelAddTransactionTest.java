@@ -6,10 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.swing.JButton;
 
@@ -19,9 +16,7 @@ import org.junit.Test;
 import Tests.Helpers.TestHelper;
 import Tests.Stub.ListenerStub;
 import learning.views.ButtonAddTransactionData;
-import learning.views.ButtonsData;
 import learning.views.PanelAddTransaction;
-import learning.views.PanelWithButtons;
 
 public class PanelAddTransactionTest {
 	PanelAddTransaction panelAddTransaction;
