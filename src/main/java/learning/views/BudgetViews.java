@@ -1,8 +1,6 @@
 package learning.views;
 
 import java.awt.EventQueue;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,7 +19,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -60,12 +57,8 @@ public class BudgetViews extends JFrame {
 	private CreateNewBudgetDialog createNewBudgetDialog;
 	private JButton btnNewMonth;
 	private JScrollPane scrollPaneDues;
-	private JPanel jpanelViewDues;
 	private JLabel lblDuesSum;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -311,7 +304,6 @@ public class BudgetViews extends JFrame {
 							.addContainerGap())))
 		);
 		
-		jpanelViewDues = new JPanel();
 		scrollPaneDues.setViewportView(panelViewDues);
 		
 		scrollPaneSavingsView.setViewportView(panelViewSavings);
