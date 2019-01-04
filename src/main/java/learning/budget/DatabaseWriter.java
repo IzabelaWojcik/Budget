@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 
 public class DatabaseWriter implements IDatabaseWriter {
@@ -38,15 +37,6 @@ public class DatabaseWriter implements IDatabaseWriter {
 		String columns = "(id_budget, year, month)";
 		String update = "insert into " + "\"" + tablename + "\"" + columns + "values(" + idBudget + "," + year + "," + month + ")";
 		executeUpdate(update);
-	}
-
-	public void writeCategoryMapToDatabase(HashMap<String, String> map, int idBudget, String tablename) {
-		String columns = "(name, id_budget)";
-		for (String s : map.values()) {
-			String update = "insert into " + "\"" + tablename + "\"" + columns + "values('" + s + "\'" + "," + "\'" + idBudget
-					+ "')";
-			executeUpdate(update);
-		}
 	}
 
 	public void writeCategoryListTodatabase(List<String> list, int idBudget, String tablename) {
